@@ -257,6 +257,7 @@ public class VimulatorInputHandler extends InputHandler
 			&& c != Character.toLowerCase(c))
 		{
 			// Shift+letter
+            Log.log(Log.WARNING, this, "Shift + " + c);
 			keyStroke = KeyStroke.getKeyStroke(c, modifiers);
 		}
 		else
@@ -306,21 +307,28 @@ public class VimulatorInputHandler extends InputHandler
 		boolean simple = (modifiers & ~KeyEvent.SHIFT_DOWN_MASK) == 0;
 
 		if (modifiers == 0 && bindings == currentBindings
-			&& (keyCode == KeyEvent.VK_ENTER || keyCode == KeyEvent.VK_TAB))
+			&& (
+                keyCode == KeyEvent.VK_ENTER 
+                || keyCode == KeyEvent.VK_TAB 
+                || keyCode == KeyEvent.VK_BACK_SPACE
+                || keyCode == KeyEvent.VK_DELETE
+                )
+            )
 		{
-			userInput((char)keyCode);
+            // Ignore, handled by KEY_TYPED
+			//userInput(keyChar);
 			evt.consume();
 			return;
 		}
 
 		if (!simple
 			|| evt.isActionKey()
-			|| keyCode == KeyEvent.VK_BACK_SPACE
-			|| keyCode == KeyEvent.VK_DELETE
 			|| keyCode == KeyEvent.VK_ESCAPE
 			|| keyCode == KeyEvent.VK_ENTER
-			|| keyCode == KeyEvent.VK_TAB)
-		{
+			|| keyCode == KeyEvent.VK_TAB
+            || keyCode == KeyEvent.VK_BACK_SPACE
+            || keyCode == KeyEvent.VK_DELETE
+        ) {
 			readNextChar = null;
 
 			KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode, modifiers);

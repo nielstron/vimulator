@@ -157,7 +157,7 @@ public class VimulatorUtilities
 
 	public static void goToNextWordStart(JEditTextArea textArea)
 	{
-
+        // TODO
 	}
 
 	/**

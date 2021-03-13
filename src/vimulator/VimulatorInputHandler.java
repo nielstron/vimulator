@@ -232,25 +232,39 @@ public class VimulatorInputHandler extends InputHandler
 		}
 	}
 
-	private boolean commandKeyTyped(Key key)
+	private void commandKeyTyped(KeyEvent evt)
 	{
-		String modifiers = key.modifiers;
-		char c = key.input;
+		int modifiers = evt.getModifiersEx();
+		char c = evt.getKeyChar();
 
 		if (readNextChar != null)
 		{
 			invokeReadNextChar(c);
 			resetState();
-			return true;
+			evt.consume();
+			return;
 		}
 
+		c = Character.toUpperCase(c);
 
 		// ignore
-		if (c == '\b' || c == ' ') return true;
+		if (c == '\b' || c == ' ') return;
 
 		readNextChar = null;
 
-		KeyStroke keyStroke = KeyStroke.getKeyStroke(c); 
+		KeyStroke keyStroke;
+		if ((modifiers & KeyEvent.SHIFT_DOWN_MASK) != 0
+			&& c != Character.toLowerCase(c))
+		{
+			// Shift+letter
+			keyStroke = KeyStroke.getKeyStroke(c, modifiers);
+		}
+		else
+		{
+			// Plain letter or Shift+punct
+			keyStroke = KeyStroke.getKeyStroke(c);
+		}
+
 		Object o = currentBindings.get(keyStroke);
 
 		if (currentBindings == bindings && Character.isDigit(c)
@@ -258,23 +272,25 @@ public class VimulatorInputHandler extends InputHandler
 		{
 			repeatCount *= 10;
 			repeatCount += c - '0';
-			return true;
+			evt.consume();
+			return;
 		}
 		else if (o instanceof Hashtable)
 		{
 			currentBindings = (Hashtable)o;
-			return true;
+			evt.consume();
+			return;
 		}
 		else if (o instanceof EditAction)
 		{
 			invokeAction((EditAction)o);
 			if (readNextChar == null) resetState();
-			return true;
+			evt.consume();
+			return;
 		}
 
 		Toolkit.getDefaultToolkit().beep();
 		resetState();
-        return false;
 	}
 
 	private void insertKeyPressed(KeyEvent evt)
@@ -333,15 +349,14 @@ public class VimulatorInputHandler extends InputHandler
 		}
 	}
 
-	private boolean insertKeyTyped(Key key)
+	private void insertKeyTyped(java.awt.event.KeyEvent evt)
 	{
-		Log.log(Log.DEBUG, this, key);
-		String modifiers = key.modifiers;
-		char c = key.input;
-
+        Log.log(Log.DEBUG, this, evt);
+		int modifiers = evt.getModifiersEx();
+		char c = evt.getKeyChar();
 		// ignore
 		if (c == '\b')
-			return true;
+			return;
 
 		if (currentBindings != bindings)
 		{
@@ -354,13 +369,15 @@ public class VimulatorInputHandler extends InputHandler
 			if (o instanceof Hashtable)
 			{
 				currentBindings = (Hashtable)o;
-				return true;
+				evt.consume();
+				return;
 			}
 			else if (o instanceof EditAction)
 			{
 				invokeAction((EditAction)o);
 				resetState();
-				return true;
+				evt.consume();
+				return;
 			}
 
 			currentBindings = bindings;
@@ -375,32 +392,38 @@ public class VimulatorInputHandler extends InputHandler
 		{
 			userInput(c);
 		}
-        return true;
 	}
 
     @Override
-    public void processKeyEvent(java.awt.event.KeyEvent evt, int from, boolean global) {
-		switch (mode)
-		{
-			case VimulatorPlugin.INSERT:
-				insertKeyPressed(evt);
-				break;
-			case VimulatorPlugin.COMMAND:
-            default:
-				commandKeyPressed(evt);
-				break;
-		}
+    public boolean handleKey(Key key, boolean global) {
+        return true;
     }
 
     @Override
-    public boolean handleKey(Key key, boolean global) {
-		switch (mode)
-		{
-			case VimulatorPlugin.INSERT:
-				return insertKeyTyped(key);
-			case VimulatorPlugin.COMMAND:
-            default:
-				return commandKeyTyped(key);
-		}
+    public void processKeyEvent(java.awt.event.KeyEvent evt, int from, boolean global) {
+        if(evt.getID() == evt.KEY_PRESSED){
+            switch (mode)
+            {
+                case VimulatorPlugin.INSERT:
+                    insertKeyPressed(evt);
+                    break;
+                case VimulatorPlugin.COMMAND:
+                default:
+                    commandKeyPressed(evt);
+                    break;
+            }
+        }
+        else if (evt.getID() == evt.KEY_TYPED){
+            switch (mode)
+            {
+                case VimulatorPlugin.INSERT:
+                    insertKeyTyped(evt);
+                    break;
+                case VimulatorPlugin.COMMAND:
+                default:
+                    commandKeyTyped(evt);
+                    break;
+            }
+        }
     }
 }

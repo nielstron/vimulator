@@ -2,7 +2,8 @@
 
 	<property name="src.dir" value="."/>
 	<property name="build.dir" value="build"/>
-	<property name="install.dir"  value=".."/>
+	<!--<property name="install.dir"  value="/home/niels/.isabelle/Isabelle2021/jedit/jars/"/>-->
+	<property name="install.dir"  value="/home/niels/.jedit/jars/"/>
 
 	<property name="jedit.install.dir"  value="/home/niels/bin/Isabelle2021/src/Tools/jEdit/dist/"/>
 

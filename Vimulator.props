@@ -3,11 +3,11 @@ plugin.vimulator.VimulatorPlugin.author=mike dillon
 plugin.vimulator.VimulatorPlugin.version=0.1.0
 
 # dependencies
-plugin.vimulator.VimulatorPlugin.depend.0=jdk 1.3
+plugin.vimulator.VimulatorPlugin.depend.0=jdk 15
 plugin.vimulator.VimulatorPlugin.depend.1=jedit 04.00.07.00
 
 # settings
-vimulator.enabled=false
+vimulator.enabled=true
 
 # option pane
 options.vimulator.label=Vimulator

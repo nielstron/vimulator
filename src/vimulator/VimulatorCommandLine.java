@@ -31,7 +31,6 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.search.*;
 
-import vimulator.*;
 import vimulator.ex.*;
 
 public class VimulatorCommandLine extends JPanel

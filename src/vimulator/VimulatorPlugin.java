@@ -20,6 +20,7 @@
 package vimulator;
 
 import java.util.*;
+import javax.swing.*;
 import javax.swing.event.*;
 
 import org.gjt.sp.jedit.*;
@@ -37,15 +38,16 @@ public class VimulatorPlugin extends EBPlugin
 	public static final int EX = 1 << 3;
 	public static final int APPEND = 1 << 4;
 
+    @Override
 	public void start()
 	{
 		initKeyBindings();
 	}
 
-	public void createMenuItems(Vector menuItems)
-	{
-		menuItems.addElement(GUIUtilities.loadMenuItem("toggle-vi-mode"));
-	}
+	//public JMenuItem createMenuItems()
+	//{
+		//return new JMenuItem[]{GUIUtilities.loadMenuItem("toggle-vi-mode")};
+	//}
 
 	public void createOptionPanes(OptionsDialog optionsDialog)
 	{
@@ -65,7 +67,7 @@ public class VimulatorPlugin extends EBPlugin
 				handlers.put(view, new VimulatorInputHandler(view, rootHandler));
 
 				if (jEdit.getBooleanProperty(
-					"vimulator.enabled", false))
+					"vimulator.enabled", true))
 				{
 					toggleEmulation(view);
 				}

@@ -148,7 +148,7 @@ public class VimulatorPlugin extends EBPlugin
 
 			// Install command line
 			view.addToolBar(View.BOTTOM_GROUP,
-				View.ABOVE_STATUS_BAR_LAYER,
+				View.ABOVE_SYSTEM_BAR_LAYER,
 				getCommandLine(view));
 		}
 		else
@@ -241,14 +241,14 @@ public class VimulatorPlugin extends EBPlugin
 
 	private void initKeyBindings(String setPrefix, int mode)
 	{
-		EditAction[] actions = jEdit.getActions();
+        String[] actionNames = jEdit.getActionNames();
 
 		String prefix = "vimulator.keys." + setPrefix + ".";
 
-		for(int i = 0; i < actions.length; i++)
+		for(int i = 0; i < actionNames.length; i++)
 		{
-			EditAction action = actions[i];
-			String actionName = action.getName();
+			String actionName = actionNames[i];
+			EditAction action = jEdit.getAction(actionName);
 
 			String propName = null;
 			int propIndex = 0;

@@ -28,6 +28,7 @@ import javax.swing.text.Segment;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 
 public class VimulatorUtilities
@@ -110,7 +111,7 @@ public class VimulatorUtilities
 
 	public static void goToNextWordEnd(JEditTextArea textArea)
 	{
-		Buffer buffer = textArea.getBuffer();
+		JEditBuffer buffer = textArea.getBuffer();
 
 		int caret = textArea.getCaretPosition();
 		int line = textArea.getCaretLine();
@@ -167,7 +168,7 @@ public class VimulatorUtilities
 	 */
 	public static int joinLines(JEditTextArea textArea, boolean addSpace)
 	{
-		Buffer buffer = textArea.getBuffer();
+		JEditBuffer buffer = textArea.getBuffer();
 		int lineNo = textArea.getCaretLine();
 		int start = buffer.getLineStartOffset(lineNo);
 		int end = buffer.getLineEndOffset(lineNo);
@@ -180,8 +181,9 @@ public class VimulatorUtilities
 		int nextEnd = buffer.getLineEndOffset(lineNo + 1);
 
 		buffer.beginCompoundEdit();
-		buffer.remove(end - 1, MiscUtilities.getLeadingWhiteSpace(
-			buffer.getText(nextStart,nextEnd - nextStart)) + 1);
+        int[] leadingWhitespace = {};
+        buffer.getCurrentIndentForLine(lineNo, leadingWhitespace);
+		buffer.remove(end - 1,leadingWhitespace[0]);
 		if (addSpace) buffer.insert(end - 1, " ");
 		buffer.endCompoundEdit();
 
@@ -261,7 +263,7 @@ public class VimulatorUtilities
 		int pos = textArea.getCaretPosition();
 		textArea.selectNone();
 
-		Buffer buffer = textArea.getBuffer();
+		JEditBuffer buffer = textArea.getBuffer();
 		buffer.beginCompoundEdit();
 		buffer.remove(pos, 1);
 		buffer.insert(pos, String.valueOf(replace));
@@ -288,7 +290,7 @@ public class VimulatorUtilities
 		int caret = textArea.getCaretPosition() - lineStart;
 
 		Segment seg = new Segment();
-		Buffer buffer = textArea.getBuffer();
+		JEditBuffer buffer = textArea.getBuffer();
 		buffer.getLineText(line, seg);
 
 		int inc, limit;

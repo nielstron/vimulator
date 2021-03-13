@@ -29,6 +29,7 @@ import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.gui.DefaultInputHandler;
 import org.gjt.sp.jedit.gui.InputHandler;
+import org.gjt.sp.jedit.gui.KeyEventTranslator.Key;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.util.Log;
 
@@ -138,32 +139,6 @@ public class VimulatorInputHandler extends InputHandler
 		}
 	}
 
-	public void keyPressed(KeyEvent evt)
-	{
-		switch (mode)
-		{
-			case VimulatorPlugin.COMMAND:
-				commandKeyPressed(evt);
-				break;
-			case VimulatorPlugin.INSERT:
-				insertKeyPressed(evt);
-				break;
-		}
-	}
-
-	public void keyTyped(KeyEvent evt)
-	{
-		switch (mode)
-		{
-			case VimulatorPlugin.COMMAND:
-				commandKeyTyped(evt);
-				break;
-			case VimulatorPlugin.INSERT:
-				insertKeyTyped(evt);
-				break;
-		}
-	}
-
 	// private members
 	private int mode;
 
@@ -206,16 +181,15 @@ public class VimulatorInputHandler extends InputHandler
 	private void resetState()
 	{
 		currentBindings = bindings;
-		repeat = false;
 		repeatCount = 0;
 	}
 
 	private void commandKeyPressed(KeyEvent evt)
 	{
 		int keyCode = evt.getKeyCode();
-		int modifiers = evt.getModifiers();
+		int modifiers = evt.getModifiersEx();
 		char c = evt.getKeyChar();
-		boolean simple = (modifiers & ~KeyEvent.SHIFT_MASK) == 0;
+		boolean simple = (modifiers & ~KeyEvent.SHIFT_DOWN_MASK) == 0;
 
 		if (!simple
 			|| evt.isActionKey()
@@ -258,74 +232,56 @@ public class VimulatorInputHandler extends InputHandler
 		}
 	}
 
-	private void commandKeyTyped(KeyEvent evt)
+	private boolean commandKeyTyped(Key key)
 	{
-		int modifiers = evt.getModifiers();
-		char c = evt.getKeyChar();
+		String modifiers = key.modifiers;
+		char c = key.input;
 
 		if (readNextChar != null)
 		{
 			invokeReadNextChar(c);
 			resetState();
-			evt.consume();
-			return;
+			return true;
 		}
 
-		c = Character.toUpperCase(c);
 
 		// ignore
-		if (c == '\b' || c == ' ') return;
+		if (c == '\b' || c == ' ') return true;
 
 		readNextChar = null;
 
-		KeyStroke keyStroke;
-		if ((modifiers & KeyEvent.SHIFT_MASK) != 0
-			&& c != Character.toLowerCase(c))
-		{
-			// Shift+letter
-			keyStroke = KeyStroke.getKeyStroke(c, modifiers);
-		}
-		else
-		{
-			// Plain letter or Shift+punct
-			keyStroke = KeyStroke.getKeyStroke(c);
-		}
-
+		KeyStroke keyStroke = KeyStroke.getKeyStroke(c); 
 		Object o = currentBindings.get(keyStroke);
 
 		if (currentBindings == bindings && Character.isDigit(c)
 			&& (repeatCount > 0 || c != '0'))
 		{
-			repeat = true;
 			repeatCount *= 10;
 			repeatCount += c - '0';
-			evt.consume();
-			return;
+			return true;
 		}
 		else if (o instanceof Hashtable)
 		{
 			currentBindings = (Hashtable)o;
-			evt.consume();
-			return;
+			return true;
 		}
 		else if (o instanceof EditAction)
 		{
 			invokeAction((EditAction)o);
 			if (readNextChar == null) resetState();
-			evt.consume();
-			return;
+			return true;
 		}
 
 		Toolkit.getDefaultToolkit().beep();
 		resetState();
+        return false;
 	}
 
 	private void insertKeyPressed(KeyEvent evt)
 	{
 		int keyCode = evt.getKeyCode();
-		int modifiers = evt.getModifiers();
-		char c = evt.getKeyChar();
-		boolean simple = (modifiers & ~KeyEvent.SHIFT_MASK) == 0;
+		int modifiers = evt.getModifiersEx();
+		boolean simple = (modifiers & ~KeyEvent.SHIFT_DOWN_MASK) == 0;
 
 		if (modifiers == 0 && bindings == currentBindings
 			&& (keyCode == KeyEvent.VK_ENTER || keyCode == KeyEvent.VK_TAB))
@@ -377,15 +333,15 @@ public class VimulatorInputHandler extends InputHandler
 		}
 	}
 
-	private void insertKeyTyped(KeyEvent evt)
+	private boolean insertKeyTyped(Key key)
 	{
-		Log.log(Log.DEBUG, this, evt);
-		int modifiers = evt.getModifiers();
-		char c = evt.getKeyChar();
+		Log.log(Log.DEBUG, this, key);
+		String modifiers = key.modifiers;
+		char c = key.input;
 
 		// ignore
 		if (c == '\b')
-			return;
+			return true;
 
 		if (currentBindings != bindings)
 		{
@@ -398,21 +354,19 @@ public class VimulatorInputHandler extends InputHandler
 			if (o instanceof Hashtable)
 			{
 				currentBindings = (Hashtable)o;
-				evt.consume();
-				return;
+				return true;
 			}
 			else if (o instanceof EditAction)
 			{
 				invokeAction((EditAction)o);
 				resetState();
-				evt.consume();
-				return;
+				return true;
 			}
 
 			currentBindings = bindings;
 		}
 
-		if (repeat && Character.isDigit(c))
+		if (repeatCount > 0 && Character.isDigit(c))
 		{
 			repeatCount *= 10;
 			repeatCount += (c - '0');
@@ -421,5 +375,32 @@ public class VimulatorInputHandler extends InputHandler
 		{
 			userInput(c);
 		}
+        return true;
 	}
+
+    @Override
+    public void processKeyEvent(java.awt.event.KeyEvent evt, int from, boolean global) {
+		switch (mode)
+		{
+			case VimulatorPlugin.INSERT:
+				insertKeyPressed(evt);
+				break;
+			case VimulatorPlugin.COMMAND:
+            default:
+				commandKeyPressed(evt);
+				break;
+		}
+    }
+
+    @Override
+    public boolean handleKey(Key key, boolean global) {
+		switch (mode)
+		{
+			case VimulatorPlugin.INSERT:
+				return insertKeyTyped(key);
+			case VimulatorPlugin.COMMAND:
+            default:
+				return commandKeyTyped(key);
+		}
+    }
 }

@@ -54,7 +54,7 @@ public class VimulatorInputHandler extends InputHandler
 		insertBindings = chain.insertBindings;
 		visualBindings = chain.visualBindings;
 
-		setMode(VimulatorPlugin.COMMAND);
+		setMode(chain.getMode());
 	}
 
 	public int getMode()
@@ -73,16 +73,16 @@ public class VimulatorInputHandler extends InputHandler
 			case VimulatorPlugin.COMMAND:
 				if (buffer.insideCompoundEdit())
 					buffer.endCompoundEdit();
-				this.bindings = commandBindings;
+				this.setBindings(commandBindings);
 				break;
 			case VimulatorPlugin.INSERT:
 				buffer.beginCompoundEdit();
-				this.bindings = insertBindings;
+				this.setBindings(insertBindings);
 				break;
 			case VimulatorPlugin.VISUAL:
 				if (buffer.insideCompoundEdit())
 					buffer.endCompoundEdit();
-				this.bindings = insertBindings;
+				this.setBindings(insertBindings);
 				break;
 			default:
 				return;
@@ -209,7 +209,7 @@ public class VimulatorInputHandler extends InputHandler
 			}
 			else if (o instanceof EditAction)
 			{
-                Log.log(Log.WARNING, this, "Pressed, Result of keystroke: New Action " + ((EditAction)o).getLabel());
+                Log.log(Log.WARNING, this, "Pressed, Result of keystroke: New Action " + ((EditAction)o).getName());
 				invokeAction((EditAction)o);
 				resetState();
 				evt.consume();
@@ -283,7 +283,8 @@ public class VimulatorInputHandler extends InputHandler
             Log.log(Log.WARNING, this, "Typed, Result of keystroke: New Action " + ((EditAction)o).getLabel());
 			invokeAction((EditAction)o);
 			//if (readNextChar == null)
-             resetState();
+            //Log.log(Log.WARNING, this, "Resetting state");
+            //resetState();
 			evt.consume();
 			return;
 		}
@@ -406,24 +407,24 @@ public class VimulatorInputHandler extends InputHandler
         if(evt.getID() == java.awt.event.KeyEvent.KEY_PRESSED){
             switch (mode)
             {
-                case VimulatorPlugin.INSERT:
-                    insertKeyPressed(evt);
-                    break;
                 case VimulatorPlugin.COMMAND:
-                default:
                     commandKeyPressed(evt);
+                    break;
+                case VimulatorPlugin.INSERT:
+                default:
+                    insertKeyPressed(evt);
                     break;
             }
         }
         else if (evt.getID() == java.awt.event.KeyEvent.KEY_TYPED){
             switch (mode)
             {
-                case VimulatorPlugin.INSERT:
-                    insertKeyTyped(evt);
-                    break;
                 case VimulatorPlugin.COMMAND:
-                default:
                     commandKeyTyped(evt);
+                    break;
+                case VimulatorPlugin.INSERT:
+                default:
+                    insertKeyTyped(evt);
                     break;
             }
         }

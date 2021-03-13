@@ -25,7 +25,7 @@ options.vimulator.enable=Enable VI Emulation by Default
 options.vimulator.code=new vimulator.VimulatorOptionPane();
 
 # menu
-toggle-vi-mode.label=VI Emulation
+vimulator.toggle-vi-mode.label=VI Emulation
 
 # status bar messages
 vimulator.msg.simple-status="{0}" {1}L, {2}C

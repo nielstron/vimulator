@@ -1,14 +1,18 @@
-## Getting Started
+# Vimulator
+A vi-emulator for jEdit.
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+This project is a "fork" of the jEdit Plugin [Vimulator](plugins.jedit.org/plugins/?Vimulator),
+modified to work for jdk 15 and jEdit 5+ (or whatever [Isabelle/jEdit](https://isabelle.in.tum.de/) is currently using).
 
-## Folder Structure
+This project is WIP, but already featuring vi-like navigation and newline/merging.
 
-The workspace contains two folders by default, where:
+## Building
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+Setup ant to point at the correct jdk and jEdit version in `build.xml`.
+Then run
+```bash
+ant dist
+```
 
-## Dependency Management
-
-The `JAVA DEPENDENCIES` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-pack/blob/master/release-notes/v0.9.0.md#work-with-jar-files-directly).
+to build the jar File.
+This file can the be manually installed in jEdit via the Plugin Manager.

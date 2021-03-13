@@ -177,14 +177,12 @@ public class VimulatorUtilities
 			Toolkit.getDefaultToolkit().beep();
 			return -1;
 		}
-		int nextStart = buffer.getLineStartOffset(lineNo + 1);
-		int nextEnd = buffer.getLineEndOffset(lineNo + 1);
-
 		buffer.beginCompoundEdit();
-        int[] leadingWhitespace = {};
+        int[] leadingWhitespace = {0};
         buffer.getCurrentIndentForLine(lineNo, leadingWhitespace);
-		buffer.remove(end - 1,leadingWhitespace[0]);
-		if (addSpace) buffer.insert(end - 1, " ");
+        Log.log(Log.WARNING, null, leadingWhitespace[0]);
+		buffer.remove(end, leadingWhitespace[0]);
+		if (addSpace) buffer.insert(end, " ");
 		buffer.endCompoundEdit();
 
 		return end - 1;
@@ -344,9 +342,18 @@ public class VimulatorUtilities
 			return;
 		}
 
-		findChar(view, last.ch, last.reverse ^ opposite, last.until,
-			false);
+		findChar(view, last.ch, last.reverse ^ opposite, last.until, false);
 	}
+
+	public static void insertEnterAndIndentBefore(JEditTextArea textArea, JEditBuffer buffer){
+        int line = textArea.getCaretLine();
+        int[] leadingWhitespace = {0};
+        buffer.getCurrentIndentForLine(line, leadingWhitespace);
+        int caretPos = textArea.getLineStartOffset(line) + leadingWhitespace[0];
+        textArea.setCaretPosition(caretPos);
+        textArea.insertEnterAndIndent();
+        textArea.setCaretPosition(caretPos);
+    }
 
 	// private members
 	private VimulatorUtilities() {}

@@ -148,10 +148,7 @@
 	<ACTION NAME="vi-open-prev-line">
 		<CODE>
 			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
-			line = textArea.getCaretLine();
-			buffer.insertString(textArea.getLineStartOffset(line), "\n", null);
-			textArea.setCaretPosition(textArea.getLineStartOffset(line));
-			textArea.goToStartOfWhiteSpace(false);
+            vimulator.VimulatorUtilities.insertEnterAndIndentBefore(textArea, buffer);
 		</CODE>
 	</ACTION>
 
@@ -159,9 +156,8 @@
 		<CODE>
 			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
 			line = textArea.getCaretLine();
-			buffer.insertString(textArea.getLineEndOffset(line), "\n", null);
-			textArea.setCaretPosition(textArea.getLineStartOffset(++line));
-			textArea.goToStartOfWhiteSpace(false);
+			textArea.setCaretPosition(textArea.getLineEndOffset(line)-1);
+            textArea.insertEnterAndIndent();
 		</CODE>
 	</ACTION>
 

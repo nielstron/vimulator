@@ -62,6 +62,8 @@ vimulator.keys.command.vi-repeat-find-char=;
 vimulator.keys.command.vi-repeat-find-char-opposite=,
 vimulator.keys.command.vi-current-line-status=C+G
 vimulator.keys.command.exit=S+Q
+vimulator.keys.command.shift-left=< <
+vimulator.keys.command.shift-right=> >
 
 vimulator.keys.insert.vi-command-mode=ESCAPE
 vimulator.keys.insert.vi-command-mode.2=C+[

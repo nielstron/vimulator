@@ -1,0 +1,295 @@
+<?xml version="1.0"?>
+
+<!--
+	Vimulator BeanShell actions
+	Copyright (C) 2000, 2001, 2002
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+-->
+
+<!DOCTYPE ACTIONS SYSTEM "actions.dtd">
+
+<ACTIONS>
+	<ACTION NAME="toggle-vi-mode">
+		<CODE>
+			vimulator.VimulatorPlugin.toggleEmulation(view);
+		</CODE>
+		<IS_SELECTED>
+			return vimulator.VimulatorUtilities.checkEmulation(view);
+		</IS_SELECTED>
+	</ACTION>
+
+	<ACTION NAME="vi-command-mode">
+		<CODE>
+			textArea.setOverwriteEnabled(false);
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.COMMAND);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-insert-mode">
+		<CODE>
+			textArea.setOverwriteEnabled(false);
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-replace-mode">
+		<CODE>
+			textArea.setOverwriteEnabled(true);
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-visual-mode">
+		<CODE>
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.VISUAL);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-home-abs" NO_REPEAT="TRUE">
+		<CODE>
+			textArea.goToStartOfLine(false);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-end-abs" NO_REPEAT="TRUE">
+		<CODE>
+			textArea.setCaretPosition(textArea.getLineEndOffset(
+				textArea.getCaretLine()) - 1, false);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-home-ws" NO_REPEAT="TRUE">
+		<CODE>
+			textArea.goToStartOfWhiteSpace(false);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-prev-line-ws-start">
+		<CODE>
+			if (textArea.getCaretLine() == 0)
+			{
+				Toolkit.getDefaultToolkit().beep();
+				return;
+			}
+			textArea.setCaretPosition(textArea.getLineStartOffset(
+				textArea.getCaretLine() - 1));
+			textArea.goToStartOfWhiteSpace(false);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-next-line-ws-start">
+		<CODE>
+			if (textArea.getCaretLine() + 1 == textArea.getLineCount())
+			{
+				Toolkit.getDefaultToolkit().beep();
+				return;
+			}
+			textArea.setCaretPosition(textArea.getLineStartOffset(
+				textArea.getCaretLine() + 1));
+			textArea.goToStartOfWhiteSpace(false);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-next-word-end">
+		<CODE>
+			vimulator.VimulatorUtilities.goToNextWordEnd(textArea);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-join-lines">
+		<CODE>
+			buffer.beginCompoundEdit();
+			end = vimulator.VimulatorUtilities.joinLines(textArea, true);
+			if (end != -1) textArea.setCaretPosition(end);
+			buffer.endCompoundEdit();
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-append">
+		<CODE>
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
+			caretLine = textArea.getCaretLine();
+			pos = textArea.getCaretPosition() + 1;
+			if (pos &gt;= textArea.getLineEndOffset(caretLine))
+			{
+				pos--;
+			}
+			textArea.setCaretPosition(pos);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-append-ws-end">
+		<CODE>
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
+			textArea.goToEndOfWhiteSpace(false);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-insert-ws-start">
+		<CODE>
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
+			textArea.goToStartOfWhiteSpace(false);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-change-end-line">
+		<CODE>
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
+			textArea.deleteToEndOfLine();
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-open-prev-line">
+		<CODE>
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
+			line = textArea.getCaretLine();
+			buffer.insertString(textArea.getLineStartOffset(line), "\n", null);
+			textArea.setCaretPosition(textArea.getLineStartOffset(line));
+			textArea.goToStartOfWhiteSpace(false);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-open-next-line">
+		<CODE>
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
+			line = textArea.getCaretLine();
+			buffer.insertString(textArea.getLineEndOffset(line), "\n", null);
+			textArea.setCaretPosition(textArea.getLineStartOffset(++line));
+			textArea.goToStartOfWhiteSpace(false);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-ex-command" NO_RECORD="TRUE">
+		<CODE>
+			vimulator.VimulatorPlugin.enterExCommand(view);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-search" NO_RECORD="TRUE">
+		<CODE>
+			vimulator.VimulatorPlugin.enterSearch(view);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-reverse-search" NO_RECORD="TRUE">
+		<CODE>
+			vimulator.VimulatorPlugin.enterSearch(view, true);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-repeat-search" NO_RECORD="TRUE">
+		<CODE>
+			vimulator.VimulatorPlugin.repeatSearch(view);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-save-close-buffer">
+		<CODE>
+			buffer.save(view, null, true);
+			jEdit.closeBuffer(view, buffer);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-replace-char">
+		<CODE>
+			view.getInputHandler().readNextChar(
+				"vimulator.VimulatorUtilities.replaceChar(textArea,__char__);");
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-find-char">
+		<CODE>
+			view.getInputHandler().readNextChar(
+				"vimulator.VimulatorUtilities.findChar(view,__char__,false,false);");
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-find-char-reverse">
+		<CODE>
+			view.getInputHandler().readNextChar(
+				"vimulator.VimulatorUtilities.findChar(view,__char__,true,false);");
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-find-until-char">
+		<CODE>
+			view.getInputHandler().readNextChar(
+				"vimulator.VimulatorUtilities.findChar(view,__char__,false,true);");
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-find-until-char-reverse">
+		<CODE>
+			view.getInputHandler().readNextChar(
+				"vimulator.VimulatorUtilities.findChar(view,__char__,true,true);");
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-repeat-find-char">
+		<CODE>
+			vimulator.VimulatorUtilities.repeatFindChar(view,false);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-repeat-find-char-opposite">
+		<CODE>
+			vimulator.VimulatorUtilities.repeatFindChar(view,true);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-prev-col">
+		<CODE>
+			if (textArea.getCaretPosition() == textArea.getLineStartOffset(textArea.getCaretLine()))
+			{
+				view.getToolkit().beep();
+				return;
+			}
+
+			textArea.goToPrevCharacter(false);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-next-col">
+		<CODE>
+			lastAllowed = textArea.getLineEndOffset(textArea.getCaretLine()) - 1;
+			if (vimulator.VimulatorUtilities.getMode(view) != vimulator.VimulatorPlugin.INSERT)
+				lastAllowed--;
+
+			if (textArea.getCaretPosition() == lastAllowed)
+			{
+				view.getToolkit().beep();
+				return;
+			}
+
+			textArea.goToNextCharacter(false);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-current-line-status" NO_RECORD="TRUE">
+		<CODE>
+			path = buffer.getPath();
+			lines = buffer.getLineCount();
+			percent = 100f * textArea.getCaretLine() / lines;
+
+			args = new Object[] { path, lines, Math.round(percent) };
+			status = jEdit.getProperty(
+				"vimulator.msg.curr-line-status", args);
+
+			vimulator.VimulatorUtilities.setStatus(view, status);
+		</CODE>
+	</ACTION>
+
+</ACTIONS>

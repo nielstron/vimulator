@@ -1,0 +1,30 @@
+plugin.vimulator.VimulatorPlugin.name=Vimulator
+plugin.vimulator.VimulatorPlugin.author=mike dillon
+plugin.vimulator.VimulatorPlugin.version=0.1.0
+
+# dependencies
+plugin.vimulator.VimulatorPlugin.depend.0=jdk 1.3
+plugin.vimulator.VimulatorPlugin.depend.1=jedit 04.00.07.00
+
+# settings
+vimulator.enabled=false
+
+# option pane
+options.vimulator.label=Vimulator
+options.vimulator.enable=Enable VI Emulation by Default
+
+# menu
+toggle-vi-mode.label=VI Emulation
+
+# status bar messages
+vimulator.msg.simple-status="{0}" {1}L, {2}C
+vimulator.msg.save-status="{0}" {1}L, {2}C written
+vimulator.msg.curr-line-status="{0}" {1} lines --{2}%--
+
+vimulator.msg.no-regexp=No previous regular expression
+vimulator.msg.not-found=Pattern not found: {0}
+vimulator.msg.bad-ex-command=Not an editor command: {0}
+
+vimulator.msg.insert-mode=-- INSERT --
+vimulator.msg.replace-mode=-- REPLACE --
+vimulator.msg.visual-mode=-- VISUAL --

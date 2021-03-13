@@ -1,0 +1,53 @@
+<project name="Vimulator" default="dist" basedir=".">
+
+	<property name="src.dir" value="."/>
+	<property name="build.dir" value="build"/>
+	<property name="install.dir"  value=".."/>
+
+	<property name="jedit.install.dir"  value="/home/niels/bin/Isabelle2021/src/Tools/jEdit/dist/"/>
+
+
+	<path id="project.class.path">
+		<pathelement location="${jedit.install.dir}/jedit.jar"/>
+	</path>
+
+
+	<target name="init">
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${src.dir}"/>
+	</target>
+
+
+	<target name="compile" depends="init">
+		<javac
+			srcdir="${src.dir}"
+			destdir="${build.dir}"
+			debug="on"
+			deprecation="on"
+			includeJavaRuntime="yes"
+		>
+			<classpath refid="project.class.path"/>
+		</javac>
+	</target>
+
+
+	<target name="dist" depends="compile">
+		<mkdir dir="${install.dir}"/>
+		<jar jarfile="${install.dir}/Vimulator.jar">
+			<fileset dir="${build.dir}"/>
+			<fileset dir="${src.dir}">
+				<include name="actions.xml"/>
+				<include name="**/*.props"/>
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+		<delete>
+			<fileset dir="." includes="**/*~" defaultexcludes="no"/>
+			<fileset dir="." includes="**/*.class"/>
+		</delete>
+	</target>
+
+</project>

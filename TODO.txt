@@ -1,0 +1,5 @@
+This list is not complete
+--------------------------------------------------------------------------------
+Escape in command line
+Fix ArrayIndexOutOfBoundsException using 'O' on last line
+Go to character commands (f,F,t,T) with PRESSED keys (not TYPED)

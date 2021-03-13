@@ -5,7 +5,7 @@
 	<!--<property name="install.dir"  value="/home/niels/.isabelle/Isabelle2021/jedit/jars/"/>-->
 	<property name="install.dir"  value="/home/niels/.jedit/jars/"/>
 
-	<property name="jedit.install.dir"  value="/home/niels/bin/Isabelle2021/src/Tools/jEdit/dist/"/>
+	<property name="jedit.install.dir"  value="/home/niels/git/vimulator2/bin/jEdit"/>
 
 
 	<path id="project.class.path">

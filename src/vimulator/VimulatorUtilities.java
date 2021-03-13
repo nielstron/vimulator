@@ -208,16 +208,16 @@ public class VimulatorUtilities
 					.charAt(i)))
 				{
 				case 'A':
-					modifiers |= KeyEvent.ALT_MASK;
+					modifiers |= KeyEvent.ALT_DOWN_MASK;
 					break;
 				case 'C':
-					modifiers |= KeyEvent.CTRL_MASK;
+					modifiers |= KeyEvent.CTRL_DOWN_MASK;
 					break;
 				case 'M':
-					modifiers |= KeyEvent.META_MASK;
+					modifiers |= KeyEvent.META_DOWN_MASK;
 					break;
 				case 'S':
-					modifiers |= KeyEvent.SHIFT_MASK;
+					modifiers |= KeyEvent.SHIFT_DOWN_MASK;
 					break;
 				}
 			}

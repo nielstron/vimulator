@@ -41,6 +41,7 @@ public class VimulatorPlugin extends EBPlugin
     @Override
 	public void start()
 	{
+        Log.log(Log.DEBUG, this, "Started Plugin");
 		initKeyBindings();
 	}
 
@@ -104,7 +105,7 @@ public class VimulatorPlugin extends EBPlugin
 			{
 				Buffer buffer = editPane.getBuffer();
 
-				View[] forViews = { editPane.getView() };
+				List<View> forViews = Arrays.asList(new View[]{editPane.getView()});
 
 				if (buffer.isNewFile())
 				{
@@ -220,17 +221,17 @@ public class VimulatorPlugin extends EBPlugin
 	private static CharacterSearch lastFindChar;
 
 	private static void updateBufferStatus (Buffer buffer, String status,
-		View[] views)
+		List<View> views)
 	{
-		if (views == null) views = jEdit.getViews();
+		if (views == null) views = jEdit.getViewManager().getViews();
 
-		for (int i = 0; i < views.length; ++i)
+		for (int i = 0; i < views.size(); ++i)
 		{
-			if (!emulationActive(views[i])) continue;
+			if (!emulationActive(views.get(i))) continue;
 
-			if (views[i].getBuffer() == buffer)
+			if (views.get(i).getBuffer() == buffer)
 			{
-				views[i].getStatus().setMessage(status);
+				views.get(i).getStatus().setMessage(status);
 			}
 		}
 	}
@@ -244,7 +245,6 @@ public class VimulatorPlugin extends EBPlugin
 	private void initKeyBindings(String setPrefix, int mode)
 	{
         String[] actionNames = jEdit.getActionNames();
-
 		String prefix = "vimulator.keys." + setPrefix + ".";
 
 		for(int i = 0; i < actionNames.length; i++)

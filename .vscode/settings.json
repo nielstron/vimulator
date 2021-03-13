@@ -1,6 +1,6 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "/home/niels/bin/Isabelle2021/src/Tools/jEdit/dist/jedit.jar"
+        "/home/niels/git/vimulator2/bin/jEdit/jedit.jar"
     ]
 }

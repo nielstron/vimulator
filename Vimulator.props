@@ -1,17 +1,28 @@
 plugin.vimulator.VimulatorPlugin.name=Vimulator
-plugin.vimulator.VimulatorPlugin.author=mike dillon
+plugin.vimulator.VimulatorPlugin.author=mike dillon, Niels Muendler
 plugin.vimulator.VimulatorPlugin.version=0.1.0
+plugin.vimulator.VimulatorPlugin.description=The Vimulator plugin provides jEdit with VI-style editing capabilities (i.e. modal editing)
+plugin.vimulator.VimulatorPlugin.activate=startup
+plugin.vimulator.VimulatorPlugin.usePluginHome=true
+
 
 # dependencies
 plugin.vimulator.VimulatorPlugin.depend.0=jdk 15
-plugin.vimulator.VimulatorPlugin.depend.1=jedit 04.00.07.00
+plugin.vimulator.VimulatorPlugin.depend.1=jedit 05.06.99.00
 
 # settings
 vimulator.enabled=true
 
+# Plugin options
+plugin.vimulator.VimulatorPlugin.menu=vimulator \
+    - \
+    vimulator.toggle-vi-mode 
+
 # option pane
+plugin.vimulator.VimulatorPlugin.option-pane=vimulator
 options.vimulator.label=Vimulator
 options.vimulator.enable=Enable VI Emulation by Default
+options.vimulator.code=new vimulator.VimulatorOptionPane();
 
 # menu
 toggle-vi-mode.label=VI Emulation

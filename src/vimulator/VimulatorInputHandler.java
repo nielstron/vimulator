@@ -73,28 +73,28 @@ public class VimulatorInputHandler extends InputHandler
 			case VimulatorPlugin.COMMAND:
 				if (buffer.insideCompoundEdit())
 					buffer.endCompoundEdit();
-				bindings = commandBindings;
+				this.bindings = commandBindings;
 				break;
 			case VimulatorPlugin.INSERT:
 				buffer.beginCompoundEdit();
-				bindings = insertBindings;
+				this.bindings = insertBindings;
 				break;
 			case VimulatorPlugin.VISUAL:
 				if (buffer.insideCompoundEdit())
 					buffer.endCompoundEdit();
-				bindings = insertBindings;
+				this.bindings = insertBindings;
 				break;
 			default:
 				return;
 		}
 
 		this.mode = mode;
-		currentBindings = bindings;
+		this.setCurrentBindings(this.bindings);
 	}
 
 	public void addKeyBinding(String binding, EditAction action)
 	{
-		addKeyBinding(binding, action, bindings);
+		addKeyBinding(binding, action, this.bindings);
 	}
 
 	public void addKeyBinding(String binding, EditAction action, int mode)
@@ -102,13 +102,13 @@ public class VimulatorInputHandler extends InputHandler
 		switch (mode)
 		{
 			case VimulatorPlugin.COMMAND:
-				addKeyBinding(binding, action, commandBindings);
+				addKeyBinding(binding, action, this.commandBindings);
 				break;
 			case VimulatorPlugin.INSERT:
-				addKeyBinding(binding, action, insertBindings);
+				addKeyBinding(binding, action, this.insertBindings);
 				break;
 			case VimulatorPlugin.VISUAL:
-				addKeyBinding(binding, action, visualBindings);
+				addKeyBinding(binding, action, this.visualBindings);
 				break;
 		}
 	}
@@ -142,8 +142,6 @@ public class VimulatorInputHandler extends InputHandler
 	// private members
 	private int mode;
 
-	private Hashtable bindings;
-	private Hashtable currentBindings;
 
 	private Hashtable commandBindings;
 	private Hashtable insertBindings;
@@ -151,6 +149,8 @@ public class VimulatorInputHandler extends InputHandler
 
 	private void addKeyBinding(String binding, EditAction action, Hashtable current)
 	{
+        // current is a hashtable that recursively refers to further hashtables until
+        // as long as there are more string tokens
 		StringTokenizer st = new StringTokenizer(binding);
 		while(st.hasMoreTokens())
 		{
@@ -159,17 +159,12 @@ public class VimulatorInputHandler extends InputHandler
 
 			if (st.hasMoreTokens())
 			{
-				Object o = current.get(keyStroke);
-				if (o instanceof Hashtable)
-				{
-					current = (Hashtable)o;
-				}
-				else
-				{
+				Object o = current.getOrDefault(keyStroke, null);
+				if (! (o instanceof Hashtable)) {
 					o = new Hashtable();
-					current.put(keyStroke,o);
-					current = (Hashtable)o;
+					current.put(keyStroke, o);
 				}
+                current = (Hashtable)o;
 			}
 			else
 			{
@@ -180,8 +175,8 @@ public class VimulatorInputHandler extends InputHandler
 
 	private void resetState()
 	{
-		currentBindings = bindings;
-		repeatCount = 0;
+		this.setCurrentBindings(bindings);
+		this.setRepeatCount(0);
 	}
 
 	private void commandKeyPressed(KeyEvent evt)
@@ -205,15 +200,16 @@ public class VimulatorInputHandler extends InputHandler
 			KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode, modifiers);
 
 			Object o = currentBindings.get(keyStroke);
-
 			if (o instanceof Hashtable)
 			{
+                Log.log(Log.WARNING, this, "Pressed, Result of keystroke: New hashtable");
 				currentBindings = (Hashtable)o;
 				evt.consume();
 				return;
 			}
 			else if (o instanceof EditAction)
 			{
+                Log.log(Log.WARNING, this, "Pressed, Result of keystroke: New Action " + ((EditAction)o).getLabel());
 				invokeAction((EditAction)o);
 				resetState();
 				evt.consume();
@@ -277,14 +273,17 @@ public class VimulatorInputHandler extends InputHandler
 		}
 		else if (o instanceof Hashtable)
 		{
+            Log.log(Log.WARNING, this, "Typed, Result of keystroke: New hashtable");
 			currentBindings = (Hashtable)o;
 			evt.consume();
 			return;
 		}
 		else if (o instanceof EditAction)
 		{
+            Log.log(Log.WARNING, this, "Typed, Result of keystroke: New Action " + ((EditAction)o).getLabel());
 			invokeAction((EditAction)o);
-			if (readNextChar == null) resetState();
+			//if (readNextChar == null)
+             resetState();
 			evt.consume();
 			return;
 		}
@@ -351,7 +350,6 @@ public class VimulatorInputHandler extends InputHandler
 
 	private void insertKeyTyped(java.awt.event.KeyEvent evt)
 	{
-        Log.log(Log.DEBUG, this, evt);
 		int modifiers = evt.getModifiersEx();
 		char c = evt.getKeyChar();
 		// ignore
@@ -401,7 +399,11 @@ public class VimulatorInputHandler extends InputHandler
 
     @Override
     public void processKeyEvent(java.awt.event.KeyEvent evt, int from, boolean global) {
-        if(evt.getID() == evt.KEY_PRESSED){
+        Log.log(Log.WARNING, this, "KeyCode: " + evt.getKeyCode());
+        Log.log(Log.WARNING, this, "KeyChar: " + evt.getKeyChar());
+        Log.log(Log.WARNING, this, "Modifier: " + evt.getModifiersEx());
+        Log.log(Log.WARNING, this, "ID: " + evt.getID());
+        if(evt.getID() == java.awt.event.KeyEvent.KEY_PRESSED){
             switch (mode)
             {
                 case VimulatorPlugin.INSERT:
@@ -413,7 +415,7 @@ public class VimulatorInputHandler extends InputHandler
                     break;
             }
         }
-        else if (evt.getID() == evt.KEY_TYPED){
+        else if (evt.getID() == java.awt.event.KeyEvent.KEY_TYPED){
             switch (mode)
             {
                 case VimulatorPlugin.INSERT:

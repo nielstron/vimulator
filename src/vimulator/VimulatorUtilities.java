@@ -180,9 +180,8 @@ public class VimulatorUtilities
 		buffer.beginCompoundEdit();
         int[] leadingWhitespace = {0};
         buffer.getCurrentIndentForLine(lineNo, leadingWhitespace);
-        Log.log(Log.WARNING, null, leadingWhitespace[0]);
-		buffer.remove(end, leadingWhitespace[0]);
-		if (addSpace) buffer.insert(end, " ");
+		buffer.remove(end-1, leadingWhitespace[0]+1);
+		if (addSpace) buffer.insert(end-1, " ");
 		buffer.endCompoundEdit();
 
 		return end - 1;

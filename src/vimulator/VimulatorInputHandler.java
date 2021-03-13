@@ -140,9 +140,12 @@ public class VimulatorInputHandler extends InputHandler
 	}
 
 	// private members
+    // current VI edit mode
 	private int mode;
+    // User requested a repeated command before
+    private boolean requestedRepeat;
 
-
+    // Key bindings for different modes
 	private Hashtable commandBindings;
 	private Hashtable insertBindings;
 	private Hashtable visualBindings;
@@ -176,7 +179,8 @@ public class VimulatorInputHandler extends InputHandler
 	private void resetState()
 	{
 		this.setCurrentBindings(bindings);
-		this.setRepeatCount(0);
+        this.requestedRepeat = false;
+		this.setRepeatCount(1);
 	}
 
 	private void commandKeyPressed(KeyEvent evt)
@@ -264,10 +268,14 @@ public class VimulatorInputHandler extends InputHandler
 		Object o = currentBindings.get(keyStroke);
 
 		if (currentBindings == bindings && Character.isDigit(c)
-			&& (repeatCount > 0 || c != '0'))
+			&& (this.requestedRepeat || c != '0'))
 		{
-			repeatCount *= 10;
-			repeatCount += c - '0';
+            if(this.requestedRepeat){
+                this.repeatCount *= 10;
+                this.repeatCount += c - '0';
+            }
+            else this.repeatCount = c - '0';
+            this.requestedRepeat = true;
 			evt.consume();
 			return;
 		}
@@ -282,9 +290,7 @@ public class VimulatorInputHandler extends InputHandler
 		{
             Log.log(Log.WARNING, this, "Typed, Result of keystroke: New Action " + ((EditAction)o).getLabel());
 			invokeAction((EditAction)o);
-			//if (readNextChar == null)
-            //Log.log(Log.WARNING, this, "Resetting state");
-            //resetState();
+			if (readNextChar == null) resetState();
 			evt.consume();
 			return;
 		}
@@ -353,9 +359,6 @@ public class VimulatorInputHandler extends InputHandler
 	{
 		int modifiers = evt.getModifiersEx();
 		char c = evt.getKeyChar();
-		// ignore
-		if (c == '\b')
-			return;
 
 		if (currentBindings != bindings)
 		{
@@ -382,12 +385,13 @@ public class VimulatorInputHandler extends InputHandler
 			currentBindings = bindings;
 		}
 
-		if (repeatCount > 0 && Character.isDigit(c))
-		{
-			repeatCount *= 10;
-			repeatCount += (c - '0');
-		}
-		else
+        // TODO why is this in the input mode?
+		//if (this.requestedRepeat && Character.isDigit(c))
+		//{
+		//	repeatCount *= 10;
+		//	repeatCount += (c - '0');
+		//}
+		//else
 		{
 			userInput(c);
 		}

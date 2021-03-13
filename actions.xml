@@ -92,14 +92,7 @@
 
 	<ACTION NAME="vi-next-line-ws-start">
 		<CODE>
-			if (textArea.getCaretLine() + 1 == textArea.getLineCount())
-			{
-				Toolkit.getDefaultToolkit().beep();
-				return;
-			}
-			textArea.setCaretPosition(textArea.getLineStartOffset(
-				textArea.getCaretLine() + 1));
-			textArea.goToStartOfWhiteSpace(false);
+			textArea.goToNextLine();
 		</CODE>
 	</ACTION>
 

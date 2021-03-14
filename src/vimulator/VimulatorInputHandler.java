@@ -43,6 +43,9 @@ public class VimulatorInputHandler extends InputHandler
 		insertBindings = new Hashtable();
 		visualBindings = new Hashtable();
 
+        insertHandler = new InsertInputHandler(view, insertBindings);
+        commandHandler = new CommandInputHandler(view, commandBindings, visualBindings);
+
 		setMode(VimulatorPlugin.COMMAND);
 	}
 
@@ -51,8 +54,10 @@ public class VimulatorInputHandler extends InputHandler
 		super(view);
 
 		commandBindings = chain.commandBindings;
-		insertBindings = chain.insertBindings;
 		visualBindings = chain.visualBindings;
+        insertBindings = chain.insertBindings;
+        insertHandler = new InsertInputHandler(view, insertBindings);
+        commandHandler = new CommandInputHandler(view, commandBindings, visualBindings);
 
 		setMode(chain.getMode());
 	}
@@ -64,26 +69,16 @@ public class VimulatorInputHandler extends InputHandler
 
 	public void setMode(int mode)
 	{
-		if (this.mode == mode || view == null) return;
-
-		Buffer buffer = view.getBuffer();
-
 		switch (mode)
 		{
 			case VimulatorPlugin.COMMAND:
-				if (buffer.insideCompoundEdit())
-					buffer.endCompoundEdit();
-				this.setBindings(commandBindings);
-				break;
-			case VimulatorPlugin.INSERT:
-				buffer.beginCompoundEdit();
-				this.setBindings(insertBindings);
-				break;
 			case VimulatorPlugin.VISUAL:
-				if (buffer.insideCompoundEdit())
-					buffer.endCompoundEdit();
-				this.setBindings(insertBindings);
-				break;
+                commandHandler.setMode(mode);
+                this.currentHandler = commandHandler;
+                break;
+            case VimulatorPlugin.INSERT:
+                this.currentHandler = insertHandler;
+                break;
 			default:
 				return;
 		}
@@ -142,13 +137,15 @@ public class VimulatorInputHandler extends InputHandler
 	// private members
     // current VI edit mode
 	private int mode;
-    // User requested a repeated command before
-    private boolean requestedRepeat;
 
     // Key bindings for different modes
 	private Hashtable commandBindings;
 	private Hashtable insertBindings;
 	private Hashtable visualBindings;
+
+    private InputHandler currentHandler;
+    private InsertInputHandler insertHandler;
+    private CommandInputHandler commandHandler;
 
 	private void addKeyBinding(String binding, EditAction action, Hashtable current)
 	{
@@ -176,234 +173,6 @@ public class VimulatorInputHandler extends InputHandler
 		}
 	}
 
-	private void resetState()
-	{
-		this.setCurrentBindings(bindings);
-        this.requestedRepeat = false;
-		this.setRepeatCount(1);
-	}
-
-	private void commandKeyPressed(KeyEvent evt)
-	{
-		int keyCode = evt.getKeyCode();
-		int modifiers = evt.getModifiersEx();
-		char c = evt.getKeyChar();
-		boolean simple = (modifiers & ~KeyEvent.SHIFT_DOWN_MASK) == 0;
-
-		if (!simple
-			|| evt.isActionKey()
-			|| keyCode == KeyEvent.VK_SPACE
-			|| keyCode == KeyEvent.VK_BACK_SPACE
-			|| keyCode == KeyEvent.VK_DELETE
-			|| keyCode == KeyEvent.VK_ESCAPE
-			|| keyCode == KeyEvent.VK_ENTER
-			|| keyCode == KeyEvent.VK_TAB)
-		{
-			readNextChar = null;
-
-			KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode, modifiers);
-
-			Object o = currentBindings.get(keyStroke);
-			if (o instanceof Hashtable)
-			{
-                Log.log(Log.WARNING, this, "Pressed, Result of keystroke: New hashtable");
-				currentBindings = (Hashtable)o;
-				evt.consume();
-				return;
-			}
-			else if (o instanceof EditAction)
-			{
-                Log.log(Log.WARNING, this, "Pressed, Result of keystroke: New Action " + ((EditAction)o).getName());
-				invokeAction((EditAction)o);
-				resetState();
-				evt.consume();
-				return;
-			}
-
-			Toolkit.getDefaultToolkit().beep();
-
-			if (currentBindings != bindings)
-			{
-				// F10 should be passed on, but C+e F10
-				// shouldn't
-				evt.consume();
-			}
-			resetState();
-		}
-	}
-
-	private void commandKeyTyped(KeyEvent evt)
-	{
-		int modifiers = evt.getModifiersEx();
-		char c = evt.getKeyChar();
-
-		if (readNextChar != null)
-		{
-			invokeReadNextChar(c);
-			resetState();
-			evt.consume();
-			return;
-		}
-
-		c = Character.toUpperCase(c);
-
-		// ignore
-		if (c == '\b' || c == ' ') return;
-
-		readNextChar = null;
-
-		KeyStroke keyStroke;
-		if ((modifiers & KeyEvent.SHIFT_DOWN_MASK) != 0
-			&& c != Character.toLowerCase(c))
-		{
-			// Shift+letter
-            Log.log(Log.WARNING, this, "Shift + " + c);
-			keyStroke = KeyStroke.getKeyStroke(c, modifiers);
-		}
-		else
-		{
-			// Plain letter or Shift+punct
-			keyStroke = KeyStroke.getKeyStroke(c);
-		}
-
-		Object o = currentBindings.get(keyStroke);
-
-		if (currentBindings == bindings && Character.isDigit(c)
-			&& (this.requestedRepeat || c != '0'))
-		{
-            if(this.requestedRepeat){
-                this.repeatCount *= 10;
-                this.repeatCount += c - '0';
-            }
-            else this.repeatCount = c - '0';
-            this.requestedRepeat = true;
-			evt.consume();
-			return;
-		}
-		else if (o instanceof Hashtable)
-		{
-            Log.log(Log.WARNING, this, "Typed, Result of keystroke: New hashtable");
-			currentBindings = (Hashtable)o;
-			evt.consume();
-			return;
-		}
-		else if (o instanceof EditAction)
-		{
-            Log.log(Log.WARNING, this, "Typed, Result of keystroke: New Action " + ((EditAction)o).getLabel());
-			invokeAction((EditAction)o);
-			if (readNextChar == null) resetState();
-			evt.consume();
-			return;
-		}
-
-		Toolkit.getDefaultToolkit().beep();
-		resetState();
-	}
-
-	private void insertKeyPressed(KeyEvent evt)
-	{
-		int keyCode = evt.getKeyCode();
-		int modifiers = evt.getModifiersEx();
-		boolean simple = (modifiers & ~KeyEvent.SHIFT_DOWN_MASK) == 0;
-
-		if (modifiers == 0 && bindings == currentBindings
-			&& (
-                keyCode == KeyEvent.VK_ENTER 
-                || keyCode == KeyEvent.VK_TAB 
-                || keyCode == KeyEvent.VK_BACK_SPACE
-                || keyCode == KeyEvent.VK_DELETE
-                )
-            )
-		{
-            // Ignore, handled by KEY_TYPED
-			//userInput(keyChar);
-			evt.consume();
-			return;
-		}
-
-		if (!simple
-			|| evt.isActionKey()
-			|| keyCode == KeyEvent.VK_ESCAPE
-			|| keyCode == KeyEvent.VK_ENTER
-			|| keyCode == KeyEvent.VK_TAB
-            || keyCode == KeyEvent.VK_BACK_SPACE
-            || keyCode == KeyEvent.VK_DELETE
-        ) {
-			readNextChar = null;
-
-			KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode, modifiers);
-
-			Object o = currentBindings.get(keyStroke);
-			if (o instanceof Hashtable)
-			{
-				currentBindings = (Hashtable)o;
-				evt.consume();
-				return;
-			}
-			else if (o instanceof EditAction)
-			{
-				invokeAction((EditAction)o);
-				resetState();
-				evt.consume();
-				return;
-			}
-
-			// Don't beep if the user presses some
-			// key we don't know about unless a
-			// prefix is active. Otherwise it will
-			// beep when caps lock is pressed, etc.
-			if (currentBindings != bindings)
-			{
-				Toolkit.getDefaultToolkit().beep();
-				// F10 should be passed on, but C+e F10
-				// shouldn't
-				evt.consume();
-			}
-			resetState();
-		}
-	}
-
-	private void insertKeyTyped(java.awt.event.KeyEvent evt)
-	{
-		int modifiers = evt.getModifiersEx();
-		char c = evt.getKeyChar();
-
-		if (currentBindings != bindings)
-		{
-			readNextChar = null;
-
-			KeyStroke keyStroke = KeyStroke.getKeyStroke(
-				Character.toUpperCase(c));
-			Object o = currentBindings.get(keyStroke);
-
-			if (o instanceof Hashtable)
-			{
-				currentBindings = (Hashtable)o;
-				evt.consume();
-				return;
-			}
-			else if (o instanceof EditAction)
-			{
-				invokeAction((EditAction)o);
-				resetState();
-				evt.consume();
-				return;
-			}
-
-			currentBindings = bindings;
-		}
-
-        // TODO why is this in the input mode?
-		//if (this.requestedRepeat && Character.isDigit(c))
-		//{
-		//	repeatCount *= 10;
-		//	repeatCount += (c - '0');
-		//}
-		//else
-		{
-			userInput(c);
-		}
-	}
 
     @Override
     public boolean handleKey(Key key, boolean global) {
@@ -416,29 +185,6 @@ public class VimulatorInputHandler extends InputHandler
         Log.log(Log.WARNING, this, "KeyChar: " + evt.getKeyChar());
         Log.log(Log.WARNING, this, "Modifier: " + evt.getModifiersEx());
         Log.log(Log.WARNING, this, "ID: " + evt.getID());
-        if(evt.getID() == java.awt.event.KeyEvent.KEY_PRESSED){
-            switch (mode)
-            {
-                case VimulatorPlugin.COMMAND:
-                    commandKeyPressed(evt);
-                    break;
-                case VimulatorPlugin.INSERT:
-                default:
-                    insertKeyPressed(evt);
-                    break;
-            }
-        }
-        else if (evt.getID() == java.awt.event.KeyEvent.KEY_TYPED){
-            switch (mode)
-            {
-                case VimulatorPlugin.COMMAND:
-                    commandKeyTyped(evt);
-                    break;
-                case VimulatorPlugin.INSERT:
-                default:
-                    insertKeyTyped(evt);
-                    break;
-            }
-        }
+        this.currentHandler.processKeyEvent(evt, from, global);
     }
 }

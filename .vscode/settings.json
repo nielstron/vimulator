@@ -2,5 +2,7 @@
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
         "/home/niels/git/vimulator2/bin/jEdit/jedit.jar"
-    ]
+    ],
+    "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+    "java.format.settings.profile": "GoogleStyle",
 }

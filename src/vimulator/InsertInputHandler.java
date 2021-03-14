@@ -1,54 +1,44 @@
 /*
- * VimulatorInputHandler.java - Modal InputHandler for Vimulator
- * Copyright (C) 2000, 2001 mike dillon
+ * VimulatorInputHandler.java - Modal InputHandler for Vimulator Copyright (C) 2000, 2001 mike
+ * dillon
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or any later version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation; either version 2 of the
+ * License, or any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+ * 02111-1307, USA.
  */
 
 package vimulator;
 
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.util.*;
 import javax.swing.KeyStroke;
-import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.gui.DefaultInputHandler;
-import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.gui.KeyEventTranslator.Key;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
-import org.gjt.sp.util.Log;
 
-public class InsertInputHandler extends DefaultInputHandler
-{
-	public InsertInputHandler(View view)
-	{
-		super(view);
+public class InsertInputHandler extends DefaultInputHandler {
+    public InsertInputHandler(View view) {
+        super(view);
 
-		insertBindings = new Hashtable();
-	}
+        insertBindings = new Hashtable();
+    }
 
-	public InsertInputHandler(View view, InsertInputHandler chain)
-	{
-		super(view);
+    public InsertInputHandler(View view, InsertInputHandler chain) {
+        super(view);
 
-		insertBindings = chain.insertBindings;
-	}
-    
-    public InsertInputHandler(View view, Hashtable bindings){
+        insertBindings = chain.insertBindings;
+    }
+
+    public InsertInputHandler(View view, Hashtable bindings) {
         super(view);
 
         insertBindings = bindings;
@@ -56,31 +46,28 @@ public class InsertInputHandler extends DefaultInputHandler
 
     private Hashtable insertBindings;
 
-	public int getMode()
-	{
-		return VimulatorPlugin.INSERT;
-	}
+    public int getMode() {
+        return VimulatorPlugin.INSERT;
+    }
 
-	public void setMode(int mode)
-	{
+    public void setMode(int mode) {
         return;
-	}
+    }
 
 
-	private void insertKeyTyped(java.awt.event.KeyEvent evt)
-	{
-		int modifiers = evt.getModifiersEx();
-		char c = evt.getKeyChar();
+    private void insertKeyTyped(java.awt.event.KeyEvent evt) {
+        int modifiers = evt.getModifiersEx();
+        char c = evt.getKeyChar();
 
         userInput(c);
-	}
+    }
 
     @Override
     public void processKeyEvent(KeyEvent evt, int from, boolean global) {
         KeyStroke k = KeyStroke.getKeyStroke(evt.getKeyCode(), evt.getModifiersEx());
         Object o = this.insertBindings.get(k);
-        if(evt.getID() == KeyEvent.KEY_PRESSED && o instanceof EditAction){
-            this.invokeAction((EditAction)o);
+        if (evt.getID() == KeyEvent.KEY_PRESSED && o instanceof EditAction) {
+            this.invokeAction((EditAction) o);
             evt.consume();
             return;
         }

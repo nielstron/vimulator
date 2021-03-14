@@ -14,9 +14,7 @@ plugin.vimulator.VimulatorPlugin.depend.1=jedit 05.06.99.00
 vimulator.enabled=true
 
 # Plugin options
-plugin.vimulator.VimulatorPlugin.menu=vimulator \
-    - \
-    toggle-vi-mode 
+plugin.vimulator.VimulatorPlugin.menu=toggle-vi-mode 
 
 # option pane
 plugin.vimulator.VimulatorPlugin.option-pane=vimulator
@@ -25,7 +23,7 @@ options.vimulator.enable=Enable VI Emulation by Default
 options.vimulator.code=new vimulator.VimulatorOptionPane();
 
 # menu
-vimulator.toggle-vi-mode.label=VI Emulation
+toggle-vi-mode.label=VI Emulation
 
 # status bar messages
 vimulator.msg.simple-status="{0}" {1}L, {2}C

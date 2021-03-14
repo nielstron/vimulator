@@ -82,7 +82,7 @@ public class VimulatorCommandLine extends JPanel
         endCommandInput("");
 	}
 
-	public void repeatSearch()
+	public void repeatSearch(boolean reverse)
 	{
 		Registers.Register reg = Registers.getRegister('/');
 		String pattern;
@@ -91,16 +91,13 @@ public class VimulatorCommandLine extends JPanel
 			VimulatorUtilities.beep(view);
 			return;
 		}
-		processSearch(pattern);
+		processSearch(pattern, reverse);
 	}
 
 	public void beginReverseSearch()
 	{
-		view.getToolkit().beep();
-		return;
-
-/*		textField.setModel("vimualtor-search");
-		beginCommandInput("?");*/
+		textField.setModel("vimualtor-search");
+		beginCommandInput("?");
 	}
 
 	public void beginShellCommand()
@@ -238,16 +235,20 @@ public class VimulatorCommandLine extends JPanel
 				"vimulator.msg.bad-ex-command", args));
 		}
 	}
+	private void processSearch(String expr){
+        this.processSearch(expr, false);
+    }
 
-	private void processSearch(String expr)
+	private void processSearch(String expr, boolean reverse)
 	{
 		if ("".equals(expr))
 		{
-			repeatSearch();
+			repeatSearch(reverse);
 			return;
 		}
 
 		char delim = prefix.charAt(0); // prefix is '/' or '?'
+        reverse = (delim == '?') ^ reverse; // if delim = ? the search direction is inverted
 		String pattern = ViSearchMatcher.extractRegexString(expr, delim);
 
 		Registers.setRegister('/', pattern);
@@ -260,6 +261,7 @@ public class VimulatorCommandLine extends JPanel
 
 			SearchAndReplace.setSearchMatcher(matcher);
 			SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
+            SearchAndReplace.setReverseSearch(reverse);
 			SearchAndReplace.find(view);
 		}
 		catch (Exception e) {}

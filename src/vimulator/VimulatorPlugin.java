@@ -201,7 +201,12 @@ public class VimulatorPlugin extends EBPlugin
 
 	public static void repeatSearch(View view)
 	{
-		getCommandLine(view).repeatSearch();
+        repeatSearch(view, false);
+	}
+
+	public static void repeatSearch(View view, boolean reverse)
+	{
+		getCommandLine(view).repeatSearch(reverse);
 	}
 
 	public static VimulatorCommandLine getCommandLine(View view)

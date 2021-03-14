@@ -195,6 +195,12 @@
 		</CODE>
 	</ACTION>
 
+	<ACTION NAME="vi-repeat-search-opposite" NO_RECORD="TRUE">
+		<CODE>
+			vimulator.VimulatorPlugin.repeatSearch(view, true);
+		</CODE>
+	</ACTION>
+
 	<ACTION NAME="vi-save-close-buffer">
 		<CODE>
 			buffer.save(view, null, true);

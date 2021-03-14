@@ -95,12 +95,15 @@ public class ExInterpreter
 
 		bind("reg", "view-registers");
 		bind("registers", "view-registers");
+
+        // TODO introduce search+replace
 	}
 
 	private static void parse(String expr)
 	{
 		for (int i = 0; i < expr.length(); i++)
 		{
+            // TODO
 		}
 	}
 }

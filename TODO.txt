@@ -1,8 +1,5 @@
 This list is not complete
 --------------------------------------------------------------------------------
-- Fix Shift+sth (also ctrl?)
-- Add "o"
-    - Fix ArrayIndexOutOfBoundsException using 'O' on last line
-- Escape in command line
+- Fix history in : and /
 - Go to character commands (f,F,t,T) with PRESSED keys (not TYPED)
 

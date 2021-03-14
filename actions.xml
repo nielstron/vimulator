@@ -207,9 +207,16 @@
 			jEdit.closeBuffer(view, buffer);
 		</CODE>
 	</ACTION>
+
 	<ACTION NAME="vi-close-buffer-force">
 		<CODE>
 			jEdit._closeBuffer(view, buffer, true);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-go-to-line">
+		<CODE>
+			vimulator.VimulatorUtilities.goToLine(view, textArea);
 		</CODE>
 	</ACTION>
 

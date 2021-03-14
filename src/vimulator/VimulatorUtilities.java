@@ -29,6 +29,7 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 
+
 public class VimulatorUtilities {
     public static boolean checkEmulation(View view) {
         return view.getInputHandler() instanceof VimulatorInputHandler;
@@ -294,6 +295,15 @@ public class VimulatorUtilities {
         int caretPos = textArea.getLineStartOffset(line) + leadingWhitespace[0];
         textArea.setCaretPosition(caretPos);
         textArea.insertEnterAndIndent();
+        textArea.setCaretPosition(caretPos);
+    }
+
+    public static void goToLine(View view, JEditTextArea textArea){
+        int rc = view.getInputHandler().getRepeatCount();
+        if (rc > textArea.getLineCount())
+            rc = textArea.getLineCount();
+        int line = rc - 1;
+        int caretPos = textArea.getLineStartOffset(line);
         textArea.setCaretPosition(caretPos);
     }
 

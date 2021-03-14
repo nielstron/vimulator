@@ -149,6 +149,16 @@ public class VimulatorInputHandler extends InputHandler {
         }
     }
 
+    @Override
+    public int getRepeatCount() {
+        return this.currentHandler.getRepeatCount();
+    }
+
+    @Override
+    public void setRepeatCount(int i) {
+        this.currentHandler.setRepeatCount(i);
+    }
+
 
     @Override
     public boolean handleKey(Key key, boolean global) {

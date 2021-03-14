@@ -123,8 +123,8 @@ public class CommandInputHandler extends InputHandler {
                 Log.log(Log.WARNING, this,
                         "Pressed, Result of keystroke: New Action " + ((EditAction) o).getName());
                 invokeAction((EditAction) o);
-                resetState();
                 evt.consume();
+                resetState();
                 return;
             }
 
@@ -189,9 +189,9 @@ public class CommandInputHandler extends InputHandler {
             Log.log(Log.WARNING, this,
                     "Typed, Result of keystroke: New Action " + ((EditAction) o).getLabel());
             invokeAction((EditAction) o);
+            evt.consume();
             if (readNextChar == null)
                 resetState();
-            evt.consume();
             return;
         }
 

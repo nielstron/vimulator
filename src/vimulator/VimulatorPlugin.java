@@ -20,7 +20,6 @@
 package vimulator;
 
 import java.util.*;
-import javax.swing.*;
 import javax.swing.event.*;
 
 import org.gjt.sp.jedit.*;

@@ -16,7 +16,7 @@ vimulator.enabled=true
 # Plugin options
 plugin.vimulator.VimulatorPlugin.menu=vimulator \
     - \
-    vimulator.toggle-vi-mode 
+    toggle-vi-mode 
 
 # option pane
 plugin.vimulator.VimulatorPlugin.option-pane=vimulator

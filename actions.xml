@@ -166,10 +166,20 @@
 			vimulator.VimulatorPlugin.enterExCommand(view);
 		</CODE>
 	</ACTION>
+	<ACTION NAME="vi-end-ex-command" NO_RECORD="TRUE">
+		<CODE>
+			vimulator.VimulatorPlugin.leaveExCommand(view);
+		</CODE>
+	</ACTION>
 
 	<ACTION NAME="vi-search" NO_RECORD="TRUE">
 		<CODE>
 			vimulator.VimulatorPlugin.enterSearch(view);
+		</CODE>
+	</ACTION>
+	<ACTION NAME="vi-end-search" NO_RECORD="TRUE">
+		<CODE>
+			vimulator.VimulatorPlugin.leaveExSearch(view);
 		</CODE>
 	</ACTION>
 

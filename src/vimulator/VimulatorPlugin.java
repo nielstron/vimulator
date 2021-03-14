@@ -176,6 +176,16 @@ public class VimulatorPlugin extends EBPlugin
 		getCommandLine(view).beginExCommand();
 	}
 
+	public static void leaveExCommand(View view)
+	{
+		getCommandLine(view).endExCommand();
+	}
+
+	public static void leaveExSearch(View view)
+	{
+		getCommandLine(view).endExCommand();
+	}
+
 	public static void enterSearch(View view)
 	{
 		enterSearch(view, false);

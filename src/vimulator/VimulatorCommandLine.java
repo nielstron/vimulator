@@ -30,6 +30,7 @@ import javax.swing.text.Document;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.search.*;
+import org.gjt.sp.util.Log;
 
 import vimulator.ex.*;
 
@@ -65,10 +66,20 @@ public class VimulatorCommandLine extends JPanel
 		beginCommandInput(":");
 	}
 
+	public void endExCommand()
+	{
+        endCommandInput("");
+	}
+
 	public void beginSearch()
 	{
 		textField.setModel("vimulator-search");
 		beginCommandInput("/");
+	}
+
+	public void endSearch()
+	{
+        endCommandInput("");
 	}
 
 	public void repeatSearch()

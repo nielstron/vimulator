@@ -15,8 +15,9 @@
  * 02111-1307, USA.
  */
 
-package vimulator;
+package vimulator.inputhandler;
 
+import vimulator.*;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import javax.swing.KeyStroke;
@@ -27,6 +28,7 @@ import org.gjt.sp.jedit.gui.KeyEventTranslator.Key;
 import org.gjt.sp.util.Log;
 
 public class VimulatorInputHandler extends InputHandler {
+
     public VimulatorInputHandler(View view) {
         super(view);
 
@@ -35,9 +37,9 @@ public class VimulatorInputHandler extends InputHandler {
         visualBindings = new Hashtable();
 
         insertHandler = new InsertInputHandler(view, insertBindings);
-        commandHandler = new CommandInputHandler(view, commandBindings, visualBindings);
+        commandHandler = new CommandInputHandler(view, commandBindings);
 
-        setMode(VimulatorPlugin.COMMAND);
+        setMode(VimulatorConstants.COMMAND);
     }
 
     public VimulatorInputHandler(View view, VimulatorInputHandler chain) {
@@ -47,7 +49,7 @@ public class VimulatorInputHandler extends InputHandler {
         visualBindings = chain.visualBindings;
         insertBindings = chain.insertBindings;
         insertHandler = new InsertInputHandler(view, insertBindings);
-        commandHandler = new CommandInputHandler(view, commandBindings, visualBindings);
+        commandHandler = new CommandInputHandler(view, commandBindings);
 
         setMode(chain.getMode());
     }
@@ -58,12 +60,12 @@ public class VimulatorInputHandler extends InputHandler {
 
     public void setMode(int mode) {
         switch (mode) {
-            case VimulatorPlugin.COMMAND:
-            case VimulatorPlugin.VISUAL:
-                commandHandler.setMode(mode);
+            case VimulatorConstants.COMMAND:
+                if(this.view.getBuffer().insideCompoundEdit())
+                    this.view.getBuffer().endCompoundEdit();
                 this.currentHandler = commandHandler;
                 break;
-            case VimulatorPlugin.INSERT:
+            case VimulatorConstants.INSERT:
                 this.currentHandler = insertHandler;
                 break;
             default:
@@ -80,13 +82,13 @@ public class VimulatorInputHandler extends InputHandler {
 
     public void addKeyBinding(String binding, EditAction action, int mode) {
         switch (mode) {
-            case VimulatorPlugin.COMMAND:
+            case VimulatorConstants.COMMAND:
                 addKeyBinding(binding, action, this.commandBindings);
                 break;
-            case VimulatorPlugin.INSERT:
+            case VimulatorConstants.INSERT:
                 addKeyBinding(binding, action, this.insertBindings);
                 break;
-            case VimulatorPlugin.VISUAL:
+            case VimulatorConstants.VISUAL:
                 addKeyBinding(binding, action, this.visualBindings);
                 break;
         }
@@ -102,13 +104,13 @@ public class VimulatorInputHandler extends InputHandler {
 
     public void removeAllKeyBindings(int mode) {
         switch (mode) {
-            case VimulatorPlugin.COMMAND:
+            case VimulatorConstants.COMMAND:
                 commandBindings.clear();
                 break;
-            case VimulatorPlugin.INSERT:
+            case VimulatorConstants.INSERT:
                 insertBindings.clear();
                 break;
-            case VimulatorPlugin.VISUAL:
+            case VimulatorConstants.VISUAL:
                 visualBindings.clear();
                 break;
         }

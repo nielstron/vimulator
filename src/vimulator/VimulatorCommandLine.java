@@ -236,7 +236,7 @@ public class VimulatorCommandLine extends JPanel implements DocumentListener, Ac
     }
 
     private boolean getVIMode() {
-        return (VimulatorUtilities.getMode(view) & VimulatorPlugin.EX) == 0;
+        return (VimulatorUtilities.getMode(view) & VimulatorConstants.EX) == 0;
     }
 
     private void setVIMode(boolean mode) {

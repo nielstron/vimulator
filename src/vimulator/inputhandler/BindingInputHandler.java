@@ -15,7 +15,9 @@
  * 02111-1307, USA.
  */
 
-package vimulator;
+package vimulator.inputhandler;
+
+import vimulator.*;
 
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -28,57 +30,34 @@ import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.gui.KeyEventTranslator.Key;
 import org.gjt.sp.util.Log;
 
-public class CommandInputHandler extends InputHandler {
-    public CommandInputHandler(View view) {
+public class BindingInputHandler extends InputHandler {
+
+    public BindingInputHandler(View view, int mode) {
         super(view);
 
-        commandBindings = new Hashtable();
-        visualBindings = new Hashtable();
-
-        setMode(VimulatorPlugin.COMMAND);
+        this.bindings = new Hashtable();
+        this.mode = mode;
+        this.setCurrentBindings(bindings);
     }
 
-    public CommandInputHandler(View view, Hashtable commandBindings, Hashtable visualBindings) {
+    public BindingInputHandler(View view, int mode, Hashtable localBindings) {
         super(view);
 
-        this.commandBindings = commandBindings;
-        this.visualBindings = visualBindings;
-
-        setMode(VimulatorPlugin.COMMAND);
+        this.bindings = localBindings;
+        this.mode = mode;
+        this.setCurrentBindings(localBindings);
     }
 
-    public CommandInputHandler(View view, CommandInputHandler chain) {
+    public BindingInputHandler(View view, BindingInputHandler chain) {
         super(view);
 
-        commandBindings = chain.commandBindings;
-        visualBindings = chain.visualBindings;
-
-        setMode(chain.getMode());
+        this.bindings = chain.bindings;
+        this.mode = chain.mode;
+        this.setCurrentBindings(this.bindings);
     }
 
     public int getMode() {
         return mode;
-    }
-
-    public void setMode(int mode) {
-        if (view == null)
-            return;
-
-        Buffer buffer = view.getBuffer();
-
-        switch (mode) {
-            case VimulatorPlugin.COMMAND:
-            case VimulatorPlugin.VISUAL:
-                if (buffer.insideCompoundEdit())
-                    buffer.endCompoundEdit();
-                this.setBindings(this.commandBindings);
-                break;
-            default:
-                return;
-        }
-
-        this.mode = mode;
-        this.setCurrentBindings(this.bindings);
     }
 
 
@@ -87,10 +66,6 @@ public class CommandInputHandler extends InputHandler {
     private int mode;
     // User requested a repeated command before
     private boolean requestedRepeat;
-
-    // Key bindings for different modes
-    private Hashtable commandBindings;
-    private Hashtable visualBindings;
 
 
     private void resetState() {
@@ -207,19 +182,10 @@ public class CommandInputHandler extends InputHandler {
     @Override
     public void processKeyEvent(java.awt.event.KeyEvent evt, int from, boolean global) {
         if (evt.getID() == java.awt.event.KeyEvent.KEY_PRESSED) {
-            switch (mode) {
-                case VimulatorPlugin.COMMAND:
-                default:
-                    commandKeyPressed(evt);
-                    break;
-            }
+            commandKeyPressed(evt);
         } else if (evt.getID() == java.awt.event.KeyEvent.KEY_TYPED) {
-            switch (mode) {
-                case VimulatorPlugin.COMMAND:
-                default:
-                    commandKeyTyped(evt);
-                    break;
-            }
+            commandKeyTyped(evt);
         }
     }
 }
+

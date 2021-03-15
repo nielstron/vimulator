@@ -15,8 +15,9 @@
  * 02111-1307, USA.
  */
 
-package vimulator;
+package vimulator.inputhandler;
 
+import vimulator.*;
 import java.awt.event.KeyEvent;
 import java.util.*;
 import javax.swing.KeyStroke;
@@ -47,7 +48,7 @@ public class InsertInputHandler extends DefaultInputHandler {
     private Hashtable insertBindings;
 
     public int getMode() {
-        return VimulatorPlugin.INSERT;
+        return VimulatorConstants.INSERT;
     }
 
     public void setMode(int mode) {

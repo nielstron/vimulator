@@ -22,6 +22,8 @@ import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
 import javax.swing.text.Segment;
 
+import vimulator.inputhandler.*;
+
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
@@ -53,13 +55,13 @@ public class VimulatorUtilities {
         if (textArea.getCaretPosition() > lastAllowed)
             textArea.setCaretPosition(lastAllowed);
 
-        if (mode == VimulatorPlugin.COMMAND) {
+        if (mode == VimulatorConstants.COMMAND) {
             setStatus(view, "");
-        } else if (mode == VimulatorPlugin.INSERT) {
+        } else if (mode == VimulatorConstants.INSERT) {
             String msg = textArea.isOverwriteEnabled() ? jEdit.getProperty("vimulator.msg.replace-mode")
                     : jEdit.getProperty("vimulator.msg.insert-mode");
             setStatus(view, msg);
-        } else if (mode == VimulatorPlugin.VISUAL) {
+        } else if (mode == VimulatorConstants.VISUAL) {
             setStatus(view, jEdit.getProperty("vimulator.msg.visual-mode"));
         }
     }
@@ -84,7 +86,7 @@ public class VimulatorUtilities {
 
         int lastAllowed = textArea.getLineEndOffset(line) - 1;
         if (checkEmulation(view)
-                && ((VimulatorInputHandler) view.getInputHandler()).getMode() != VimulatorPlugin.INSERT)
+                && ((VimulatorInputHandler) view.getInputHandler()).getMode() != VimulatorConstants.INSERT)
             lastAllowed--;
 
         if (lastAllowed < textArea.getLineStartOffset(line))

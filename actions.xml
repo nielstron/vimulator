@@ -41,27 +41,27 @@
 	<ACTION NAME="vi-command-mode">
 		<CODE>
 			textArea.setOverwriteEnabled(false);
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.COMMAND);
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.COMMAND);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-insert-mode">
 		<CODE>
 			textArea.setOverwriteEnabled(false);
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.INSERT);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-replace-mode">
 		<CODE>
 			textArea.setOverwriteEnabled(true);
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.INSERT);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-visual-mode">
 		<CODE>
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.VISUAL);
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.VISUAL);
 		</CODE>
 	</ACTION>
 
@@ -126,7 +126,7 @@
 
 	<ACTION NAME="vi-append">
 		<CODE>
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.INSERT);
 			caretLine = textArea.getCaretLine();
 			pos = textArea.getCaretPosition() + 1;
 			if (pos &gt;= textArea.getLineEndOffset(caretLine))
@@ -199,35 +199,35 @@
 
 	<ACTION NAME="vi-append-ws-end">
 		<CODE>
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.INSERT);
 			textArea.goToEndOfWhiteSpace(false);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-insert-ws-start">
 		<CODE>
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.INSERT);
 			textArea.goToStartOfWhiteSpace(false);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-change-end-line">
 		<CODE>
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.INSERT);
 			textArea.deleteToEndOfLine();
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-open-prev-line">
 		<CODE>
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.INSERT);
             vimulator.VimulatorUtilities.insertEnterAndIndentBefore(textArea, buffer);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-open-next-line">
 		<CODE>
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.INSERT);
 			line = textArea.getCaretLine();
 			textArea.setCaretPosition(textArea.getLineEndOffset(line)-1);
             textArea.insertEnterAndIndent();

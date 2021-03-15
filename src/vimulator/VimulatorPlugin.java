@@ -16,6 +16,8 @@
 
 package vimulator;
 
+import vimulator.inputhandler.*;
+
 import java.util.*;
 import javax.swing.event.*;
 
@@ -27,11 +29,6 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 
 public class VimulatorPlugin extends EBPlugin {
-    public static final int COMMAND = 1 << 0;
-    public static final int INSERT = 1 << 1;
-    public static final int VISUAL = 1 << 2;
-    public static final int EX = 1 << 3;
-    public static final int APPEND = 1 << 4;
 
     @Override
     public void start() {
@@ -116,7 +113,7 @@ public class VimulatorPlugin extends EBPlugin {
         // or back to the default
         if (newHandler instanceof VimulatorInputHandler) {
             // Switch to COMMAND mode
-            ((VimulatorInputHandler) newHandler).setMode(COMMAND);
+            ((VimulatorInputHandler) newHandler).setMode(VimulatorConstants.COMMAND);
 
             // Install command line
             view.addToolBar(View.BOTTOM_GROUP, View.ABOVE_SYSTEM_BAR_LAYER, getCommandLine(view));
@@ -202,8 +199,8 @@ public class VimulatorPlugin extends EBPlugin {
     }
 
     private void initKeyBindings() {
-        initKeyBindings("command", COMMAND);
-        initKeyBindings("insert", INSERT);
+        initKeyBindings("command", VimulatorConstants.COMMAND);
+        initKeyBindings("insert", VimulatorConstants.INSERT);
     }
 
     private void initKeyBindings(String setPrefix, int mode) {

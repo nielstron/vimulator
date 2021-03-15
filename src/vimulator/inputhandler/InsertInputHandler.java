@@ -55,14 +55,6 @@ public class InsertInputHandler extends DefaultInputHandler {
         return;
     }
 
-
-    private void insertKeyTyped(java.awt.event.KeyEvent evt) {
-        int modifiers = evt.getModifiersEx();
-        char c = evt.getKeyChar();
-
-        userInput(c);
-    }
-
     @Override
     public void processKeyEvent(KeyEvent evt, int from, boolean global) {
         KeyStroke k = KeyStroke.getKeyStroke(evt.getKeyCode(), evt.getModifiersEx());

@@ -25,6 +25,7 @@ import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.gui.KeyEventTranslator.Key;
+import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.util.Log;
 
 public class VimulatorInputHandler extends InputHandler {
@@ -38,6 +39,7 @@ public class VimulatorInputHandler extends InputHandler {
 
         insertHandler = new InsertInputHandler(view, insertBindings);
         commandHandler = new CommandInputHandler(view, commandBindings);
+        visualHandler = new VisualInputHandler(view, visualBindings);
 
         setMode(VimulatorConstants.COMMAND);
     }
@@ -50,6 +52,7 @@ public class VimulatorInputHandler extends InputHandler {
         insertBindings = chain.insertBindings;
         insertHandler = new InsertInputHandler(view, insertBindings);
         commandHandler = new CommandInputHandler(view, commandBindings);
+        visualHandler = new VisualInputHandler(view, visualBindings);
 
         setMode(chain.getMode());
     }
@@ -59,11 +62,17 @@ public class VimulatorInputHandler extends InputHandler {
     }
 
     public void setMode(int mode) {
+        if (this.view == null) return;
+
+        this.view.getTextArea().selectNone();
+        if (this.view.getBuffer().insideCompoundEdit())
+            this.view.getBuffer().endCompoundEdit();
         switch (mode) {
             case VimulatorConstants.COMMAND:
-                if(this.view.getBuffer().insideCompoundEdit())
-                    this.view.getBuffer().endCompoundEdit();
                 this.currentHandler = commandHandler;
+                break;
+            case VimulatorConstants.VISUAL:
+                this.currentHandler = visualHandler;
                 break;
             case VimulatorConstants.INSERT:
                 this.currentHandler = insertHandler;
@@ -73,7 +82,6 @@ public class VimulatorInputHandler extends InputHandler {
         }
 
         this.mode = mode;
-        this.setCurrentBindings(this.bindings);
     }
 
     public void addKeyBinding(String binding, EditAction action) {
@@ -128,6 +136,7 @@ public class VimulatorInputHandler extends InputHandler {
     private InputHandler currentHandler;
     private InsertInputHandler insertHandler;
     private CommandInputHandler commandHandler;
+    private VisualInputHandler visualHandler;
 
     private void addKeyBinding(String binding, EditAction action, Hashtable current) {
         // current is a hashtable that recursively refers to further hashtables until

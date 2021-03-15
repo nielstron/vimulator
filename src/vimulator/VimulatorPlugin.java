@@ -201,6 +201,7 @@ public class VimulatorPlugin extends EBPlugin {
     private void initKeyBindings() {
         initKeyBindings("command", VimulatorConstants.COMMAND);
         initKeyBindings("insert", VimulatorConstants.INSERT);
+        initKeyBindings("visual", VimulatorConstants.VISUAL);
     }
 
     private void initKeyBindings(String setPrefix, int mode) {

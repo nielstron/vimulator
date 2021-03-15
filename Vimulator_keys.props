@@ -72,6 +72,7 @@ vimulator.keys.command.vi-append=A
 vimulator.keys.command.vi-append-ws-end=S+A
 vimulator.keys.command.vi-replace-char=R
 vimulator.keys.command.vi-replace-mode=S+R
+vimulator.keys.command.vi-visual-mode=V
 vimulator.keys.command.vi-open-prev-line=S+O
 vimulator.keys.command.vi-open-next-line=O
 vimulator.keys.command.prev-page=C+B
@@ -136,3 +137,15 @@ vimulator.keys.command.vi-yank-prev-char=Y H
 vimulator.keys.command.vi-yank-next-line=Y J
 vimulator.keys.command.vi-yank-prev-line=Y K
 vimulator.keys.command.vi-yank-next-char=Y L
+
+# Visual mode
+vimulator.keys.visual.vi-command-mode=ESCAPE
+vimulator.keys.visual.vi-command-mode.2=C+[
+vimulator.keys.visual.vi-command-mode.3=C+C
+vimulator.keys.visual.vi-yank-selection=Y
+vimulator.keys.visual.vi-delete-selection=D
+vimulator.keys.visual.select-next-line=J
+vimulator.keys.visual.select-prev-line=K
+# TODO fix to not allow moving past borders
+vimulator.keys.visual.vi-select-next-col=L
+vimulator.keys.visual.select-prev-char=H

@@ -25,7 +25,7 @@ import javax.swing.text.Segment;
 import vimulator.inputhandler.*;
 
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 
@@ -47,6 +47,7 @@ public class VimulatorUtilities {
         if (!checkEmulation(view))
             return;
 
+        Log.log(Log.WARNING, null, "Setting mode to "+mode);
         ((VimulatorInputHandler) view.getInputHandler()).setMode(mode);
 
         JEditTextArea textArea = view.getTextArea();
@@ -55,14 +56,18 @@ public class VimulatorUtilities {
         if (textArea.getCaretPosition() > lastAllowed)
             textArea.setCaretPosition(lastAllowed);
 
-        if (mode == VimulatorConstants.COMMAND) {
-            setStatus(view, "");
-        } else if (mode == VimulatorConstants.INSERT) {
-            String msg = textArea.isOverwriteEnabled() ? jEdit.getProperty("vimulator.msg.replace-mode")
-                    : jEdit.getProperty("vimulator.msg.insert-mode");
-            setStatus(view, msg);
-        } else if (mode == VimulatorConstants.VISUAL) {
-            setStatus(view, jEdit.getProperty("vimulator.msg.visual-mode"));
+        switch(mode){
+            case VimulatorConstants.COMMAND:
+                setStatus(view, "");
+                break;
+            case VimulatorConstants.INSERT:
+                String msg = textArea.isOverwriteEnabled() ? jEdit.getProperty("vimulator.msg.replace-mode")
+                        : jEdit.getProperty("vimulator.msg.insert-mode");
+                setStatus(view, msg);
+                break;
+            case VimulatorConstants.VISUAL:
+                setStatus(view, jEdit.getProperty("vimulator.msg.visual-mode"));
+                break;
         }
     }
 
@@ -386,6 +391,41 @@ public class VimulatorUtilities {
         } else
             caretPos = textArea.getCaretPosition() + (after? 1:0);
         buffer.insert(caretPos, s);
+    }
+
+    public static void selectCaret(JEditTextArea textArea){
+        int caret = textArea.getCaretPosition();
+        Selection s = new Selection.Range(caret, caret+1);
+        textArea.addToSelection(new Selection[]{s});
+    }
+
+    public static void goToNextCol(View view, JEditTextArea textArea, boolean select){
+        int lastAllowed = textArea.getLineEndOffset(textArea.getCaretLine()) - 1;
+
+        if (textArea.getCaretPosition() >= lastAllowed)
+        {
+            view.getToolkit().beep();
+            return;
+        }
+
+        textArea.goToNextCharacter(select);
+    }
+
+    public static void goToNextCol(View view, JEditTextArea textArea){
+        goToNextCol(view, textArea, false);
+    }
+
+    public static void selectNextCol(View view, JEditTextArea textArea){
+        goToNextCol(view, textArea, true);
+    }
+
+    public static void yankSelection(JEditTextArea textArea){
+        yank(textArea.getSelectedText());
+    }
+
+    public static void deleteSelection(JEditTextArea textArea){
+        yankSelection(textArea);
+        textArea.setSelectedText("");
     }
 
     // private members

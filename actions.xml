@@ -52,16 +52,17 @@
 		</CODE>
 	</ACTION>
 
+	<ACTION NAME="vi-visual-mode">
+		<CODE>
+			textArea.setOverwriteEnabled(false);
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.VISUAL);
+		</CODE>
+	</ACTION>
+
 	<ACTION NAME="vi-replace-mode">
 		<CODE>
 			textArea.setOverwriteEnabled(true);
 			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.INSERT);
-		</CODE>
-	</ACTION>
-
-	<ACTION NAME="vi-visual-mode">
-		<CODE>
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.VISUAL);
 		</CODE>
 	</ACTION>
 
@@ -354,15 +355,27 @@
 
 	<ACTION NAME="vi-next-col">
 		<CODE>
-			lastAllowed = textArea.getLineEndOffset(textArea.getCaretLine()) - 1;
+            vimulator.VimulatorUtilities.goToNextCol(view, textArea);
+		</CODE>
+	</ACTION>
 
-			if (textArea.getCaretPosition() >= lastAllowed)
-			{
-				view.getToolkit().beep();
-				return;
-			}
+	<ACTION NAME="vi-select-next-col">
+		<CODE>
+            vimulator.VimulatorUtilities.selectNextCol(view, textArea);
+		</CODE>
+	</ACTION>
 
-			textArea.goToNextCharacter(false);
+	<ACTION NAME="vi-yank-selection">
+		<CODE>
+            vimulator.VimulatorUtilities.yankSelection(textArea);
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.COMMAND);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-delete-selection">
+		<CODE>
+            vimulator.VimulatorUtilities.deleteSelection(textArea);
+			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.COMMAND);
 		</CODE>
 	</ACTION>
 

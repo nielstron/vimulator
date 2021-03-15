@@ -29,6 +29,8 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 
+import java.lang.Character;
+
 public class VimulatorUtilities {
     public static boolean checkEmulation(View view) {
         return view.getInputHandler() instanceof VimulatorInputHandler;
@@ -93,45 +95,12 @@ public class VimulatorUtilities {
         return lastAllowed;
     }
 
-    public static void goToNextWordEnd(JEditTextArea textArea) {
-        JEditBuffer buffer = textArea.getBuffer();
-
-        int caret = textArea.getCaretPosition();
-        int line = textArea.getCaretLine();
-        int lineStart = textArea.getLineStartOffset(line);
-        caret -= lineStart;
-
-        String lineText = textArea.getLineText(line);
-
-        if (caret == lineText.length()) {
-            if (lineStart + caret == buffer.getLength()) {
-                Toolkit.getDefaultToolkit().beep();
-                return;
-            }
-
-            caret++;
-        } else {
-            String noWordSep = (String) buffer.getProperty("noWordSep");
-            caret = TextUtilities.findWordEnd(lineText, caret + 1, noWordSep);
-        }
-
-        while (Character.isWhitespace(lineText.charAt(caret))) {
-            if (caret < lineText.length() - 1) {
-                ++caret;
-            } else if (line < textArea.getLineCount()) {
-                lineText = textArea.getLineText(++line);
-                lineStart = textArea.getLineStartOffset(line);
-                caret = 0;
-            }
-        }
-
-        caret += lineStart;
-
-        textArea.setCaretPosition(caret);
+    public static void goToWordEnd(JEditTextArea textArea) {
+        textArea.setCaretPosition(findWordEnd(textArea));
     }
 
     public static void goToNextWordStart(JEditTextArea textArea) {
-        // TODO
+        textArea.setCaretPosition(findNextWordStart(textArea));
     }
 
     /**
@@ -304,9 +273,85 @@ public class VimulatorUtilities {
         textArea.setCaretPosition(caretPos);
     }
 
+
+    /**
+     * 
+     * @param textArea
+     * @param start True -> finds next word start False -> finds word end
+     * @return
+     */
+    public static int findWord(JEditTextArea textArea, boolean start){
+        int caretLine = textArea.getCaretLine();
+        int caret = textArea.getCaretPosition();
+        JEditBuffer buffer = textArea.getBuffer();
+
+        // Copied from textArea.deleteWord from here (with modifications)
+		int lineStart = textArea.getLineStartOffset(caretLine);
+        // start off by one to skip the current end of word
+		int _caret = caret - lineStart + 1;
+
+		String lineText = textArea.getLineText(caretLine);
+
+        // addition: skip leading whitespace
+        while(_caret >= lineText.length() || Character.isWhitespace(lineText.charAt(_caret))){
+            _caret += 1;
+            if(_caret >= lineText.length()-1)
+            {
+                if(lineStart + _caret == buffer.getLength())
+                {
+                    return buffer.getLength();
+                }
+                caretLine += 1;
+                lineText = textArea.getLineText(caretLine);
+                lineStart = textArea.getLineStartOffset(caretLine);
+                _caret = 0;
+            }
+        }
+        String noWordSep = buffer.getStringProperty("noWordSep");
+        boolean camelCasedWords = buffer.getBooleanProperty("camelCasedWords");
+        _caret = TextUtilities.findWordEnd(lineText,
+            _caret+1,noWordSep,true,camelCasedWords,start);
+        return _caret + lineStart - 1;
+    }
+
+    public static int findWordEnd(JEditTextArea textArea){
+        return findWord(textArea, false);
+    }
+
+    public static int findNextWordStart(JEditTextArea textArea){
+        return findWord(textArea, true); // broken
+    }
+
+
+    public static void yank(String s){
+        Registers.setRegister('y', s);
+    }
+
+    public static String unYank(){
+        return Registers.getRegister('y').toString();
+    }
+
     public static void yankLine(JEditTextArea textArea) {
         String s = textArea.getLineText(textArea.getCaretLine()) + "\n";
         Registers.setRegister('y', s);
+    }
+
+    public static void yankEndLine(JEditTextArea textArea) {
+        int caretPos = textArea.getCaretPosition();
+        String s = textArea.getText(caretPos, textArea.getLineEndOffset(textArea.getCaretLine()) - caretPos);
+        yank(s);
+    }
+
+    public static void yankWordEnd(JEditTextArea textArea) {
+        int caretPos = textArea.getCaretPosition();
+        String s = textArea.getText(caretPos, findWordEnd(textArea) - caretPos);
+        yank(s);
+    }
+
+    public static void yankStartLine(JEditTextArea textArea) {
+        int lineStartPos = textArea.getLineStartOffset(textArea.getCaretLine());
+        String s = textArea.getText(lineStartPos, textArea.getCaretPosition() - lineStartPos);
+        yank(s);
     }
 
     public static void deleteLine(JEditTextArea textArea) {
@@ -315,21 +360,22 @@ public class VimulatorUtilities {
     }
 
     public static void deleteEndLine(JEditTextArea textArea) {
-        int caretPos = textArea.getCaretPosition();
-        String s = textArea.getText(caretPos, textArea.getLineEndOffset(textArea.getCaretLine()) - caretPos);
-        Registers.setRegister('y', s);
+        yankEndLine(textArea);
         textArea.deleteToEndOfLine();
     }
 
     public static void deleteStartLine(JEditTextArea textArea) {
-        int lineStartPos = textArea.getLineStartOffset(textArea.getCaretLine());
-        String s = textArea.getText(lineStartPos, textArea.getCaretPosition() - lineStartPos);
-        Registers.setRegister('y', s);
+        yankStartLine(textArea);
         textArea.deleteToStartOfLine();
     }
 
+    public static void deleteWordEnd(JEditTextArea textArea) {
+        yankWordEnd(textArea);
+        textArea.deleteWord();
+    }
+
     public static void paste(JEditTextArea textArea, JEditBuffer buffer, boolean after) {
-        String s = Registers.getRegister('y').toString();
+        String s = unYank();
         int caretPos;
         if (s.endsWith("\n") || s.endsWith("\r")) {
             int caretLine = textArea.getCaretLine();

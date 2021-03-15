@@ -26,6 +26,7 @@
 			debug="on"
 			deprecation="on"
 			includeJavaRuntime="yes"
+            excludes="bin/**"
 		>
 			<classpath refid="project.class.path"/>
 		</javac>
@@ -39,6 +40,7 @@
 			<fileset dir="${src.dir}">
 				<include name="actions.xml"/>
 				<include name="**/*.props"/>
+                <exclude name="bin/**"/>
 			</fileset>
 		</jar>
 	</target>

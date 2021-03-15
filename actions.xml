@@ -67,7 +67,7 @@
 	<ACTION NAME="vi-end-abs" NO_REPEAT="TRUE">
 		<CODE>
 			textArea.setCaretPosition(textArea.getLineEndOffset(
-				textArea.getCaretLine()) - 1, false);
+				textArea.getCaretLine())-1, false);
 		</CODE>
 	</ACTION>
 
@@ -96,9 +96,15 @@
 		</CODE>
 	</ACTION>
 
-	<ACTION NAME="vi-next-word-end">
+	<ACTION NAME="vi-word-end">
 		<CODE>
-			vimulator.VimulatorUtilities.goToNextWordEnd(textArea);
+			vimulator.VimulatorUtilities.goToWordEnd(textArea);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-next-word">
+		<CODE>
+			vimulator.VimulatorUtilities.goToNextWordStart(textArea);
 		</CODE>
 	</ACTION>
 
@@ -130,6 +136,24 @@
 		</CODE>
 	</ACTION>
 
+	<ACTION NAME="vi-yank-end-line">
+		<CODE>
+			vimulator.VimulatorUtilities.yankEndLine(textArea);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-yank-start-line">
+		<CODE>
+			vimulator.VimulatorUtilities.yankStartLine(textArea);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-yank-word-end">
+		<CODE>
+			vimulator.VimulatorUtilities.yankStartLine(textArea);
+		</CODE>
+	</ACTION>
+
 	<ACTION NAME="vi-delete-line">
 		<CODE>
 			vimulator.VimulatorUtilities.deleteLine(textArea);
@@ -145,6 +169,12 @@
 	<ACTION NAME="vi-delete-start-line">
 		<CODE>
 			vimulator.VimulatorUtilities.deleteStartLine(textArea);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-delete-word-end">
+		<CODE>
+			vimulator.VimulatorUtilities.deleteWordEnd(textArea);
 		</CODE>
 	</ACTION>
 
@@ -318,10 +348,8 @@
 	<ACTION NAME="vi-next-col">
 		<CODE>
 			lastAllowed = textArea.getLineEndOffset(textArea.getCaretLine()) - 1;
-			if (vimulator.VimulatorUtilities.getMode(view) != vimulator.VimulatorPlugin.INSERT)
-				lastAllowed--;
 
-			if (textArea.getCaretPosition() == lastAllowed)
+			if (textArea.getCaretPosition() >= lastAllowed)
 			{
 				view.getToolkit().beep();
 				return;

@@ -27,7 +27,7 @@ vimulator.keys.command.document-home=C+HOME
 vimulator.keys.command.prev-paragraph={
 vimulator.keys.command.next-paragraph=}
 vimulator.keys.command.prev-word=B
-vimulator.keys.command.vi-next-word-end=E
+vimulator.keys.command.vi-word-end=E
 vimulator.keys.command.next-word=W
 vimulator.keys.command.delete=X
 vimulator.keys.command.backspace=S+X
@@ -85,12 +85,20 @@ vimulator.keys.insert.prev-page.2=PAGE_UP
 vimulator.keys.insert.next-page=S+DOWN
 vimulator.keys.insert.next-page.2=PAGE_DOWN
 
-vimulator.keys.command.delete-word=D W  # TODO yanking
-vimulator.keys.command.backspace-word=D B  # TODO yanking
+# Deletion
+vimulator.keys.command.vi-delete-word-end=D E
 vimulator.keys.command.vi-delete-end-line=D $
 vimulator.keys.command.vi-delete-end-line.2=S+D
 vimulator.keys.command.vi-delete-start-line=D 0
 vimulator.keys.command.vi-delete-line=D D
+# TODO yanking
+vimulator.keys.command.backspace-word=D B
+# TODO
+vimulator.keys.command.vi-delete-next-word=D W 
+vimulator.keys.command.vi-delete-prev-char=D H
+vimulator.keys.command.vi-delete-next-line=D J
+vimulator.keys.command.vi-delete-prev-line=D K
+vimulator.keys.command.vi-delete-next-char=D L
 
 vimulator.keys.command.split-horizontal=C+W S
 vimulator.keys.command.split-vertical=C+W V
@@ -105,9 +113,13 @@ vimulator.keys.command.expand-all-folds=Z R
 vimulator.keys.command.vi-paste-before=S+P
 vimulator.keys.command.vi-paste-after=P
 vimulator.keys.command.vi-yank-line=Y Y
-# TODO
 vimulator.keys.command.vi-yank-line-end=Y $
 vimulator.keys.command.vi-yank-line-start=Y 0
-vimulator.keys.command.vi-yank-next-word-end=Y E
+vimulator.keys.command.vi-yank-word-end=Y E
+# TODO
 vimulator.keys.command.vi-yank-next-word=Y W
 vimulator.keys.command.vi-yank-prev-word=Y B
+vimulator.keys.command.vi-yank-prev-char=Y H
+vimulator.keys.command.vi-yank-next-line=Y J
+vimulator.keys.command.vi-yank-prev-line=Y K
+vimulator.keys.command.vi-yank-next-char=Y L

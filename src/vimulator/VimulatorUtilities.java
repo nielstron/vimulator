@@ -96,7 +96,7 @@ public class VimulatorUtilities {
     }
 
     public static void goToWordEnd(JEditTextArea textArea) {
-        textArea.setCaretPosition(findWordEnd(textArea));
+        textArea.setCaretPosition(findWordEnd(textArea)-1);
     }
 
     public static void goToNextWordStart(JEditTextArea textArea) {
@@ -311,7 +311,7 @@ public class VimulatorUtilities {
         boolean camelCasedWords = buffer.getBooleanProperty("camelCasedWords");
         _caret = TextUtilities.findWordEnd(lineText,
             _caret+1,noWordSep,true,camelCasedWords,start);
-        return _caret + lineStart - 1;
+        return _caret + lineStart;
     }
 
     public static int findWordEnd(JEditTextArea textArea){
@@ -338,7 +338,7 @@ public class VimulatorUtilities {
 
     public static void yankEndLine(JEditTextArea textArea) {
         int caretPos = textArea.getCaretPosition();
-        String s = textArea.getText(caretPos, textArea.getLineEndOffset(textArea.getCaretLine()) - caretPos);
+        String s = textArea.getText(caretPos, textArea.getLineEndOffset(textArea.getCaretLine()) - caretPos - 1);
         yank(s);
     }
 

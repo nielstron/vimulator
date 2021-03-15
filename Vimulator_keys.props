@@ -126,8 +126,8 @@ vimulator.keys.command.expand-all-folds=Z R
 vimulator.keys.command.vi-paste-before=S+P
 vimulator.keys.command.vi-paste-after=P
 vimulator.keys.command.vi-yank-line=Y Y
-vimulator.keys.command.vi-yank-line-end=Y $
-vimulator.keys.command.vi-yank-line-start=Y 0
+vimulator.keys.command.vi-yank-end-line=Y $
+vimulator.keys.command.vi-yank-start-line=Y 0
 vimulator.keys.command.vi-yank-word-end=Y E
 # TODO
 vimulator.keys.command.vi-yank-next-word=Y W

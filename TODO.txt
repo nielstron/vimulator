@@ -1,6 +1,7 @@
 This list is not complete
 --------------------------------------------------------------------------------
 - Insert visual style
+- Fix broken D E
 - Bypass "execute x times" for G G
 - Fix history in : and /
 - Go to character commands (f,F,t,T) with PRESSED keys (not TYPED)

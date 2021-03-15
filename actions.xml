@@ -157,7 +157,7 @@
 
 	<ACTION NAME="vi-yank-word-end">
 		<CODE>
-			vimulator.VimulatorUtilities.yankStartLine(textArea);
+			vimulator.VimulatorUtilities.yankWordEnd(textArea);
 		</CODE>
 	</ACTION>
 

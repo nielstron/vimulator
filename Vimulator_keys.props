@@ -1,3 +1,34 @@
+# Keybindings for the vi Modes
+
+# Structure:
+# vimulator.keys.MODE.ACTION=KEYBINDING
+# where 
+#   - mode refers to either insert, command, visual or visual-block
+#   - action refers to an action (see jEdit.getActionNames())
+#   - keybinding refers to the letter code of some combination of keys
+# i.g. if there exists a standard action conducting some operation, we try to use it.
+# Otherwise a derived method called "vi-OPNAME" is created in actions.xml
+
+# Insert mode
+vimulator.keys.insert.vi-command-mode=ESCAPE
+vimulator.keys.insert.vi-command-mode.2=C+[
+vimulator.keys.insert.vi-command-mode.3=C+C
+vimulator.keys.insert.delete=DELETE
+vimulator.keys.insert.backspace=BACK_SPACE
+vimulator.keys.insert.vi-home-abs=HOME
+vimulator.keys.insert.vi-end-abs=END
+vimulator.keys.insert.prev-char=LEFT
+vimulator.keys.insert.next-char=RIGHT
+vimulator.keys.insert.prev-line=UP
+vimulator.keys.insert.next-line=DOWN
+vimulator.keys.insert.prev-word=S+LEFT
+vimulator.keys.insert.next-word=S+RIGHT
+vimulator.keys.insert.prev-page=S+UP
+vimulator.keys.insert.prev-page.2=PAGE_UP
+vimulator.keys.insert.next-page=S+DOWN
+vimulator.keys.insert.next-page.2=PAGE_DOWN
+
+# Command mode
 vimulator.keys.command.vi-prev-col=H
 vimulator.keys.command.vi-prev-col.2=C+H
 vimulator.keys.command.vi-prev-col.3=BACK_SPACE
@@ -66,24 +97,6 @@ vimulator.keys.command.vi-current-line-status=C+G
 vimulator.keys.command.exit=S+Q
 vimulator.keys.command.shift-left=< <
 vimulator.keys.command.shift-right=> >
-
-vimulator.keys.insert.vi-command-mode=ESCAPE
-vimulator.keys.insert.vi-command-mode.2=C+[
-vimulator.keys.insert.vi-command-mode.3=C+C
-vimulator.keys.insert.delete=DELETE
-vimulator.keys.insert.backspace=BACK_SPACE
-vimulator.keys.insert.vi-home-abs=HOME
-vimulator.keys.insert.vi-end-abs=END
-vimulator.keys.insert.prev-char=LEFT
-vimulator.keys.insert.next-char=RIGHT
-vimulator.keys.insert.prev-line=UP
-vimulator.keys.insert.next-line=DOWN
-vimulator.keys.insert.prev-word=S+LEFT
-vimulator.keys.insert.next-word=S+RIGHT
-vimulator.keys.insert.prev-page=S+UP
-vimulator.keys.insert.prev-page.2=PAGE_UP
-vimulator.keys.insert.next-page=S+DOWN
-vimulator.keys.insert.next-page.2=PAGE_DOWN
 
 # Deletion
 vimulator.keys.command.vi-delete-word-end=D E

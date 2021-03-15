@@ -20,8 +20,6 @@ package vimulator;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Element;
 import javax.swing.text.Segment;
 
 import org.gjt.sp.jedit.*;

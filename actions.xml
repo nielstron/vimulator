@@ -19,6 +19,13 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 -->
 
+<!-- Actions defined for the vi-emulation.
+    Beanshell actions should not be longer than 3 lines.
+    The reason is that errors hardly turn up anywhere and are difficult to trace.
+    Instead, create a corresponding function in the VimulatorUtilites class
+    TODO separate VimulatorUtilities and VimulatorActions
+-->
+
 <!DOCTYPE ACTIONS SYSTEM "actions.dtd">
 
 <ACTIONS>

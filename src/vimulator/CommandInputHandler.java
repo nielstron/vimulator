@@ -115,13 +115,13 @@ public class CommandInputHandler extends InputHandler {
 
             Object o = currentBindings.get(keyStroke);
             if (o instanceof Hashtable) {
-                Log.log(Log.WARNING, this, "Pressed, Result of keystroke: New hashtable");
+                //Log.log(Log.WARNING, this, "Pressed, Result of keystroke: New hashtable");
                 currentBindings = (Hashtable) o;
                 evt.consume();
                 return;
             } else if (o instanceof EditAction) {
-                Log.log(Log.WARNING, this,
-                        "Pressed, Result of keystroke: New Action " + ((EditAction) o).getName());
+                //Log.log(Log.WARNING, this,
+                //        "Pressed, Result of keystroke: New Action " + ((EditAction) o).getName());
                 invokeAction((EditAction) o);
                 evt.consume();
                 resetState();
@@ -181,13 +181,13 @@ public class CommandInputHandler extends InputHandler {
             evt.consume();
             return;
         } else if (o instanceof Hashtable) {
-            Log.log(Log.WARNING, this, "Typed, Result of keystroke: New hashtable");
+            //Log.log(Log.WARNING, this, "Typed, Result of keystroke: New hashtable");
             currentBindings = (Hashtable) o;
             evt.consume();
             return;
         } else if (o instanceof EditAction) {
-            Log.log(Log.WARNING, this,
-                    "Typed, Result of keystroke: New Action " + ((EditAction) o).getLabel());
+            //Log.log(Log.WARNING, this,
+            //        "Typed, Result of keystroke: New Action " + ((EditAction) o).getLabel());
             invokeAction((EditAction) o);
             evt.consume();
             if (readNextChar == null)
@@ -206,10 +206,6 @@ public class CommandInputHandler extends InputHandler {
 
     @Override
     public void processKeyEvent(java.awt.event.KeyEvent evt, int from, boolean global) {
-        // Log.log(Log.WARNING, this, "KeyCode: " + evt.getKeyCode());
-        // Log.log(Log.WARNING, this, "KeyChar: " + evt.getKeyChar());
-        // Log.log(Log.WARNING, this, "Modifier: " + evt.getModifiersEx());
-        // Log.log(Log.WARNING, this, "ID: " + evt.getID());
         if (evt.getID() == java.awt.event.KeyEvent.KEY_PRESSED) {
             switch (mode) {
                 case VimulatorPlugin.COMMAND:

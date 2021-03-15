@@ -31,8 +31,6 @@ vimulator.keys.command.vi-next-word-end=E
 vimulator.keys.command.next-word=W
 vimulator.keys.command.delete=X
 vimulator.keys.command.backspace=S+X
-vimulator.keys.command.delete-line=D D
-vimulator.keys.command.delete-end-line=S+D
 vimulator.keys.command.vi-change-end-line=S+C
 vimulator.keys.command.vi-join-lines=S+J
 vimulator.keys.command.undo=U
@@ -87,10 +85,12 @@ vimulator.keys.insert.prev-page.2=PAGE_UP
 vimulator.keys.insert.next-page=S+DOWN
 vimulator.keys.insert.next-page.2=PAGE_DOWN
 
-vimulator.keys.command.delete-word=D W
-vimulator.keys.command.backspace-word=D B
-vimulator.keys.command.delete-end-line=D $
-vimulator.keys.command.delete-start-line=D 0
+vimulator.keys.command.delete-word=D W  # TODO yanking
+vimulator.keys.command.backspace-word=D B  # TODO yanking
+vimulator.keys.command.vi-delete-end-line=D $
+vimulator.keys.command.vi-delete-end-line.2=S+D
+vimulator.keys.command.vi-delete-start-line=D 0
+vimulator.keys.command.vi-delete-line=D D
 
 vimulator.keys.command.split-horizontal=C+W S
 vimulator.keys.command.split-vertical=C+W V
@@ -101,3 +101,13 @@ vimulator.keys.command.collapse-fold=Z F
 vimulator.keys.command.collapse-all-folds=Z M
 vimulator.keys.command.expand-fold=Z O
 vimulator.keys.command.expand-all-folds=Z R
+
+vimulator.keys.command.vi-paste-before=S+P
+vimulator.keys.command.vi-paste-after=P
+vimulator.keys.command.vi-yank-line=Y Y
+# TODO
+vimulator.keys.command.vi-yank-line-end=Y $
+vimulator.keys.command.vi-yank-line-start=Y 0
+vimulator.keys.command.vi-yank-next-word-end=Y E
+vimulator.keys.command.vi-yank-next-word=Y W
+vimulator.keys.command.vi-yank-prev-word=Y B

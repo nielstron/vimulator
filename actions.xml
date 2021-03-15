@@ -124,6 +124,42 @@
 		</CODE>
 	</ACTION>
 
+	<ACTION NAME="vi-yank-line">
+		<CODE>
+			vimulator.VimulatorUtilities.yankLine(textArea);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-delete-line">
+		<CODE>
+			vimulator.VimulatorUtilities.deleteLine(textArea);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-delete-end-line">
+		<CODE>
+			vimulator.VimulatorUtilities.deleteEndLine(textArea);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-delete-start-line">
+		<CODE>
+			vimulator.VimulatorUtilities.deleteStartLine(textArea);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-paste-after">
+		<CODE>
+			vimulator.VimulatorUtilities.paste(textArea, buffer, true);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-paste-before">
+		<CODE>
+			vimulator.VimulatorUtilities.paste(textArea, buffer, false);
+		</CODE>
+	</ACTION>
+
 	<ACTION NAME="vi-append-ws-end">
 		<CODE>
 			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorPlugin.INSERT);

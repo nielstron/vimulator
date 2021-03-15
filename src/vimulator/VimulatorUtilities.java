@@ -29,7 +29,6 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 
-
 public class VimulatorUtilities {
     public static boolean checkEmulation(View view) {
         return view.getInputHandler() instanceof VimulatorInputHandler;
@@ -57,9 +56,8 @@ public class VimulatorUtilities {
         if (mode == VimulatorPlugin.COMMAND) {
             setStatus(view, "");
         } else if (mode == VimulatorPlugin.INSERT) {
-            String msg =
-                    textArea.isOverwriteEnabled() ? jEdit.getProperty("vimulator.msg.replace-mode")
-                            : jEdit.getProperty("vimulator.msg.insert-mode");
+            String msg = textArea.isOverwriteEnabled() ? jEdit.getProperty("vimulator.msg.replace-mode")
+                    : jEdit.getProperty("vimulator.msg.insert-mode");
             setStatus(view, msg);
         } else if (mode == VimulatorPlugin.VISUAL) {
             setStatus(view, jEdit.getProperty("vimulator.msg.visual-mode"));
@@ -85,8 +83,8 @@ public class VimulatorUtilities {
         }
 
         int lastAllowed = textArea.getLineEndOffset(line) - 1;
-        if (checkEmulation(view) && ((VimulatorInputHandler) view.getInputHandler())
-                .getMode() != VimulatorPlugin.INSERT)
+        if (checkEmulation(view)
+                && ((VimulatorInputHandler) view.getInputHandler()).getMode() != VimulatorPlugin.INSERT)
             lastAllowed--;
 
         if (lastAllowed < textArea.getLineStartOffset(line))
@@ -152,7 +150,7 @@ public class VimulatorUtilities {
             return -1;
         }
         buffer.beginCompoundEdit();
-        int[] leadingWhitespace = {0};
+        int[] leadingWhitespace = { 0 };
         buffer.getCurrentIndentForLine(lineNo, leadingWhitespace);
         buffer.remove(end - 1, leadingWhitespace[0] + 1);
         if (addSpace)
@@ -172,18 +170,18 @@ public class VimulatorUtilities {
         } else if (index != -1) {
             for (int i = 0; i < index; i++) {
                 switch (Character.toUpperCase(keyStroke.charAt(i))) {
-                    case 'A':
-                        modifiers |= KeyEvent.ALT_DOWN_MASK;
-                        break;
-                    case 'C':
-                        modifiers |= KeyEvent.CTRL_DOWN_MASK;
-                        break;
-                    case 'M':
-                        modifiers |= KeyEvent.META_DOWN_MASK;
-                        break;
-                    case 'S':
-                        modifiers |= KeyEvent.SHIFT_DOWN_MASK;
-                        break;
+                case 'A':
+                    modifiers |= KeyEvent.ALT_DOWN_MASK;
+                    break;
+                case 'C':
+                    modifiers |= KeyEvent.CTRL_DOWN_MASK;
+                    break;
+                case 'M':
+                    modifiers |= KeyEvent.META_DOWN_MASK;
+                    break;
+                case 'S':
+                    modifiers |= KeyEvent.SHIFT_DOWN_MASK;
+                    break;
                 }
             }
         }
@@ -227,8 +225,7 @@ public class VimulatorUtilities {
         findChar(view, find, reverse, until, true);
     }
 
-    public static void findChar(View view, char find, boolean reverse, boolean until,
-            boolean setLastFindChar) {
+    public static void findChar(View view, char find, boolean reverse, boolean until, boolean setLastFindChar) {
         if (setLastFindChar)
             VimulatorPlugin.setLastFindChar(find, reverse, until);
 
@@ -290,7 +287,7 @@ public class VimulatorUtilities {
 
     public static void insertEnterAndIndentBefore(JEditTextArea textArea, JEditBuffer buffer) {
         int line = textArea.getCaretLine();
-        int[] leadingWhitespace = {0};
+        int[] leadingWhitespace = { 0 };
         buffer.getCurrentIndentForLine(line, leadingWhitespace);
         int caretPos = textArea.getLineStartOffset(line) + leadingWhitespace[0];
         textArea.setCaretPosition(caretPos);
@@ -298,13 +295,51 @@ public class VimulatorUtilities {
         textArea.setCaretPosition(caretPos);
     }
 
-    public static void goToLine(View view, JEditTextArea textArea){
+    public static void goToLine(View view, JEditTextArea textArea) {
         int rc = view.getInputHandler().getRepeatCount();
         if (rc > textArea.getLineCount())
             rc = textArea.getLineCount();
         int line = rc - 1;
         int caretPos = textArea.getLineStartOffset(line);
         textArea.setCaretPosition(caretPos);
+    }
+
+    public static void yankLine(JEditTextArea textArea) {
+        String s = textArea.getLineText(textArea.getCaretLine()) + "\n";
+        Registers.setRegister('y', s);
+    }
+
+    public static void deleteLine(JEditTextArea textArea) {
+        yankLine(textArea);
+        textArea.deleteLine();
+    }
+
+    public static void deleteEndLine(JEditTextArea textArea) {
+        int caretPos = textArea.getCaretPosition();
+        String s = textArea.getText(caretPos, textArea.getLineEndOffset(textArea.getCaretLine()) - caretPos);
+        Registers.setRegister('y', s);
+        textArea.deleteToEndOfLine();
+    }
+
+    public static void deleteStartLine(JEditTextArea textArea) {
+        int lineStartPos = textArea.getLineStartOffset(textArea.getCaretLine());
+        String s = textArea.getText(lineStartPos, textArea.getCaretPosition() - lineStartPos);
+        Registers.setRegister('y', s);
+        textArea.deleteToStartOfLine();
+    }
+
+    public static void paste(JEditTextArea textArea, JEditBuffer buffer, boolean after) {
+        String s = Registers.getRegister('y').toString();
+        int caretPos;
+        if (s.endsWith("\n") || s.endsWith("\r")) {
+            int caretLine = textArea.getCaretLine();
+            if (after)
+                caretPos = textArea.getLineEndOffset(caretLine);
+            else
+                caretPos = textArea.getLineStartOffset(caretLine);
+        } else
+            caretPos = textArea.getCaretPosition() + (after? 1:0);
+        buffer.insert(caretPos, s);
     }
 
     // private members

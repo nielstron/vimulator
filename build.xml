@@ -2,10 +2,12 @@
 
 	<property name="src.dir" value="."/>
 	<property name="build.dir" value="build"/>
+    <!-- can be bent to point at the Plugin jars directory instead -->
 	<!--<property name="install.dir"  value="/home/niels/.isabelle/Isabelle2021/jedit/jars/"/>-->
-	<property name="install.dir"  value="/home/niels/.jedit/jars/"/>
+	<property name="install.dir"  value="build"/>
 
-	<property name="jedit.install.dir"  value="/home/niels/git/vimulator2/bin/jEdit"/>
+    <!-- Replace this with the actual path, this is the installation path for the apt install -->
+	<property name="jedit.install.dir"  value="/usr/share/jedit/"/>
 
 
 	<path id="project.class.path">

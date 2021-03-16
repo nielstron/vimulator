@@ -6,3 +6,6 @@ addons:
   apt:
     packages:
       - jedit
+
+script:
+ - ant compile

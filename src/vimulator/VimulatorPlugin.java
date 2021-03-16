@@ -186,7 +186,7 @@ public class VimulatorPlugin extends EBPlugin {
 
     private static void updateBufferStatus(Buffer buffer, String status, List<View> views) {
         if (views == null)
-            views = jEdit.getViewManager().getViews();
+            views = List.of(jEdit.getViews());
 
         for (int i = 0; i < views.size(); ++i) {
             if (!emulationActive(views.get(i)))

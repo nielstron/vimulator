@@ -1,4 +1,6 @@
 # Vimulator
+[![Build Status](https://travis-ci.com/nielstron/vimulator.svg?branch=master)](https://travis-ci.com/nielstron/vimulator)
+
 A vi-emulator for jEdit.
 
 This project is a "fork" of the jEdit Plugin [Vimulator](plugins.jedit.org/plugins/?Vimulator),

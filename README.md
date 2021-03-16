@@ -8,6 +8,13 @@ modified to work for jdk 15 and jEdit 5+ (or whatever [Isabelle/jEdit](https://i
 
 This project is WIP, but already featuring vi-like navigation, yanking, newlines, a fast insertion mode and a visual mode.
 
+## Installation
+
+This plugin is not (yet) available via the official Plugin Manager.
+You may however manually install the compiled Plugin [as a "User Plugin"](http://plugins.jedit.org/install.php).
+You may find the corresponding `Vimulator.jar` in the Releases section or by
+building the project yourself.
+
 ## Building
 
 Setup ant to point at the correct jdk and jEdit version in `build.xml`.

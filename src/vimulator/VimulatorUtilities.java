@@ -23,6 +23,7 @@ import javax.swing.KeyStroke;
 import javax.swing.text.Segment;
 
 import vimulator.inputhandler.*;
+import vimulator.*;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.textarea.*;

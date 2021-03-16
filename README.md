@@ -4,7 +4,7 @@ A vi-emulator for jEdit.
 This project is a "fork" of the jEdit Plugin [Vimulator](plugins.jedit.org/plugins/?Vimulator),
 modified to work for jdk 15 and jEdit 5+ (or whatever [Isabelle/jEdit](https://isabelle.in.tum.de/) is currently using).
 
-This project is WIP, but already featuring vi-like navigation and newline/merging.
+This project is WIP, but already featuring vi-like navigation, yanking, newlines, a fast insertion mode and a visual mode.
 
 ## Building
 

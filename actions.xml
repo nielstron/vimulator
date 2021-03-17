@@ -41,28 +41,28 @@
 	<ACTION NAME="vi-command-mode">
 		<CODE>
 			textArea.setOverwriteEnabled(false);
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.COMMAND);
+			vimulator.VimulatorUtilities.setCommandMode(view);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-insert-mode">
 		<CODE>
 			textArea.setOverwriteEnabled(false);
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.INSERT);
+			vimulator.VimulatorUtilities.setInsertMode(view);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-visual-mode">
 		<CODE>
 			textArea.setOverwriteEnabled(false);
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.VISUAL);
+			vimulator.VimulatorUtilities.setVisualMode(view);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-replace-mode">
 		<CODE>
 			textArea.setOverwriteEnabled(true);
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.INSERT);
+			vimulator.VimulatorUtilities.setInsertMode(view);
 		</CODE>
 	</ACTION>
 
@@ -127,14 +127,7 @@
 
 	<ACTION NAME="vi-append">
 		<CODE>
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.INSERT);
-			caretLine = textArea.getCaretLine();
-			pos = textArea.getCaretPosition() + 1;
-			if (pos &gt;= textArea.getLineEndOffset(caretLine))
-			{
-				pos--;
-			}
-			textArea.setCaretPosition(pos);
+			vimulator.VimulatorUtilities.append(view, textArea);
 		</CODE>
 	</ACTION>
 
@@ -170,7 +163,7 @@
 
 	<ACTION NAME="vi-delete-end-line">
 		<CODE>
-			vimulator.VimulatorUtilities.deleteEndLine(textArea);
+			vimulator.VimulatorUtilities.deleteEndLine(view, textArea);
 		</CODE>
 	</ACTION>
 
@@ -182,7 +175,7 @@
 
 	<ACTION NAME="vi-delete-word-end">
 		<CODE>
-			vimulator.VimulatorUtilities.deleteWordEnd(textArea);
+			vimulator.VimulatorUtilities.deleteWordEnd(view, textArea);
 		</CODE>
 	</ACTION>
 
@@ -200,35 +193,58 @@
 
 	<ACTION NAME="vi-append-ws-end">
 		<CODE>
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.INSERT);
+			vimulator.VimulatorUtilities.setInsertMode(view);
 			textArea.goToEndOfWhiteSpace(false);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-insert-ws-start">
 		<CODE>
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.INSERT);
+			vimulator.VimulatorUtilities.setInsertMode(view);
 			textArea.goToStartOfWhiteSpace(false);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-change-line">
+		<CODE>
+			vimulator.VimulatorUtilities.deleteStartLine(textArea);
+			vimulator.VimulatorUtilities.deleteEndLine(view, textArea);
+			vimulator.VimulatorUtilities.setInsertMode(view);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-change-end-line">
 		<CODE>
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.INSERT);
-			textArea.deleteToEndOfLine();
+			vimulator.VimulatorUtilities.deleteEndLine(view, textArea);
+			vimulator.VimulatorUtilities.setInsertMode(view);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-change-start-line">
+		<CODE>
+			vimulator.VimulatorUtilities.deleteStartLine(textArea);
+			vimulator.VimulatorUtilities.setInsertMode(view);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-change-word-end">
+		<CODE>
+			vimulator.VimulatorUtilities.deleteWordEnd(view, textArea);
+			vimulator.VimulatorUtilities.setInsertMode(view);
+            // TODO correct caret position when deleting at end of line
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-open-prev-line">
 		<CODE>
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.INSERT);
+			vimulator.VimulatorUtilities.setInsertMode(view);
             vimulator.VimulatorUtilities.insertEnterAndIndentBefore(textArea, buffer);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-open-next-line">
 		<CODE>
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.INSERT);
+			vimulator.VimulatorUtilities.setInsertMode(view);
 			line = textArea.getCaretLine();
 			textArea.setCaretPosition(textArea.getLineEndOffset(line)-1);
             textArea.insertEnterAndIndent();
@@ -240,7 +256,7 @@
 			vimulator.VimulatorPlugin.enterExCommand(view);
 		</CODE>
 	</ACTION>
-	<ACTION NAME="vi-end-ex-command" NO_RECORD="TRUE">
+	<ACTION NAME="vi-end-command" NO_RECORD="TRUE">
 		<CODE>
 			vimulator.VimulatorPlugin.leaveExCommand(view);
 		</CODE>
@@ -249,11 +265,6 @@
 	<ACTION NAME="vi-search" NO_RECORD="TRUE">
 		<CODE>
 			vimulator.VimulatorPlugin.enterSearch(view);
-		</CODE>
-	</ACTION>
-	<ACTION NAME="vi-end-search" NO_RECORD="TRUE">
-		<CODE>
-			vimulator.VimulatorPlugin.leaveExSearch(view);
 		</CODE>
 	</ACTION>
 
@@ -368,14 +379,14 @@
 	<ACTION NAME="vi-yank-selection">
 		<CODE>
             vimulator.VimulatorUtilities.yankSelection(textArea);
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.COMMAND);
+			vimulator.VimulatorUtilities.setCommandMode(view);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-delete-selection">
 		<CODE>
             vimulator.VimulatorUtilities.deleteSelection(textArea);
-			vimulator.VimulatorUtilities.setMode(view, vimulator.VimulatorConstants.COMMAND);
+			vimulator.VimulatorUtilities.setCommandMode(view);
 		</CODE>
 	</ACTION>
 

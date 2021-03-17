@@ -62,7 +62,6 @@ vimulator.keys.command.vi-word-end=E
 vimulator.keys.command.next-word=W
 vimulator.keys.command.delete=X
 vimulator.keys.command.backspace=S+X
-vimulator.keys.command.vi-change-end-line=S+C
 vimulator.keys.command.vi-join-lines=S+J
 vimulator.keys.command.undo=U
 vimulator.keys.command.redo=C+R
@@ -83,8 +82,6 @@ vimulator.keys.command.vi-ex-command=:
 vimulator.keys.command.vi-end-ex-command=ESCAPE
 vimulator.keys.command.vi-end-ex-command.2=C+C
 vimulator.keys.command.vi-search=/
-vimulator.keys.command.vi-end-search=ESCAPE
-vimulator.keys.command.vi-end-search.2=C+C
 vimulator.keys.command.vi-reverse-search=?
 vimulator.keys.command.vi-repeat-search=N
 vimulator.keys.command.vi-repeat-search-opposite=S+N
@@ -98,6 +95,19 @@ vimulator.keys.command.vi-current-line-status=C+G
 vimulator.keys.command.exit=S+Q
 vimulator.keys.command.shift-left=< <
 vimulator.keys.command.shift-right=> >
+
+vimulator.keys.command.split-horizontal=C+W S
+vimulator.keys.command.split-vertical=C+W V
+vimulator.keys.command.next-buffer=C+W W
+vimulator.keys.command.unsplit=C+W O
+
+vimulator.keys.command.collapse-fold=Z F
+vimulator.keys.command.collapse-all-folds=Z M
+vimulator.keys.command.expand-fold=Z O
+vimulator.keys.command.expand-all-folds=Z R
+
+vimulator.keys.command.vi-paste-before=S+P
+vimulator.keys.command.vi-paste-after=P
 
 # Deletion
 vimulator.keys.command.vi-delete-word-end=D E
@@ -114,18 +124,22 @@ vimulator.keys.command.vi-delete-next-line=D J
 vimulator.keys.command.vi-delete-prev-line=D K
 vimulator.keys.command.vi-delete-next-char=D L
 
-vimulator.keys.command.split-horizontal=C+W S
-vimulator.keys.command.split-vertical=C+W V
-vimulator.keys.command.next-buffer=C+W W
-vimulator.keys.command.unsplit=C+W O
+# Changing
+vimulator.keys.command.vi-change-word-end=C E
+vimulator.keys.command.vi-change-end-line=C $
+vimulator.keys.command.vi-change-end-line.2=S+C
+vimulator.keys.command.vi-change-start-line=C 0
+vimulator.keys.command.vi-change-line=C C
+# TODO yanking
+vimulator.keys.command.backspace-word=C B
+# TODO
+vimulator.keys.command.vi-change-next-word=C W 
+vimulator.keys.command.vi-change-prev-char=C H
+vimulator.keys.command.vi-change-next-line=C J
+vimulator.keys.command.vi-change-prev-line=C K
+vimulator.keys.command.vi-change-next-char=C L
 
-vimulator.keys.command.collapse-fold=Z F
-vimulator.keys.command.collapse-all-folds=Z M
-vimulator.keys.command.expand-fold=Z O
-vimulator.keys.command.expand-all-folds=Z R
-
-vimulator.keys.command.vi-paste-before=S+P
-vimulator.keys.command.vi-paste-after=P
+# Yanking
 vimulator.keys.command.vi-yank-line=Y Y
 vimulator.keys.command.vi-yank-end-line=Y $
 vimulator.keys.command.vi-yank-start-line=Y 0

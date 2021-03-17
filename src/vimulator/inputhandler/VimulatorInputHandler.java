@@ -178,10 +178,10 @@ public class VimulatorInputHandler extends InputHandler {
 
     @Override
     public void processKeyEvent(java.awt.event.KeyEvent evt, int from, boolean global) {
-        //Log.log(Log.WARNING, this, "KeyCode: " + evt.getKeyCode());
-        //Log.log(Log.WARNING, this, "KeyChar: " + evt.getKeyChar());
-        //Log.log(Log.WARNING, this, "Modifier: " + evt.getModifiersEx());
-        //Log.log(Log.WARNING, this, "ID: " + evt.getID());
+        Log.log(Log.WARNING, this, "KeyCode: " + evt.getKeyCode());
+        Log.log(Log.WARNING, this, "KeyChar: " + evt.getKeyChar());
+        Log.log(Log.WARNING, this, "Modifier: " + evt.getModifiersEx());
+        Log.log(Log.WARNING, this, "ID: " + evt.getID());
         this.currentHandler.processKeyEvent(evt, from, global);
     }
 }

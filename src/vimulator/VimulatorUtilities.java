@@ -72,6 +72,18 @@ public class VimulatorUtilities {
         }
     }
 
+    public static void setInsertMode(View view) {
+        setMode(view, VimulatorConstants.INSERT);
+    }
+
+    public static void setCommandMode(View view) {
+        setMode(view, VimulatorConstants.COMMAND);
+    }
+
+    public static void setVisualMode(View view) {
+        setMode(view, VimulatorConstants.VISUAL);
+    }
+
     public static void beep(View view) {
         view.getToolkit().beep();
     }
@@ -365,9 +377,10 @@ public class VimulatorUtilities {
         textArea.deleteLine();
     }
 
-    public static void deleteEndLine(JEditTextArea textArea) {
+    public static void deleteEndLine(View view, JEditTextArea textArea) {
         yankEndLine(textArea);
         textArea.deleteToEndOfLine();
+        //goToNextCol(view, textArea);
     }
 
     public static void deleteStartLine(JEditTextArea textArea) {
@@ -375,9 +388,11 @@ public class VimulatorUtilities {
         textArea.deleteToStartOfLine();
     }
 
-    public static void deleteWordEnd(JEditTextArea textArea) {
+    public static void deleteWordEnd(View view, JEditTextArea textArea) {
         yankWordEnd(textArea);
-        textArea.deleteWord();
+        int caretPos = textArea.getCaretPosition();
+        textArea.getBuffer().remove(caretPos, findWordEnd(textArea) - caretPos);;
+        //goToNextCol(view, textArea);
     }
 
     public static void paste(JEditTextArea textArea, JEditBuffer buffer, boolean after) {
@@ -427,6 +442,17 @@ public class VimulatorUtilities {
     public static void deleteSelection(JEditTextArea textArea){
         yankSelection(textArea);
         textArea.setSelectedText("");
+    }
+
+    public static void append(View view, JEditTextArea textArea){
+        vimulator.VimulatorUtilities.setInsertMode(view);
+        int caretLine = textArea.getCaretLine();
+        int pos = textArea.getCaretPosition() + 1;
+        if (pos >= textArea.getLineEndOffset(caretLine))
+        {
+            pos--;
+        }
+        textArea.setCaretPosition(pos);
     }
 
     // private members

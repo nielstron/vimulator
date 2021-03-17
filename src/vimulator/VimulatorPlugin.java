@@ -141,10 +141,6 @@ public class VimulatorPlugin extends EBPlugin {
         getCommandLine(view).endExCommand();
     }
 
-    public static void leaveExSearch(View view) {
-        getCommandLine(view).endExCommand();
-    }
-
     public static void enterSearch(View view) {
         enterSearch(view, false);
     }
@@ -186,7 +182,7 @@ public class VimulatorPlugin extends EBPlugin {
 
     private static void updateBufferStatus(Buffer buffer, String status, List<View> views) {
         if (views == null)
-            views = List.of(jEdit.getViews());
+            views = jEdit.getViewManager().getViews();
 
         for (int i = 0; i < views.size(); ++i) {
             if (!emulationActive(views.get(i)))

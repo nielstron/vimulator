@@ -59,7 +59,7 @@ vimulator.keys.command.prev-paragraph={
 vimulator.keys.command.next-paragraph=}
 vimulator.keys.command.prev-word=B
 vimulator.keys.command.vi-word-end=E
-vimulator.keys.command.next-word=W
+vimulator.keys.command.vi-next-word=W
 vimulator.keys.command.delete=X
 vimulator.keys.command.backspace=S+X
 vimulator.keys.command.vi-join-lines=S+J
@@ -169,6 +169,7 @@ vimulator.keys.visual.select-next-char=L
 vimulator.keys.visual.select-prev-char=H
 
 # Visual line mode
+# TODO fix selection of last line
 vimulator.keys.visual-line.select-next-line=J
 vimulator.keys.visual-line.select-prev-line=K
 vimulator.keys.visual-line.skip=L

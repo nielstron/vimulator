@@ -325,7 +325,7 @@ public class VimulatorUtilities {
 		String lineText = textArea.getLineText(caretLine);
 
         // addition: skip leading whitespace
-        while(_caret >= lineText.length() || Character.isWhitespace(lineText.charAt(_caret))){
+        while(_caret >= lineText.length() || (!start && Character.isWhitespace(lineText.charAt(_caret)))){
             _caret += 1;
             if(_caret >= lineText.length()-1)
             {

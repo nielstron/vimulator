@@ -41,6 +41,7 @@
 	<ACTION NAME="vi-command-mode">
 		<CODE>
 			textArea.setOverwriteEnabled(false);
+            textArea.setRectangularSelectionEnabled(false);
 			vimulator.VimulatorUtilities.setCommandMode(view);
 		</CODE>
 	</ACTION>
@@ -48,6 +49,7 @@
 	<ACTION NAME="vi-insert-mode">
 		<CODE>
 			textArea.setOverwriteEnabled(false);
+            textArea.setRectangularSelectionEnabled(false);
 			vimulator.VimulatorUtilities.setInsertMode(view);
 		</CODE>
 	</ACTION>
@@ -55,13 +57,23 @@
 	<ACTION NAME="vi-visual-mode">
 		<CODE>
 			textArea.setOverwriteEnabled(false);
+            textArea.setRectangularSelectionEnabled(false);
 			vimulator.VimulatorUtilities.setVisualMode(view);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-visual-block-mode">
+		<CODE>
+			textArea.setOverwriteEnabled(false);
+            textArea.setRectangularSelectionEnabled(true);
+			vimulator.VimulatorUtilities.setVisualBlockMode(view);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-replace-mode">
 		<CODE>
 			textArea.setOverwriteEnabled(true);
+            textArea.setRectangularSelectionEnabled(false);
 			vimulator.VimulatorUtilities.setInsertMode(view);
 		</CODE>
 	</ACTION>
@@ -74,7 +86,7 @@
 
 	<ACTION NAME="vi-end-abs" NO_REPEAT="TRUE">
 		<CODE>
-			textArea.setCaretPosition(textArea.getLineEndOffset(
+			textArea.moveCaretPosition(textArea.getLineEndOffset(
 				textArea.getCaretLine())-1, false);
 		</CODE>
 	</ACTION>
@@ -92,7 +104,7 @@
 				Toolkit.getDefaultToolkit().beep();
 				return;
 			}
-			textArea.setCaretPosition(textArea.getLineStartOffset(
+			textArea.moveCaretPosition(textArea.getLineStartOffset(
 				textArea.getCaretLine() - 1));
 			textArea.goToStartOfWhiteSpace(false);
 		</CODE>
@@ -120,7 +132,7 @@
 		<CODE>
 			buffer.beginCompoundEdit();
 			end = vimulator.VimulatorUtilities.joinLines(textArea, true);
-			if (end != -1) textArea.setCaretPosition(end);
+			if (end != -1) textArea.moveCaretPosition(end);
 			buffer.endCompoundEdit();
 		</CODE>
 	</ACTION>
@@ -246,7 +258,7 @@
 		<CODE>
 			vimulator.VimulatorUtilities.setInsertMode(view);
 			line = textArea.getCaretLine();
-			textArea.setCaretPosition(textArea.getLineEndOffset(line)-1);
+			textArea.moveCaretPosition(textArea.getLineEndOffset(line)-1);
             textArea.insertEnterAndIndent();
 		</CODE>
 	</ACTION>
@@ -403,5 +415,12 @@
 			vimulator.VimulatorUtilities.setStatus(view, status);
 		</CODE>
 	</ACTION>
+
+	<ACTION NAME="vi-select-next-row">
+		<CODE>
+			vimulator.VimulatorUtilities.selectNextRow(textArea);
+		</CODE>
+	</ACTION>
+
 
 </ACTIONS>

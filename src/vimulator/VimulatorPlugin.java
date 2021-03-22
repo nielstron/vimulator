@@ -198,6 +198,9 @@ public class VimulatorPlugin extends EBPlugin {
         initKeyBindings("command", VimulatorConstants.COMMAND);
         initKeyBindings("insert", VimulatorConstants.INSERT);
         initKeyBindings("visual", VimulatorConstants.VISUAL);
+        // Also per default use the keybindings from visual mode in visual block mode
+        initKeyBindings("visual", VimulatorConstants.VISUAL_BLOCK);
+        initKeyBindings("visual-block", VimulatorConstants.VISUAL_BLOCK);
     }
 
     private void initKeyBindings(String setPrefix, int mode) {

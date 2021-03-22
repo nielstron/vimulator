@@ -55,7 +55,7 @@ public class VimulatorUtilities {
 
         int lastAllowed = getLastAllowedOffset(view, textArea);
         if (textArea.getCaretPosition() > lastAllowed)
-            textArea.setCaretPosition(lastAllowed);
+            textArea.moveCaretPosition(lastAllowed);
 
         switch(mode){
             case VimulatorConstants.COMMAND:
@@ -68,6 +68,9 @@ public class VimulatorUtilities {
                 break;
             case VimulatorConstants.VISUAL:
                 setStatus(view, jEdit.getProperty("vimulator.msg.visual-mode"));
+                break;
+            case VimulatorConstants.VISUAL_BLOCK:
+                setStatus(view, jEdit.getProperty("vimulator.msg.visual-block-mode"));
                 break;
         }
     }
@@ -82,6 +85,10 @@ public class VimulatorUtilities {
 
     public static void setVisualMode(View view) {
         setMode(view, VimulatorConstants.VISUAL);
+    }
+
+    public static void setVisualBlockMode(View view) {
+        setMode(view, VimulatorConstants.VISUAL_BLOCK);
     }
 
     public static void beep(View view) {
@@ -107,18 +114,17 @@ public class VimulatorUtilities {
                 && ((VimulatorInputHandler) view.getInputHandler()).getMode() != VimulatorConstants.INSERT)
             lastAllowed--;
 
-        if (lastAllowed < textArea.getLineStartOffset(line))
-            lastAllowed = textArea.getLineStartOffset(line);
+        lastAllowed = Math.max(lastAllowed, textArea.getLineStartOffset(line));
 
         return lastAllowed;
     }
 
     public static void goToWordEnd(JEditTextArea textArea) {
-        textArea.setCaretPosition(findWordEnd(textArea)-1);
+        textArea.moveCaretPosition(findWordEnd(textArea)-1);
     }
 
     public static void goToNextWordStart(JEditTextArea textArea) {
-        textArea.setCaretPosition(findNextWordStart(textArea));
+        textArea.moveCaretPosition(findNextWordStart(textArea));
     }
 
     /**
@@ -204,7 +210,7 @@ public class VimulatorUtilities {
         buffer.beginCompoundEdit();
         buffer.remove(pos, 1);
         buffer.insert(pos, String.valueOf(replace));
-        textArea.setCaretPosition(pos);
+        textArea.moveCaretPosition(pos);
         buffer.endCompoundEdit();
     }
 
@@ -258,7 +264,7 @@ public class VimulatorUtilities {
         if (until)
             pos -= inc;
 
-        textArea.setCaretPosition(pos);
+        textArea.moveCaretPosition(pos);
     }
 
     public static void repeatFindChar(View view, boolean opposite) {
@@ -277,18 +283,19 @@ public class VimulatorUtilities {
         int[] leadingWhitespace = { 0 };
         buffer.getCurrentIndentForLine(line, leadingWhitespace);
         int caretPos = textArea.getLineStartOffset(line) + leadingWhitespace[0];
-        textArea.setCaretPosition(caretPos);
+        textArea.moveCaretPosition(caretPos);
         textArea.insertEnterAndIndent();
-        textArea.setCaretPosition(caretPos);
+        textArea.moveCaretPosition(caretPos);
     }
 
     public static void goToLine(View view, JEditTextArea textArea) {
-        int rc = view.getInputHandler().getRepeatCount();
-        if (rc > textArea.getLineCount())
-            rc = textArea.getLineCount();
+        int rc = Math.min(
+            view.getInputHandler().getRepeatCount(),
+            textArea.getLineCount()
+        );
         int line = rc - 1;
         int caretPos = textArea.getLineStartOffset(line);
-        textArea.setCaretPosition(caretPos);
+        textArea.moveCaretPosition(caretPos);
     }
 
 
@@ -452,7 +459,7 @@ public class VimulatorUtilities {
         {
             pos--;
         }
-        textArea.setCaretPosition(pos);
+        textArea.moveCaretPosition(pos);
     }
 
     // private members

@@ -29,6 +29,11 @@
 <!DOCTYPE ACTIONS SYSTEM "actions.dtd">
 
 <ACTIONS>
+	<ACTION NAME="skip" NO_RECORD="TRUE">
+		<CODE>
+		</CODE>
+	</ACTION>
+
 	<ACTION NAME="toggle-vi-mode">
 		<CODE>
 			vimulator.VimulatorPlugin.toggleEmulation(view);
@@ -54,6 +59,14 @@
 		</CODE>
 	</ACTION>
 
+	<ACTION NAME="vi-replace-mode">
+		<CODE>
+			textArea.setOverwriteEnabled(true);
+            textArea.setRectangularSelectionEnabled(false);
+			vimulator.VimulatorUtilities.setInsertMode(view);
+		</CODE>
+	</ACTION>
+
 	<ACTION NAME="vi-visual-mode">
 		<CODE>
 			textArea.setOverwriteEnabled(false);
@@ -74,16 +87,8 @@
 		<CODE>
 			textArea.setOverwriteEnabled(false);
             textArea.setRectangularSelectionEnabled(false);
-            vimulator.VimulatorUtilities.selectLine();
 			vimulator.VimulatorUtilities.setVisualLineMode(view);
-		</CODE>
-	</ACTION>
-
-	<ACTION NAME="vi-replace-mode">
-		<CODE>
-			textArea.setOverwriteEnabled(true);
-            textArea.setRectangularSelectionEnabled(false);
-			vimulator.VimulatorUtilities.setInsertMode(view);
+            vimulator.VimulatorUtilities.selectLine(textArea);
 		</CODE>
 	</ACTION>
 
@@ -429,6 +434,20 @@
 				"vimulator.msg.curr-line-status", args);
 
 			vimulator.VimulatorUtilities.setStatus(view, status);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-line-next-line">
+		<CODE>
+			textArea.goToNextLine(false);
+            vimulator.VimulatorUtilities.selectLine(textArea);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-line-prev-line">
+		<CODE>
+			textArea.goToPrevLine(false);
+            vimulator.VimulatorUtilities.selectLine(textArea);
 		</CODE>
 	</ACTION>
 

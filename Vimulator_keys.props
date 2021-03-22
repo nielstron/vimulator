@@ -171,5 +171,8 @@ vimulator.keys.visual.select-prev-char=H
 # Visual line mode
 vimulator.keys.visual-line.select-next-line=J
 vimulator.keys.visual-line.select-prev-line=K
-vimulator.keys.visual-line.next-char=L
-vimulator.keys.visual-line.prev-char=H
+vimulator.keys.visual-line.skip=L
+vimulator.keys.visual-line.skip.2=H
+vimulator.keys.visual-line.skip.3=E
+vimulator.keys.visual-line.skip.4=W
+vimulator.keys.visual-line.skip.5=B

@@ -470,11 +470,8 @@ public class VimulatorUtilities {
     }
 
     public static void selectLine(JEditTextArea textArea){
-    	int caretLine = textArea.getCaretLine();
-		int start = textArea.getLineStartOffset(caretLine);
-		int end = textArea.getLineEndOffset(caretLine) - 1;
-		Selection s = new Selection.Range(start,end);
-        textArea.addToSelection(s);
+        textArea.moveCaretPosition(textArea.getLineStartOffset(textArea.getCaretLine()));
+        textArea.goToNextLine(true);
     }
 
     // private members

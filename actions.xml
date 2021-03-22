@@ -136,6 +136,12 @@
 		</CODE>
 	</ACTION>
 
+	<ACTION NAME="vi-word-start">
+		<CODE>
+			vimulator.VimulatorUtilities.goToWordStart(textArea);
+		</CODE>
+	</ACTION>
+
 	<ACTION NAME="vi-next-word">
 		<CODE>
 			vimulator.VimulatorUtilities.goToNextWordStart(textArea);
@@ -181,6 +187,12 @@
 		</CODE>
 	</ACTION>
 
+	<ACTION NAME="vi-yank-word-start">
+		<CODE>
+			vimulator.VimulatorUtilities.yankWordStart(textArea);
+		</CODE>
+	</ACTION>
+
 	<ACTION NAME="vi-delete-line">
 		<CODE>
 			vimulator.VimulatorUtilities.deleteLine(textArea);
@@ -202,6 +214,12 @@
 	<ACTION NAME="vi-delete-word-end">
 		<CODE>
 			vimulator.VimulatorUtilities.deleteWordEnd(view, textArea);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-delete-word-start">
+		<CODE>
+			vimulator.VimulatorUtilities.deleteWordStart(view, textArea);
 		</CODE>
 	</ACTION>
 
@@ -258,6 +276,13 @@
 			vimulator.VimulatorUtilities.deleteWordEnd(view, textArea);
 			vimulator.VimulatorUtilities.setInsertMode(view);
             // TODO correct caret position when deleting at end of line
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-change-word-start">
+		<CODE>
+			vimulator.VimulatorUtilities.deleteWordStart(view, textArea);
+			vimulator.VimulatorUtilities.setInsertMode(view);
 		</CODE>
 	</ACTION>
 

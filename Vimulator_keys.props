@@ -57,7 +57,7 @@ vimulator.keys.command.document-end.2=C+END
 vimulator.keys.command.document-home=C+HOME
 vimulator.keys.command.prev-paragraph={
 vimulator.keys.command.next-paragraph=}
-vimulator.keys.command.prev-word=B
+vimulator.keys.command.vi-word-start=B
 vimulator.keys.command.vi-word-end=E
 vimulator.keys.command.vi-next-word=W
 vimulator.keys.command.delete=X
@@ -113,12 +113,11 @@ vimulator.keys.command.vi-paste-after=P
 
 # Deletion
 vimulator.keys.command.vi-delete-word-end=D E
+vimulator.keys.command.vi-delete-word-start=D B
 vimulator.keys.command.vi-delete-end-line=D $
 vimulator.keys.command.vi-delete-end-line.2=S+D
 vimulator.keys.command.vi-delete-start-line=D 0
 vimulator.keys.command.vi-delete-line=D D
-# TODO yanking
-vimulator.keys.command.backspace-word=D B
 # TODO
 vimulator.keys.command.vi-delete-next-word=D W 
 vimulator.keys.command.vi-delete-prev-char=D H
@@ -128,12 +127,11 @@ vimulator.keys.command.vi-delete-next-char=D L
 
 # Changing
 vimulator.keys.command.vi-change-word-end=C E
+vimulator.keys.command.vi-change-word-start=C B
 vimulator.keys.command.vi-change-end-line=C $
 vimulator.keys.command.vi-change-end-line.2=S+C
 vimulator.keys.command.vi-change-start-line=C 0
 vimulator.keys.command.vi-change-line=C C
-# TODO yanking
-vimulator.keys.command.backspace-word=C B
 # TODO
 vimulator.keys.command.vi-change-next-word=C W 
 vimulator.keys.command.vi-change-prev-char=C H
@@ -146,9 +144,9 @@ vimulator.keys.command.vi-yank-line=Y Y
 vimulator.keys.command.vi-yank-end-line=Y $
 vimulator.keys.command.vi-yank-start-line=Y 0
 vimulator.keys.command.vi-yank-word-end=Y E
+vimulator.keys.command.vi-yank-word-start=Y B
 # TODO
 vimulator.keys.command.vi-yank-next-word=Y W
-vimulator.keys.command.vi-yank-prev-word=Y B
 vimulator.keys.command.vi-yank-prev-char=Y H
 vimulator.keys.command.vi-yank-next-line=Y J
 vimulator.keys.command.vi-yank-prev-line=Y K
@@ -167,6 +165,10 @@ vimulator.keys.visual.select-prev-line=K
 # TODO fix de-selection when being move to the last char of a prev/next row
 vimulator.keys.visual.select-next-char=L
 vimulator.keys.visual.select-prev-char=H
+# TODO
+vimulator.keys.visual.select-word-end=E
+vimulator.keys.visual.select-next-word=W
+vimulator.keys.visual.select-word-start=B
 
 # Visual line mode
 # TODO fix selection of last line

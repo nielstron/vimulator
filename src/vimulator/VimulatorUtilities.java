@@ -474,6 +474,60 @@ public class VimulatorUtilities {
         textArea.goToNextLine(true);
     }
 
+    public static int findWordStart(JEditTextArea textArea){
+        // TODO fix beginning of line
+        int caretLine = textArea.getCaretLine();
+        JEditBuffer buffer = textArea.getBuffer();
+        int caret = textArea.getCaretPosition();
+        int lineStart = textArea.getLineStartOffset(caretLine);
+		int _caret = caret - lineStart;
+		if(_caret == 0 && lineStart == 0)
+		{
+            javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
+            return caret;
+		}
+        _caret--;
+
+		String lineText = textArea.getLineText(caretLine);
+        // addition: skip leading whitespace
+        while(_caret < 0 || Character.isWhitespace(lineText.charAt(_caret))){
+            if(_caret < 0)
+            {
+                if(lineStart + _caret < 0)
+                {
+                    return 0;
+                }
+                caretLine -= 1;
+                lineText = textArea.getLineText(caretLine);
+                lineStart = textArea.getLineStartOffset(caretLine);
+                _caret = textArea.getLineEndOffset(caretLine);
+            }
+            _caret -= 1;
+        }
+
+        String noWordSep = buffer.getStringProperty("noWordSep");
+        boolean camelCasedWords = buffer.getBooleanProperty("camelCasedWords");
+        _caret = TextUtilities.findWordStart(lineText,_caret,
+            noWordSep,true,camelCasedWords,false,true);
+		return _caret + lineStart;
+    }
+
+    public static void goToWordStart(JEditTextArea textArea){
+        textArea.moveCaretPosition(findWordStart(textArea));
+    }
+
+    public static void yankWordStart(JEditTextArea textArea){
+        int wordStartPos = findWordStart(textArea);
+        String s = textArea.getText(wordStartPos, wordStartPos - textArea.getCaretPosition());
+        yank(s);
+    }
+
+    public static void deleteWordStart(JEditTextArea textArea){
+        yankWordStart(textArea);
+        int wordStartPos = findWordStart(textArea);
+        textArea.getBuffer().remove(wordStartPos, wordStartPos - textArea.getCaretPosition());
+    }
+
     // private members
     private VimulatorUtilities() {
     }

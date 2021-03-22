@@ -70,6 +70,15 @@
 		</CODE>
 	</ACTION>
 
+	<ACTION NAME="vi-visual-line-mode">
+		<CODE>
+			textArea.setOverwriteEnabled(false);
+            textArea.setRectangularSelectionEnabled(false);
+            vimulator.VimulatorUtilities.selectLine();
+			vimulator.VimulatorUtilities.setVisualLineMode(view);
+		</CODE>
+	</ACTION>
+
 	<ACTION NAME="vi-replace-mode">
 		<CODE>
 			textArea.setOverwriteEnabled(true);
@@ -402,6 +411,13 @@
 		</CODE>
 	</ACTION>
 
+	<ACTION NAME="vi-change-selection">
+		<CODE>
+            vimulator.VimulatorUtilities.deleteSelection(textArea);
+			vimulator.VimulatorUtilities.setInsertMode(view);
+		</CODE>
+	</ACTION>
+
 	<ACTION NAME="vi-current-line-status" NO_RECORD="TRUE">
 		<CODE>
 			path = buffer.getPath();
@@ -413,12 +429,6 @@
 				"vimulator.msg.curr-line-status", args);
 
 			vimulator.VimulatorUtilities.setStatus(view, status);
-		</CODE>
-	</ACTION>
-
-	<ACTION NAME="vi-select-next-row">
-		<CODE>
-			vimulator.VimulatorUtilities.selectNextRow(textArea);
 		</CODE>
 	</ACTION>
 

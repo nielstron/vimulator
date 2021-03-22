@@ -72,6 +72,9 @@ public class VimulatorUtilities {
             case VimulatorConstants.VISUAL_BLOCK:
                 setStatus(view, jEdit.getProperty("vimulator.msg.visual-block-mode"));
                 break;
+            case VimulatorConstants.VISUAL_LINE:
+                setStatus(view, jEdit.getProperty("vimulator.msg.visual-line-mode"));
+                break;
         }
     }
 
@@ -89,6 +92,10 @@ public class VimulatorUtilities {
 
     public static void setVisualBlockMode(View view) {
         setMode(view, VimulatorConstants.VISUAL_BLOCK);
+    }
+
+    public static void setVisualLineMode(View view) {
+        setMode(view, VimulatorConstants.VISUAL_LINE);
     }
 
     public static void beep(View view) {
@@ -460,6 +467,14 @@ public class VimulatorUtilities {
             pos--;
         }
         textArea.moveCaretPosition(pos);
+    }
+
+    public static void selectLine(JEditTextArea textArea){
+    	int caretLine = textArea.getCaretLine();
+		int start = textArea.getLineStartOffset(caretLine);
+		int end = textArea.getLineEndOffset(caretLine) - 1;
+		Selection s = new Selection.Range(start,end);
+        textArea.addToSelection(s);
     }
 
     // private members

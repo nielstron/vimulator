@@ -38,3 +38,4 @@ vimulator.msg.insert-mode=-- INSERT --
 vimulator.msg.replace-mode=-- REPLACE --
 vimulator.msg.visual-mode=-- VISUAL --
 vimulator.msg.visual-block-mode=-- VISUAL-BLOCK --
+vimulator.msg.visual-line-mode=-- VISUAL-LINE --

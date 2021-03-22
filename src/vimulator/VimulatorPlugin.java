@@ -201,6 +201,9 @@ public class VimulatorPlugin extends EBPlugin {
         // Also per default use the keybindings from visual mode in visual block mode
         initKeyBindings("visual", VimulatorConstants.VISUAL_BLOCK);
         initKeyBindings("visual-block", VimulatorConstants.VISUAL_BLOCK);
+        // Also per default use the keybindings from visual mode in visual line mode
+        initKeyBindings("visual", VimulatorConstants.VISUAL_LINE);
+        initKeyBindings("visual-line", VimulatorConstants.VISUAL_LINE);
     }
 
     private void initKeyBindings(String setPrefix, int mode) {

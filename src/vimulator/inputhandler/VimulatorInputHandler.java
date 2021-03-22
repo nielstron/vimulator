@@ -37,11 +37,13 @@ public class VimulatorInputHandler extends InputHandler {
         insertBindings = new Hashtable();
         visualBindings = new Hashtable();
         visualBlockBindings = new Hashtable();
+        visualLineBindings = new Hashtable();
 
         insertHandler = new InsertInputHandler(view, insertBindings);
         commandHandler = new CommandInputHandler(view, commandBindings);
         visualHandler = new VisualInputHandler(view, visualBindings);
         visualBlockHandler = new VisualBlockInputHandler(view, visualBlockBindings);
+        visualLineHandler = new VisualLineInputHandler(view, visualLineBindings);
 
         setMode(VimulatorConstants.COMMAND);
     }
@@ -53,10 +55,12 @@ public class VimulatorInputHandler extends InputHandler {
         insertBindings = chain.insertBindings;
         visualBindings = chain.visualBindings;
         visualBlockBindings = chain.visualBlockBindings;
+        visualLineBindings = chain.visualLineBindings;
         insertHandler = new InsertInputHandler(view, insertBindings);
         commandHandler = new CommandInputHandler(view, commandBindings);
         visualHandler = new VisualInputHandler(view, visualBindings);
         visualBlockHandler = new VisualBlockInputHandler(view, visualBlockBindings);
+        visualLineHandler = new VisualLineInputHandler(view, visualLineBindings);
 
         setMode(chain.getMode());
     }
@@ -80,6 +84,9 @@ public class VimulatorInputHandler extends InputHandler {
                 break;
             case VimulatorConstants.VISUAL_BLOCK:
                 this.currentHandler = visualBlockHandler;
+                break;
+            case VimulatorConstants.VISUAL_LINE:
+                this.currentHandler = visualLineHandler;
                 break;
             case VimulatorConstants.INSERT:
                 this.currentHandler = insertHandler;
@@ -109,6 +116,9 @@ public class VimulatorInputHandler extends InputHandler {
             case VimulatorConstants.VISUAL_BLOCK:
                 addKeyBinding(binding, action, this.visualBlockBindings);
                 break;
+            case VimulatorConstants.VISUAL_LINE:
+                addKeyBinding(binding, action, this.visualLineBindings);
+                break;
         }
     }
 
@@ -134,6 +144,9 @@ public class VimulatorInputHandler extends InputHandler {
             case VimulatorConstants.VISUAL_BLOCK:
                 visualBlockBindings.clear();
                 break;
+            case VimulatorConstants.VISUAL_LINE:
+                visualLineBindings.clear();
+                break;
         }
     }
 
@@ -146,12 +159,14 @@ public class VimulatorInputHandler extends InputHandler {
     private Hashtable insertBindings;
     private Hashtable visualBindings;
     private Hashtable visualBlockBindings;
+    private Hashtable visualLineBindings;
 
     private InputHandler currentHandler;
     private InsertInputHandler insertHandler;
     private CommandInputHandler commandHandler;
     private VisualInputHandler visualHandler;
     private VisualBlockInputHandler visualBlockHandler;
+    private VisualLineInputHandler visualLineHandler;
 
     private void addKeyBinding(String binding, EditAction action, Hashtable current) {
         // current is a hashtable that recursively refers to further hashtables until

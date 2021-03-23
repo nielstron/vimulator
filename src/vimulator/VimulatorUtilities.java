@@ -548,6 +548,8 @@ public class VimulatorUtilities {
     }
 
     public static void multilineEdit(View view, JEditTextArea textArea, boolean replace){
+        // Some black magic to enable multi-caret editing (insertion and replacement)
+        // Idea courtesy to Skeeve https://sourceforge.net/p/jedit/feature-requests/499/
         JEditBuffer buffer = textArea.getBuffer();
         List<Selection> news = new ArrayList<Selection>(textArea.getSelectedLines().length);
         int selectionStart = buffer.getLength();

@@ -95,16 +95,19 @@ public class BindingInputHandler extends InputHandler {
 
 		// remember old values, in case action changes them
 
-        try
-        {
-            buffer.beginCompoundEdit();
+        if(repeatCount == 1)
+            // inside compound edit actions like "undo" don't work anymore
+            action.invoke(view);
+        else {
+            try {
+                buffer.beginCompoundEdit();
 
-            for(int i = 0; i < repeatCount; i++)
-                action.invoke(view);
-        }
-        finally
-        {
-            buffer.endCompoundEdit();
+                for(int i = 0; i < repeatCount; i++)
+                    action.invoke(view);
+            }
+            finally {
+                buffer.endCompoundEdit();
+            }
         }
 
 		Macros.Recorder recorder = view.getMacroRecorder();

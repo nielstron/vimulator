@@ -63,7 +63,6 @@ vimulator.keys.command.vi-next-word=W
 vimulator.keys.command.delete=X
 vimulator.keys.command.backspace=S+X
 vimulator.keys.command.vi-join-lines=S+J
-# TODO fix undo not working
 vimulator.keys.command.undo=U
 vimulator.keys.command.redo=C+R
 vimulator.keys.command.vi-insert-mode=I

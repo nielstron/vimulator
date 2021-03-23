@@ -161,10 +161,10 @@ vimulator.keys.visual.vi-delete-selection=D
 vimulator.keys.visual.vi-change-selection=C
 vimulator.keys.visual.select-next-line=J
 vimulator.keys.visual.select-prev-line=K
-# TODO fix to not allow moving past borders
-# TODO fix de-selection when being move to the last char of a prev/next row
-vimulator.keys.visual.select-next-char=L
-vimulator.keys.visual.select-prev-char=H
+vimulator.keys.visual.select-line-end=$
+vimulator.keys.visual.select-line-home=0
+vimulator.keys.visual.vi-select-next-col=L
+vimulator.keys.visual.vi-select-prev-col=H
 # TODO
 vimulator.keys.visual.select-word-end=E
 vimulator.keys.visual.select-next-word=W

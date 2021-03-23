@@ -100,8 +100,9 @@
 
 	<ACTION NAME="vi-end-abs" NO_REPEAT="TRUE">
 		<CODE>
-			textArea.moveCaretPosition(textArea.getLineEndOffset(
-				textArea.getCaretLine())-1, false);
+			textArea.moveCaretPosition(
+                vimulator.VimulatorUtilities.getLastAllowedOffset(view, textArea)
+                , false);
 		</CODE>
 	</ACTION>
 
@@ -405,19 +406,25 @@
 
 	<ACTION NAME="vi-prev-col">
 		<CODE>
-			if (textArea.getCaretPosition() == textArea.getLineStartOffset(textArea.getCaretLine()))
-			{
-				view.getToolkit().beep();
-				return;
-			}
-
-			textArea.goToPrevCharacter(false);
+            vimulator.VimulatorUtilities.goToPrevCol(view, textArea);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-next-col">
 		<CODE>
             vimulator.VimulatorUtilities.goToNextCol(view, textArea);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-select-prev-col">
+		<CODE>
+            vimulator.VimulatorUtilities.goToPrevCol(view, textArea, true);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-select-next-col">
+		<CODE>
+            vimulator.VimulatorUtilities.goToNextCol(view, textArea, true);
 		</CODE>
 	</ACTION>
 

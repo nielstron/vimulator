@@ -119,7 +119,7 @@ public class VimulatorUtilities {
 
         int lastAllowed = textArea.getLineEndOffset(line) - 1;
         if (checkEmulation(view)
-                && ((VimulatorInputHandler) view.getInputHandler()).getMode() != VimulatorConstants.INSERT)
+                && ((VimulatorInputHandler) view.getInputHandler()).getMode() == VimulatorConstants.COMMAND)
             lastAllowed--;
 
         lastAllowed = Math.max(lastAllowed, textArea.getLineStartOffset(line));
@@ -433,7 +433,7 @@ public class VimulatorUtilities {
     }
 
     public static void goToNextCol(View view, JEditTextArea textArea, boolean select){
-        int lastAllowed = textArea.getLineEndOffset(textArea.getCaretLine()) - 1;
+        int lastAllowed = getLastAllowedOffset(view, textArea);
 
         if (textArea.getCaretPosition() >= lastAllowed)
         {
@@ -442,6 +442,20 @@ public class VimulatorUtilities {
         }
 
         textArea.goToNextCharacter(select);
+    }
+
+    public static void goToPrevCol(View view, JEditTextArea textArea){
+        goToPrevCol(view, textArea, false);
+    }
+
+    public static void goToPrevCol(View view, JEditTextArea textArea, boolean select){
+        if (textArea.getCaretPosition() == textArea.getLineStartOffset(textArea.getCaretLine()))
+        {
+            view.getToolkit().beep();
+            return;
+        }
+
+        textArea.goToPrevCharacter(false);
     }
 
     public static void goToNextCol(View view, JEditTextArea textArea){

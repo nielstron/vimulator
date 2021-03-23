@@ -66,7 +66,8 @@ public class VimulatorUtilities {
         textArea.setOverwriteEnabled((mode & VimulatorConstants.OVERWRITE) != 0);
         textArea.setRectangularSelectionEnabled((mode & VimulatorConstants.BLOCK) != 0);
         if(mode == VimulatorConstants.COMMAND){
-            view.getTextArea().selectNone();
+            textArea.selectNone();
+            textArea.setMultipleSelectionEnabled(false);
         }
         
         setStatus(
@@ -153,13 +154,9 @@ public class VimulatorUtilities {
             Toolkit.getDefaultToolkit().beep();
             return -1;
         }
-        buffer.beginCompoundEdit();
-        int[] leadingWhitespace = { 0 };
-        buffer.getCurrentIndentForLine(lineNo, leadingWhitespace);
-        buffer.remove(end - 1, leadingWhitespace[0] + 1);
+        buffer.remove(end - 1, leadingWhitespace(buffer, lineNo) + 1);
         if (addSpace)
             buffer.insert(end - 1, " ");
-        buffer.endCompoundEdit();
 
         return end - 1;
     }
@@ -218,11 +215,9 @@ public class VimulatorUtilities {
         textArea.selectNone();
 
         JEditBuffer buffer = textArea.getBuffer();
-        buffer.beginCompoundEdit();
         buffer.remove(pos, 1);
         buffer.insert(pos, String.valueOf(replace));
         textArea.moveCaretPosition(pos);
-        buffer.endCompoundEdit();
     }
 
     public static void findChar(View view, char find, boolean reverse, boolean until) {
@@ -289,11 +284,15 @@ public class VimulatorUtilities {
         findChar(view, last.ch, last.reverse ^ opposite, last.until, false);
     }
 
-    public static void insertEnterAndIndentBefore(JEditTextArea textArea, JEditBuffer buffer) {
-        int line = textArea.getCaretLine();
+    public static int leadingWhitespace(JEditBuffer buffer, int line){
         int[] leadingWhitespace = { 0 };
         buffer.getCurrentIndentForLine(line, leadingWhitespace);
-        int caretPos = textArea.getLineStartOffset(line) + leadingWhitespace[0];
+        return leadingWhitespace[0];
+    }
+
+    public static void insertEnterAndIndentBefore(JEditTextArea textArea, JEditBuffer buffer) {
+        int line = textArea.getCaretLine();
+        int caretPos = textArea.getLineStartOffset(line) + leadingWhitespace(buffer, line);
         textArea.moveCaretPosition(caretPos);
         textArea.insertEnterAndIndent();
         textArea.moveCaretPosition(caretPos);
@@ -548,22 +547,19 @@ public class VimulatorUtilities {
         textArea.getBuffer().remove(wordStartPos, wordStartPos - textArea.getCaretPosition());
     }
 
-    public static void multilineEdit(View view, JEditTextArea textArea){
+    public static void multilineEdit(View view, JEditTextArea textArea, boolean replace){
         JEditBuffer buffer = textArea.getBuffer();
         List<Selection> news = new ArrayList<Selection>(textArea.getSelectedLines().length);
         int selectionStart = buffer.getLength();
-        for(Selection s : textArea.getSelection()){
-            selectionStart = Math.min(selectionStart, s.getStart());
-            if(s instanceof Selection.Rect){
-                Selection.Rect sr = (Selection.Rect) s;
-                for(int j = sr.getStartLine(); j <= sr.getEndLine(); j++){
-                    int news_start = buffer.getLineStartOffset(j);
-                    news.add(new Selection.Range(
-                        news_start + sr.getStartColumn(buffer),
-                        news_start + sr.getEndColumn(buffer)
-                    ));
-                } 
-            }
+        Selection s = textArea.getSelection()[0];
+        selectionStart = Math.min(selectionStart, s.getStart());
+
+        for(int j : textArea.getSelectedLines()){
+            int start = s.getStart(buffer, j);
+            int end = s.getEnd(buffer, j);
+            // TODO insert dummy value at selection beginnings
+            // for correct multi-caret insertion
+            news.add(new Selection.Range(start, replace ? end : start+1));
         }
         textArea.setMultipleSelectionEnabled(true);
         textArea.setSelection(news.toArray(new Selection.Range[0]));

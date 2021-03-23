@@ -63,6 +63,7 @@ vimulator.keys.command.vi-next-word=W
 vimulator.keys.command.delete=X
 vimulator.keys.command.backspace=S+X
 vimulator.keys.command.vi-join-lines=S+J
+# TODO fix undo not working
 vimulator.keys.command.undo=U
 vimulator.keys.command.redo=C+R
 vimulator.keys.command.vi-insert-mode=I
@@ -159,6 +160,7 @@ vimulator.keys.visual.vi-command-mode.3=C+C
 vimulator.keys.visual.vi-yank-selection=Y
 vimulator.keys.visual.vi-delete-selection=D
 vimulator.keys.visual.vi-change-selection=C
+vimulator.keys.visual.vi-paste-selection=P
 vimulator.keys.visual.select-next-line=J
 vimulator.keys.visual.select-prev-line=K
 vimulator.keys.visual.select-line-end=$
@@ -166,16 +168,20 @@ vimulator.keys.visual.select-line-home=0
 vimulator.keys.visual.vi-select-next-col=L
 vimulator.keys.visual.vi-select-prev-col=H
 vimulator.keys.visual.vi-insert-mode=I
-vimulator.keys.visual.vi-multiline-edit=S+I
+vimulator.keys.visual.vi-multiline-insert=S+I
 # TODO
 vimulator.keys.visual.select-word-end=E
 vimulator.keys.visual.select-next-word=W
 vimulator.keys.visual.select-word-start=B
 
+# Visual block mode
+vimulator.keys.visual-block.vi-multiline-change=C
+
 # Visual line mode
 # TODO fix selection of last line
 vimulator.keys.visual-line.select-next-line=J
 vimulator.keys.visual-line.select-prev-line=K
+vimulator.keys.visual-line.vi-multiline-change=C
 vimulator.keys.visual-line.skip=L
 vimulator.keys.visual-line.skip.2=H
 vimulator.keys.visual-line.skip.3=E

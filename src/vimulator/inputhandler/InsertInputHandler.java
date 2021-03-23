@@ -60,7 +60,9 @@ public class InsertInputHandler extends DefaultInputHandler {
         KeyStroke k = KeyStroke.getKeyStroke(evt.getKeyCode(), evt.getModifiersEx());
         Object o = this.insertBindings.get(k);
         if (evt.getID() == KeyEvent.KEY_PRESSED && o instanceof EditAction) {
+            this.view.getBuffer().beginCompoundEdit();
             this.invokeAction((EditAction) o);
+            this.view.getBuffer().endCompoundEdit();
             evt.consume();
             return;
         }

@@ -139,10 +139,8 @@
 
 	<ACTION NAME="vi-join-lines">
 		<CODE>
-			buffer.beginCompoundEdit();
 			end = vimulator.VimulatorUtilities.joinLines(textArea, true);
 			if (end != -1) textArea.moveCaretPosition(end);
-			buffer.endCompoundEdit();
 		</CODE>
 	</ACTION>
 
@@ -209,6 +207,13 @@
 	<ACTION NAME="vi-delete-word-start">
 		<CODE>
 			vimulator.VimulatorUtilities.deleteWordStart(view, textArea);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-paste-selection">
+		<CODE>
+            vimulator.VimulatorUtilities.deleteSelection(textArea);
+			vimulator.VimulatorUtilities.paste(textArea, buffer, true);
 		</CODE>
 	</ACTION>
 
@@ -471,9 +476,15 @@
 		</CODE>
 	</ACTION>
 
-	<ACTION NAME="vi-multiline-edit">
+	<ACTION NAME="vi-multiline-insert">
 		<CODE>
-            vimulator.VimulatorUtilities.multilineEdit(view, textArea);
+            vimulator.VimulatorUtilities.multilineEdit(view, textArea, false);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-multiline-change">
+		<CODE>
+            vimulator.VimulatorUtilities.multilineEdit(view, textArea, true);
 		</CODE>
 	</ACTION>
 </ACTIONS>

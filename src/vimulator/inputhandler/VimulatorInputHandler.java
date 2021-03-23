@@ -78,8 +78,6 @@ public class VimulatorInputHandler extends InputHandler {
     public void setMode(int mode) {
         if (this.view == null) return;
 
-        if (this.view.getBuffer().insideCompoundEdit())
-            this.view.getBuffer().endCompoundEdit();
         this.currentHandler = handlerOfMode.getOrDefault(mode, this.currentHandler);
 
         this.mode = mode;

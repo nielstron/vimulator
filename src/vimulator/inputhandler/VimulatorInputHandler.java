@@ -18,8 +18,7 @@
 package vimulator.inputhandler;
 
 import vimulator.*;
-import java.util.Hashtable;
-import java.util.StringTokenizer;
+import java.util.*;
 import javax.swing.KeyStroke;
 import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.View;
@@ -30,39 +29,46 @@ import org.gjt.sp.util.Log;
 
 public class VimulatorInputHandler extends InputHandler {
 
+    // private members
+    // current VI edit mode
+    private int mode;
+
+    private InputHandler currentHandler;
+    private Map<Integer, Hashtable> bindingOfMode;
+    private Map<Integer, InputHandler> handlerOfMode;
+
     public VimulatorInputHandler(View view) {
         super(view);
 
-        commandBindings = new Hashtable();
-        insertBindings = new Hashtable();
-        visualBindings = new Hashtable();
-        visualBlockBindings = new Hashtable();
-        visualLineBindings = new Hashtable();
+        bindingOfMode = new Hashtable<>();
+        for(int m : VimulatorConstants.editorModes)
+            bindingOfMode.put(m, new Hashtable<>());
+        // manually bind replace to insert
+        bindingOfMode.put(VimulatorConstants.REPLACE, bindingOfMode.get(VimulatorConstants.INSERT));
 
-        insertHandler = new InsertInputHandler(view, insertBindings);
-        commandHandler = new CommandInputHandler(view, commandBindings);
-        visualHandler = new VisualInputHandler(view, visualBindings);
-        visualBlockHandler = new VisualBlockInputHandler(view, visualBlockBindings);
-        visualLineHandler = new VisualLineInputHandler(view, visualLineBindings);
-
+        initHandlers();
         setMode(VimulatorConstants.COMMAND);
     }
 
     public VimulatorInputHandler(View view, VimulatorInputHandler chain) {
         super(view);
 
-        commandBindings = chain.commandBindings;
-        insertBindings = chain.insertBindings;
-        visualBindings = chain.visualBindings;
-        visualBlockBindings = chain.visualBlockBindings;
-        visualLineBindings = chain.visualLineBindings;
-        insertHandler = new InsertInputHandler(view, insertBindings);
-        commandHandler = new CommandInputHandler(view, commandBindings);
-        visualHandler = new VisualInputHandler(view, visualBindings);
-        visualBlockHandler = new VisualBlockInputHandler(view, visualBlockBindings);
-        visualLineHandler = new VisualLineInputHandler(view, visualLineBindings);
+        bindingOfMode = chain.bindingOfMode;
 
+        initHandlers();
         setMode(chain.getMode());
+    }
+
+    private void initHandlers(){
+        handlerOfMode = new Hashtable<>();
+        for(int m : VimulatorConstants.editorModes)
+            handlerOfMode.put(m, new BindingInputHandler(view, m, bindingOfMode.get(m)));
+        // manually bind insert and replace to the special handler
+        handlerOfMode.put(
+            VimulatorConstants.INSERT,
+            new InsertInputHandler(view, bindingOfMode.get(VimulatorConstants.INSERT))
+        );
+        handlerOfMode.put(VimulatorConstants.REPLACE, handlerOfMode.get(VimulatorConstants.INSERT));
     }
 
     public int getMode() {
@@ -72,28 +78,9 @@ public class VimulatorInputHandler extends InputHandler {
     public void setMode(int mode) {
         if (this.view == null) return;
 
-        this.view.getTextArea().selectNone();
         if (this.view.getBuffer().insideCompoundEdit())
             this.view.getBuffer().endCompoundEdit();
-        switch (mode) {
-            case VimulatorConstants.COMMAND:
-                this.currentHandler = commandHandler;
-                break;
-            case VimulatorConstants.VISUAL:
-                this.currentHandler = visualHandler;
-                break;
-            case VimulatorConstants.VISUAL_BLOCK:
-                this.currentHandler = visualBlockHandler;
-                break;
-            case VimulatorConstants.VISUAL_LINE:
-                this.currentHandler = visualLineHandler;
-                break;
-            case VimulatorConstants.INSERT:
-                this.currentHandler = insertHandler;
-                break;
-            default:
-                return;
-        }
+        this.currentHandler = handlerOfMode.getOrDefault(mode, this.currentHandler);
 
         this.mode = mode;
     }
@@ -103,23 +90,7 @@ public class VimulatorInputHandler extends InputHandler {
     }
 
     public void addKeyBinding(String binding, EditAction action, int mode) {
-        switch (mode) {
-            case VimulatorConstants.COMMAND:
-                addKeyBinding(binding, action, this.commandBindings);
-                break;
-            case VimulatorConstants.INSERT:
-                addKeyBinding(binding, action, this.insertBindings);
-                break;
-            case VimulatorConstants.VISUAL:
-                addKeyBinding(binding, action, this.visualBindings);
-                break;
-            case VimulatorConstants.VISUAL_BLOCK:
-                addKeyBinding(binding, action, this.visualBlockBindings);
-                break;
-            case VimulatorConstants.VISUAL_LINE:
-                addKeyBinding(binding, action, this.visualLineBindings);
-                break;
-        }
+        addKeyBinding(binding, action, this.bindingOfMode.get(mode));
     }
 
     public void removeKeyBinding(String binding) {
@@ -131,42 +102,8 @@ public class VimulatorInputHandler extends InputHandler {
     }
 
     public void removeAllKeyBindings(int mode) {
-        switch (mode) {
-            case VimulatorConstants.COMMAND:
-                commandBindings.clear();
-                break;
-            case VimulatorConstants.INSERT:
-                insertBindings.clear();
-                break;
-            case VimulatorConstants.VISUAL:
-                visualBindings.clear();
-                break;
-            case VimulatorConstants.VISUAL_BLOCK:
-                visualBlockBindings.clear();
-                break;
-            case VimulatorConstants.VISUAL_LINE:
-                visualLineBindings.clear();
-                break;
-        }
+        this.bindingOfMode.get(mode).clear();
     }
-
-    // private members
-    // current VI edit mode
-    private int mode;
-
-    // Key bindings for different modes
-    private Hashtable commandBindings;
-    private Hashtable insertBindings;
-    private Hashtable visualBindings;
-    private Hashtable visualBlockBindings;
-    private Hashtable visualLineBindings;
-
-    private InputHandler currentHandler;
-    private InsertInputHandler insertHandler;
-    private CommandInputHandler commandHandler;
-    private VisualInputHandler visualHandler;
-    private VisualBlockInputHandler visualBlockHandler;
-    private VisualLineInputHandler visualLineHandler;
 
     private void addKeyBinding(String binding, EditAction action, Hashtable current) {
         // current is a hashtable that recursively refers to further hashtables until

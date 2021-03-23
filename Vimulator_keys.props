@@ -165,6 +165,8 @@ vimulator.keys.visual.select-line-end=$
 vimulator.keys.visual.select-line-home=0
 vimulator.keys.visual.vi-select-next-col=L
 vimulator.keys.visual.vi-select-prev-col=H
+vimulator.keys.visual.vi-insert-mode=I
+vimulator.keys.visual.vi-multiline-edit=S+I
 # TODO
 vimulator.keys.visual.select-word-end=E
 vimulator.keys.visual.select-next-word=W

@@ -45,48 +45,36 @@
 
 	<ACTION NAME="vi-command-mode">
 		<CODE>
-			textArea.setOverwriteEnabled(false);
-            textArea.setRectangularSelectionEnabled(false);
 			vimulator.VimulatorUtilities.setCommandMode(view);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-insert-mode">
 		<CODE>
-			textArea.setOverwriteEnabled(false);
-            textArea.setRectangularSelectionEnabled(false);
 			vimulator.VimulatorUtilities.setInsertMode(view);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-replace-mode">
 		<CODE>
-			textArea.setOverwriteEnabled(true);
-            textArea.setRectangularSelectionEnabled(false);
-			vimulator.VimulatorUtilities.setInsertMode(view);
+			vimulator.VimulatorUtilities.setReplaceMode(view);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-visual-mode">
 		<CODE>
-			textArea.setOverwriteEnabled(false);
-            textArea.setRectangularSelectionEnabled(false);
 			vimulator.VimulatorUtilities.setVisualMode(view);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-visual-block-mode">
 		<CODE>
-			textArea.setOverwriteEnabled(false);
-            textArea.setRectangularSelectionEnabled(true);
 			vimulator.VimulatorUtilities.setVisualBlockMode(view);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-visual-line-mode">
 		<CODE>
-			textArea.setOverwriteEnabled(false);
-            textArea.setRectangularSelectionEnabled(false);
 			vimulator.VimulatorUtilities.setVisualLineMode(view);
             vimulator.VimulatorUtilities.selectLine(textArea);
 		</CODE>
@@ -483,5 +471,9 @@
 		</CODE>
 	</ACTION>
 
-
+	<ACTION NAME="vi-multiline-edit">
+		<CODE>
+            vimulator.VimulatorUtilities.multilineEdit(view, textArea);
+		</CODE>
+	</ACTION>
 </ACTIONS>

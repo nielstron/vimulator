@@ -34,6 +34,7 @@ vimulator.msg.no-regexp=No previous regular expression
 vimulator.msg.not-found=Pattern not found: {0}
 vimulator.msg.bad-ex-command=Not an editor command: {0}
 
+vimulator.msg.command-mode=
 vimulator.msg.insert-mode=-- INSERT --
 vimulator.msg.replace-mode=-- REPLACE --
 vimulator.msg.visual-mode=-- VISUAL --

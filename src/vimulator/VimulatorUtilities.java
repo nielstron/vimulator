@@ -17,6 +17,8 @@
 
 package vimulator;
 
+import java.util.*;
+
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
@@ -31,8 +33,11 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 
 import java.lang.Character;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class VimulatorUtilities {
+
 
     public static boolean checkEmulation(View view) {
         return view.getInputHandler() instanceof VimulatorInputHandler;
@@ -57,30 +62,28 @@ public class VimulatorUtilities {
         int lastAllowed = getLastAllowedOffset(view, textArea);
         if (textArea.getCaretPosition() > lastAllowed)
             textArea.moveCaretPosition(lastAllowed);
-
-        switch(mode){
-            case VimulatorConstants.COMMAND:
-                setStatus(view, "");
-                break;
-            case VimulatorConstants.INSERT:
-                String msg = textArea.isOverwriteEnabled() ? jEdit.getProperty("vimulator.msg.replace-mode")
-                        : jEdit.getProperty("vimulator.msg.insert-mode");
-                setStatus(view, msg);
-                break;
-            case VimulatorConstants.VISUAL:
-                setStatus(view, jEdit.getProperty("vimulator.msg.visual-mode"));
-                break;
-            case VimulatorConstants.VISUAL_BLOCK:
-                setStatus(view, jEdit.getProperty("vimulator.msg.visual-block-mode"));
-                break;
-            case VimulatorConstants.VISUAL_LINE:
-                setStatus(view, jEdit.getProperty("vimulator.msg.visual-line-mode"));
-                break;
+        
+        textArea.setOverwriteEnabled((mode & VimulatorConstants.OVERWRITE) != 0);
+        textArea.setRectangularSelectionEnabled((mode & VimulatorConstants.BLOCK) != 0);
+        if(mode == VimulatorConstants.COMMAND){
+            view.getTextArea().selectNone();
         }
+        
+        setStatus(
+            view,
+            jEdit.getProperty(
+                "vimulator.msg." +
+                VimulatorConstants.stringOfMode.get(mode).toLowerCase() +
+                "-mode")
+        );
     }
 
     public static void setInsertMode(View view) {
         setMode(view, VimulatorConstants.INSERT);
+    }
+
+    public static void setReplaceMode(View view) {
+        setMode(view, VimulatorConstants.REPLACE);
     }
 
     public static void setCommandMode(View view) {
@@ -543,6 +546,29 @@ public class VimulatorUtilities {
         yankWordStart(textArea);
         int wordStartPos = findWordStart(textArea);
         textArea.getBuffer().remove(wordStartPos, wordStartPos - textArea.getCaretPosition());
+    }
+
+    public static void multilineEdit(View view, JEditTextArea textArea){
+        JEditBuffer buffer = textArea.getBuffer();
+        List<Selection> news = new ArrayList<Selection>(textArea.getSelectedLines().length);
+        int selectionStart = buffer.getLength();
+        for(Selection s : textArea.getSelection()){
+            selectionStart = Math.min(selectionStart, s.getStart());
+            if(s instanceof Selection.Rect){
+                Selection.Rect sr = (Selection.Rect) s;
+                for(int j = sr.getStartLine(); j <= sr.getEndLine(); j++){
+                    int news_start = buffer.getLineStartOffset(j);
+                    news.add(new Selection.Range(
+                        news_start + sr.getStartColumn(buffer),
+                        news_start + sr.getEndColumn(buffer)
+                    ));
+                } 
+            }
+        }
+        textArea.setMultipleSelectionEnabled(true);
+        textArea.setSelection(news.toArray(new Selection.Range[0]));
+        textArea.moveCaretPosition(selectionStart);
+        setInsertMode(view);
     }
 
     // private members

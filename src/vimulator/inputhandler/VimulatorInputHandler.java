@@ -214,4 +214,14 @@ public class VimulatorInputHandler extends InputHandler {
         Log.log(Log.WARNING, this, "ID: " + evt.getID());
         this.currentHandler.processKeyEvent(evt, from, global);
     }
+
+    @Override
+    public int getLastActionCount() {
+        return this.currentHandler.getLastActionCount();
+    }
+
+    @Override
+    public EditAction getLastAction() {
+        return this.currentHandler.getLastAction();
+    }
 }

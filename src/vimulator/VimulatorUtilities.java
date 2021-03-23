@@ -33,6 +33,7 @@ import org.gjt.sp.util.Log;
 import java.lang.Character;
 
 public class VimulatorUtilities {
+
     public static boolean checkEmulation(View view) {
         return view.getInputHandler() instanceof VimulatorInputHandler;
     }
@@ -300,6 +301,8 @@ public class VimulatorUtilities {
             view.getInputHandler().getRepeatCount(),
             textArea.getLineCount()
         );
+        // Reset repeat count, this action should really only be invoked once
+        view.getInputHandler().setRepeatCount(1);
         int line = rc - 1;
         int caretPos = textArea.getLineStartOffset(line);
         textArea.moveCaretPosition(caretPos);

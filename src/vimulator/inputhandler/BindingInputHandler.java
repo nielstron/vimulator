@@ -25,7 +25,10 @@ import java.util.*;
 import javax.swing.KeyStroke;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.EditAction;
+import org.gjt.sp.jedit.Macros;
 import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.gui.HistoryModel;
 import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.gui.KeyEventTranslator.Key;
 import org.gjt.sp.util.Log;
@@ -59,6 +62,69 @@ public class BindingInputHandler extends InputHandler {
     public int getMode() {
         return mode;
     }
+
+	//{{{ invokeAction() method
+	/**
+	 * Invokes the specified action, repeating and recording it as
+	 * necessary.
+     * This method is changed with respect to the super method in two aspects
+     *  - every iteration checks the global repeatCount, hence its current state is observable
+     *  - the user is never asked whether the current action should be repeated
+	 * @param action The action
+	 */
+	@Override
+	public void invokeAction(EditAction action)
+	{
+		JEditBuffer buffer = view.getBuffer();
+
+		/* if(buffer.insideCompoundEdit())
+			buffer.endCompoundEdit(); */
+
+		// remember the last executed action
+		if(!action.noRememberLast())
+		{
+			HistoryModel.getModel("action").addItem(action.getName());
+			if(lastAction == action)
+				lastActionCount++;
+			else
+			{
+				lastAction = action;
+				lastActionCount = 1;
+			}
+		}
+
+		// remember old values, in case action changes them
+
+        try
+        {
+            buffer.beginCompoundEdit();
+
+            for(int i = 0; i < repeatCount; i++)
+                action.invoke(view);
+        }
+        finally
+        {
+            buffer.endCompoundEdit();
+        }
+
+		Macros.Recorder recorder = view.getMacroRecorder();
+
+		if(recorder != null && !action.noRecord())
+			recorder.record(repeatCount,action.getCode());
+
+		// If repeat was true originally, clear it
+		// Otherwise it might have been set by the action, etc
+		if(repeatCount != 1)
+		{
+			// first of all, if this action set a
+			// readNextChar, do not clear the repeat
+			if(readNextChar != null)
+				return;
+
+			repeatCount = 1;
+			view.getStatus().setMessage(null);
+		}
+	} //}}}
 
 
     // private members

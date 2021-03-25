@@ -429,13 +429,7 @@
 
 	<ACTION NAME="vi-select-prev-col">
 		<CODE>
-            vimulator.VimulatorUtilities.goToPrevCol(view, textArea, true);
-		</CODE>
-	</ACTION>
-
-	<ACTION NAME="vi-select-next-col">
-		<CODE>
-            vimulator.VimulatorUtilities.goToNextCol(view, textArea, true);
+            vimulator.VimulatorUtilities.selectPrevCol(view, textArea);
 		</CODE>
 	</ACTION>
 

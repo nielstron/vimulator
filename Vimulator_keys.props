@@ -168,9 +168,9 @@ vimulator.keys.visual.vi-select-next-col=L
 vimulator.keys.visual.vi-select-prev-col=H
 vimulator.keys.visual.vi-insert-mode=I
 vimulator.keys.visual.vi-multiline-insert=S+I
-vimulator.keys.visual.select-word-end=E
-vimulator.keys.visual.select-next-word=W
-vimulator.keys.visual.select-word-start=B
+vimulator.keys.visual.vi-select-word-end=E
+vimulator.keys.visual.vi-select-next-word=W
+vimulator.keys.visual.vi-select-word-start=B
 vimulator.keys.visual.shift-right=>
 vimulator.keys.visual.shift-left=<
 

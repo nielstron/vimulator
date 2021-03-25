@@ -461,6 +461,10 @@ public class VimulatorUtilities {
         goToPrevCol(view, textArea, false);
     }
 
+    public static void selectPrevCol(View view, JEditTextArea textArea){
+        goToPrevCol(view, textArea, true);
+    }
+
     public static void goToPrevCol(View view, JEditTextArea textArea, boolean select){
         if (textArea.getCaretPosition() == textArea.getLineStartOffset(textArea.getCaretLine()))
         {
@@ -468,7 +472,7 @@ public class VimulatorUtilities {
             return;
         }
 
-        textArea.goToPrevCharacter(false);
+        textArea.goToPrevCharacter(select);
     }
 
     public static void goToNextCol(View view, JEditTextArea textArea){

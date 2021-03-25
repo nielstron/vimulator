@@ -125,15 +125,33 @@
 		</CODE>
 	</ACTION>
 
+	<ACTION NAME="vi-select-word-end">
+		<CODE>
+			vimulator.VimulatorUtilities.selectWordEnd(textArea);
+		</CODE>
+	</ACTION>
+
 	<ACTION NAME="vi-word-start">
 		<CODE>
 			vimulator.VimulatorUtilities.goToWordStart(textArea);
 		</CODE>
 	</ACTION>
 
+	<ACTION NAME="vi-select-word-start">
+		<CODE>
+			vimulator.VimulatorUtilities.selectWordStart(textArea);
+		</CODE>
+	</ACTION>
+
 	<ACTION NAME="vi-next-word">
 		<CODE>
 			vimulator.VimulatorUtilities.goToNextWordStart(textArea);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-select-next-word">
+		<CODE>
+			vimulator.VimulatorUtilities.selectNextWordStart(textArea);
 		</CODE>
 	</ACTION>
 

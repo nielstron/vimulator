@@ -139,6 +139,17 @@ public class VimulatorUtilities {
         textArea.moveCaretPosition(findNextWordStart(textArea));
     }
 
+    public static void selectWordEnd(JEditTextArea textArea) {
+        textArea.extendSelection(textArea.getCaretPosition(), findWordEnd(textArea)-1);
+        goToWordEnd(textArea);
+    }
+
+    public static void selectNextWordStart(JEditTextArea textArea) {
+        textArea.extendSelection(textArea.getCaretPosition(), findNextWordStart(textArea));
+        goToNextWordStart(textArea);
+    }
+
+
     /**
      * Joins the current and the next line, optionally adding a space between them.
      * 
@@ -532,6 +543,11 @@ public class VimulatorUtilities {
     }
 
     public static void goToWordStart(JEditTextArea textArea){
+        textArea.moveCaretPosition(findWordStart(textArea));
+    }
+
+    public static void selectWordStart(JEditTextArea textArea){
+        textArea.extendSelection(textArea.getCaretPosition(), findWordStart(textArea));
         textArea.moveCaretPosition(findWordStart(textArea));
     }
 

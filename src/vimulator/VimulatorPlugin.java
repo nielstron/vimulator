@@ -195,23 +195,23 @@ public class VimulatorPlugin extends EBPlugin {
     }
 
     private void initKeyBindings() {
-        initKeyBindings("command", VimulatorConstants.COMMAND);
+        for(int mode : VimulatorConstants.editorModes){
+            // init global keybindings for all modes
+            initKeyBindings("global", mode);
+            // init visual bindings for all modes that have the visual flag
+            if ((VimulatorConstants.VISUAL & mode) != 0)
+                initKeyBindings("visual", mode);
+        }
         initKeyBindings("insert", VimulatorConstants.INSERT);
-        initKeyBindings("visual", VimulatorConstants.VISUAL);
-        // Also per default use the keybindings from visual mode in visual block mode
-        initKeyBindings("visual", VimulatorConstants.VISUAL_BLOCK);
+        initKeyBindings("command", VimulatorConstants.COMMAND);
         initKeyBindings("visual-block", VimulatorConstants.VISUAL_BLOCK);
-        // Also per default use the keybindings from visual mode in visual line mode
-        initKeyBindings("visual", VimulatorConstants.VISUAL_LINE);
         initKeyBindings("visual-line", VimulatorConstants.VISUAL_LINE);
     }
 
     private void initKeyBindings(String setPrefix, int mode) {
-        String[] actionNames = jEdit.getActionNames();
         String prefix = "vimulator.keys." + setPrefix + ".";
 
-        for (int i = 0; i < actionNames.length; i++) {
-            String actionName = actionNames[i];
+        for (String actionName : jEdit.getActionNames()) {
             EditAction action = jEdit.getAction(actionName);
 
             String propName = null;

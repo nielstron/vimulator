@@ -177,24 +177,22 @@ public class VimulatorUtilities {
             return null;
         int modifiers = 0;
         int index = keyStroke.indexOf('+');
-        if (index == 0) {
+        if (index == 0)
             index = -1;
-        } else if (index != -1) {
-            for (int i = 0; i < index; i++) {
-                switch (Character.toUpperCase(keyStroke.charAt(i))) {
-                case 'A':
-                    modifiers |= KeyEvent.ALT_DOWN_MASK;
-                    break;
-                case 'C':
-                    modifiers |= KeyEvent.CTRL_DOWN_MASK;
-                    break;
-                case 'M':
-                    modifiers |= KeyEvent.META_DOWN_MASK;
-                    break;
-                case 'S':
-                    modifiers |= KeyEvent.SHIFT_DOWN_MASK;
-                    break;
-                }
+        for (int i = 0; i < index; i++) {
+            switch (Character.toUpperCase(keyStroke.charAt(i))) {
+            case 'A':
+                modifiers |= KeyEvent.ALT_DOWN_MASK;
+                break;
+            case 'C':
+                modifiers |= KeyEvent.CTRL_DOWN_MASK;
+                break;
+            case 'M':
+                modifiers |= KeyEvent.META_DOWN_MASK;
+                break;
+            case 'S':
+                modifiers |= KeyEvent.SHIFT_DOWN_MASK;
+                break;
             }
         }
         String key = keyStroke.substring(index + 1);

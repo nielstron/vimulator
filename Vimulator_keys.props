@@ -187,3 +187,10 @@ vimulator.keys.visual-line.skip.2=H
 vimulator.keys.visual-line.skip.3=E
 vimulator.keys.visual-line.skip.4=W
 vimulator.keys.visual-line.skip.5=B
+
+# some standard keybindings
+vimulator.keys.global.paste=CS+V
+vimulator.keys.global.copy=CS+C
+vimulator.keys.global.cut=CS+X
+vimulator.keys.global.undo=C+Z
+vimulator.keys.global.redo=CS+Z

@@ -565,7 +565,23 @@ public class VimulatorUtilities {
         textArea.getBuffer().remove(wordStartPos, wordStartPos - textArea.getCaretPosition());
     }
 
-    public static void multilineEdit(View view, JEditTextArea textArea, boolean replace){
+    public static int MULTILINE_INSERT = 1;
+    public static int MULTILINE_REPLACE = 2;
+    public static int MULTILINE_APPEND = 3;
+
+    public static void multilineInsert(View view, JEditTextArea textArea){
+        multilineEdit(view, textArea, MULTILINE_INSERT);
+    }
+
+    public static void multilineReplace(View view, JEditTextArea textArea){
+        multilineEdit(view, textArea, MULTILINE_REPLACE);
+    }
+
+    public static void multilineAppend(View view, JEditTextArea textArea){
+        multilineEdit(view, textArea, MULTILINE_APPEND);
+    }
+
+    public static void multilineEdit(View view, JEditTextArea textArea, int mode){
         // Some black magic to enable multi-caret editing (insertion and replacement)
         // Idea courtesy to Skeeve https://sourceforge.net/p/jedit/feature-requests/499/
         JEditBuffer buffer = textArea.getBuffer();
@@ -579,7 +595,7 @@ public class VimulatorUtilities {
             int end = s.getEnd(buffer, j);
             // TODO insert dummy value at selection beginnings
             // for correct multi-caret insertion
-            news.add(new Selection.Range(start, replace ? end : start+1));
+            news.add(new Selection.Range(mode == MULTILINE_APPEND ? end-1 : start, mode == MULTILINE_INSERT ? start+1 : end));
         }
         textArea.setMultipleSelectionEnabled(true);
         textArea.setSelection(news.toArray(new Selection.Range[0]));

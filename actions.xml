@@ -490,13 +490,19 @@
 
 	<ACTION NAME="vi-multiline-insert">
 		<CODE>
-            vimulator.VimulatorUtilities.multilineEdit(view, textArea, false);
+            vimulator.VimulatorUtilities.multilineInsert(view, textArea);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-multiline-change">
 		<CODE>
-            vimulator.VimulatorUtilities.multilineEdit(view, textArea, true);
+            vimulator.VimulatorUtilities.multilineReplace(view, textArea);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-multiline-append">
+		<CODE>
+            vimulator.VimulatorUtilities.multilineAppend(view, textArea);
 		</CODE>
 	</ACTION>
 </ACTIONS>

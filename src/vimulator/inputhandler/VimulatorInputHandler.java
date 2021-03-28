@@ -20,6 +20,7 @@ package vimulator.inputhandler;
 import vimulator.*;
 import java.util.*;
 import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
 import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.gui.InputHandler;
@@ -143,10 +144,16 @@ public class VimulatorInputHandler extends InputHandler {
 
     @Override
     public void processKeyEvent(java.awt.event.KeyEvent evt, int from, boolean global) {
-        Log.log(Log.WARNING, this, "KeyCode: " + evt.getKeyCode());
-        Log.log(Log.WARNING, this, "KeyChar: " + evt.getKeyChar());
-        Log.log(Log.WARNING, this, "Modifier: " + evt.getModifiersEx());
-        Log.log(Log.WARNING, this, "ID: " + evt.getID());
+        //Log.log(Log.WARNING, this, "KeyCode: " + evt.getKeyCode());
+        //Log.log(Log.WARNING, this, "KeyChar: " + evt.getKeyChar());
+        //Log.log(Log.WARNING, this, "Modifier: " + evt.getModifiersEx());
+        //Log.log(Log.WARNING, this, "ID: " + evt.getID());
+        // special case: operations that modify exactly the next operation
+        if(this.readNextChar != null){
+            if(evt.getID() == KeyEvent.KEY_TYPED)
+                this.invokeReadNextChar(evt.getKeyChar());
+            return;
+        }
         this.currentHandler.processKeyEvent(evt, from, global);
     }
 

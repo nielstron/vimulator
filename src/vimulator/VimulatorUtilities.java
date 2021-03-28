@@ -140,8 +140,8 @@ public class VimulatorUtilities {
     }
 
     public static void selectWordEnd(JEditTextArea textArea) {
-        textArea.extendSelection(textArea.getCaretPosition(), findWordEnd(textArea)-1);
-        goToWordEnd(textArea);
+        textArea.extendSelection(textArea.getCaretPosition(), findWordEnd(textArea));
+        textArea.moveCaretPosition(findWordEnd(textArea));
     }
 
     public static void selectNextWordStart(JEditTextArea textArea) {
@@ -485,9 +485,17 @@ public class VimulatorUtilities {
         yank(textArea.getSelectedText());
     }
 
-    public static void deleteSelection(JEditTextArea textArea){
+    public static void replaceSelection(JEditTextArea textArea, String s){
         yankSelection(textArea);
-        textArea.setSelectedText("");
+        textArea.setSelectedText(s);
+    }
+
+    public static void deleteSelection(JEditTextArea textArea){
+        replaceSelection(textArea, "");
+    }
+
+    public static void pasteSelection(JEditTextArea textArea){
+        replaceSelection(textArea, unYank());
     }
 
     public static void append(View view, JEditTextArea textArea){

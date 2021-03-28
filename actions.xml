@@ -230,8 +230,8 @@
 
 	<ACTION NAME="vi-paste-selection">
 		<CODE>
-            vimulator.VimulatorUtilities.deleteSelection(textArea);
-			vimulator.VimulatorUtilities.paste(textArea, buffer, true);
+            vimulator.VimulatorUtilities.pasteSelection(textArea);
+			vimulator.VimulatorUtilities.setCommandMode(view);
 		</CODE>
 	</ACTION>
 
@@ -370,35 +370,35 @@
 
 	<ACTION NAME="vi-replace-char">
 		<CODE>
-			view.getInputHandler().readNextChar(
-				"vimulator.VimulatorUtilities.replaceChar(textArea,__char__);");
+            view.getInputHandler().readNextChar("",
+                "vimulator.VimulatorUtilities.replaceChar(textArea,__char__);");
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-find-char">
 		<CODE>
-			view.getInputHandler().readNextChar(
+			view.getInputHandler().readNextChar("",
 				"vimulator.VimulatorUtilities.findChar(view,__char__,false,false);");
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-find-char-reverse">
 		<CODE>
-			view.getInputHandler().readNextChar(
+			view.getInputHandler().readNextChar("",
 				"vimulator.VimulatorUtilities.findChar(view,__char__,true,false);");
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-find-until-char">
 		<CODE>
-			view.getInputHandler().readNextChar(
+			view.getInputHandler().readNextChar("",
 				"vimulator.VimulatorUtilities.findChar(view,__char__,false,true);");
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-find-until-char-reverse">
 		<CODE>
-			view.getInputHandler().readNextChar(
+			view.getInputHandler().readNextChar("",
 				"vimulator.VimulatorUtilities.findChar(view,__char__,true,true);");
 		</CODE>
 	</ACTION>

@@ -17,6 +17,7 @@ This project is WIP, but already features
 
 This plugin is not (yet) available via the official Plugin Manager.
 You may however manually install the compiled Plugin [as a "User Plugin"](http://plugins.jedit.org/install.php).
+For isabelle/jedit, the user plugin path is `$HOME/.isabelle/Isabelle2021/jedit/jars`.
 You may find the corresponding `Vimulator.jar` in the Releases section or by
 building the project yourself.
 

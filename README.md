@@ -4,7 +4,7 @@
 A vi-emulator for jEdit.
 
 This project is a "fork" of the jEdit Plugin [Vimulator](plugins.jedit.org/plugins/?Vimulator),
-modified to work for jdk 15 and jEdit 5+ (or whatever [Isabelle/jEdit](https://isabelle.in.tum.de/) is currently using).
+modified to work for JDK 15 and jEdit 5+ (or whatever [Isabelle/jEdit](https://isabelle.in.tum.de/) is currently using).
 
 This project is WIP, but already features
 - vi-like navigation
@@ -17,9 +17,9 @@ This project is WIP, but already features
 
 This plugin is not (yet) available via the official Plugin Manager.
 You may however manually install the compiled Plugin [as a "User Plugin"](http://plugins.jedit.org/install.php).
-For isabelle/jedit, the user plugin path is `$HOME/.isabelle/Isabelle2021/jedit/jars`.
-You may find the corresponding `Vimulator.jar` in the Releases section or by
-building the project yourself.
+For Isabelle/jEdit 2021 on Linux/Mac, the user plugin path is `$HOME/.isabelle/Isabelle2021/jedit/jars`.
+
+You may find the corresponding `Vimulator.jar` under [Releases](https://github.com/nielstron/vimulator/releases) or by building the project yourself.
 
 ## Building
 
@@ -30,4 +30,4 @@ ant dist
 ```
 
 to build the jar File.
-This file can the be manually installed in jEdit via the Plugin Manager.
+This file can then be manually installed in jEdit via the Plugin Manager.

@@ -13,14 +13,6 @@
 vimulator.keys.insert.vi-command-mode=ESCAPE
 vimulator.keys.insert.vi-command-mode.2=C+[
 vimulator.keys.insert.vi-command-mode.3=C+C
-vimulator.keys.insert.delete=DELETE
-vimulator.keys.insert.backspace=BACK_SPACE
-vimulator.keys.insert.vi-home-abs=HOME
-vimulator.keys.insert.vi-end-abs=END
-vimulator.keys.insert.prev-char=LEFT
-vimulator.keys.insert.next-char=RIGHT
-vimulator.keys.insert.prev-line=UP
-vimulator.keys.insert.next-line=DOWN
 vimulator.keys.insert.prev-word=S+LEFT
 vimulator.keys.insert.next-word=S+RIGHT
 vimulator.keys.insert.prev-page=S+UP

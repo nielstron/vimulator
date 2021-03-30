@@ -23,6 +23,7 @@ import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.gui.DefaultInputHandler;
 import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.gui.KeyEventTranslator.Key;
 import org.gjt.sp.jedit.textarea.Selection;

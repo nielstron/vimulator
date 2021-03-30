@@ -24,28 +24,33 @@ import javax.swing.KeyStroke;
 import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.gui.DefaultInputHandler;
+import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.gui.KeyEventTranslator.Key;
 
-public class InsertInputHandler extends DefaultInputHandler {
+public class InsertInputHandler extends InputHandler {
     public InsertInputHandler(View view) {
         super(view);
 
+        this.defaultInputHandler = view == null ? null : view.getInputHandler();
         insertBindings = new Hashtable();
     }
 
     public InsertInputHandler(View view, InsertInputHandler chain) {
         super(view);
 
+        this.defaultInputHandler = view == null ? null : view.getInputHandler();
         insertBindings = chain.insertBindings;
     }
 
     public InsertInputHandler(View view, Hashtable bindings) {
         super(view);
 
+        this.defaultInputHandler = view == null ? null : view.getInputHandler();
         insertBindings = bindings;
     }
 
     private Hashtable insertBindings;
+    private InputHandler defaultInputHandler;
 
     public int getMode() {
         return VimulatorConstants.INSERT;
@@ -67,12 +72,12 @@ public class InsertInputHandler extends DefaultInputHandler {
             return;
         }
         // TODO Auto-generated method stub
-        super.processKeyEvent(evt, from, global);
+        this.defaultInputHandler.processKeyEvent(evt, from, global);
     }
 
     @Override
     public boolean handleKey(Key key, boolean global) {
-        return super.handleKey(key, global);
+        return this.defaultInputHandler.handleKey(key, global);
     }
 
 }

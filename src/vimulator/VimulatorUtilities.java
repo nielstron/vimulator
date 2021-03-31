@@ -165,9 +165,11 @@ public class VimulatorUtilities {
             Toolkit.getDefaultToolkit().beep();
             return -1;
         }
-        buffer.remove(end - 1, leadingWhitespace(buffer, lineNo) + 1);
+        buffer.beginCompoundEdit();
+        buffer.remove(end - 1, leadingWhitespace(buffer, lineNo+1)+1);
         if (addSpace)
             buffer.insert(end - 1, " ");
+        buffer.endCompoundEdit();
 
         return end - 1;
     }

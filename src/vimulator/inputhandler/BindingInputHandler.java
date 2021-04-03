@@ -205,7 +205,7 @@ public class BindingInputHandler extends InputHandler {
         KeyStroke keyStroke;
         if ((modifiers & KeyEvent.SHIFT_DOWN_MASK) != 0 && c != Character.toLowerCase(c)) {
             // Shift+letter
-            Log.log(Log.WARNING, this, "Shift + " + c);
+            //Log.log(Log.WARNING, this, "Shift + " + c);
             keyStroke = KeyStroke.getKeyStroke(c, modifiers);
         } else {
             // Plain letter or Shift+punct

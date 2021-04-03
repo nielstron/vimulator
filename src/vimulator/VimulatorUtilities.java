@@ -54,7 +54,7 @@ public class VimulatorUtilities {
         if (!checkEmulation(view))
             return;
 
-        Log.log(Log.WARNING, null, "Setting mode to " + mode);
+        Log.log(Log.DEBUG, null, "Setting mode to " + mode);
         ((VimulatorInputHandler) view.getInputHandler()).setMode(mode);
 
         JEditTextArea textArea = view.getTextArea();
@@ -62,10 +62,24 @@ public class VimulatorUtilities {
         int lastAllowed = getLastAllowedOffset(view, textArea);
         if (textArea.getCaretPosition() > lastAllowed)
             textArea.moveCaretPosition(lastAllowed);
+        
+        if((mode & VimulatorConstants.INSERT) != 0){
+            // restore caret user settings in the insert modes
+            textArea.getPainter().setBlockCaretEnabled(jEdit.getBooleanProperty("view.blockCaret"));
+            textArea.getPainter().setThickCaretEnabled(jEdit.getBooleanProperty("view.thickCaret"));
+            textArea.setCaretBlinkEnabled(jEdit.getBooleanProperty("view.caretBlink"));
+
+        }
+        else {
+            // otherwise enforce block
+            textArea.getPainter().setBlockCaretEnabled(true);
+            textArea.getPainter().setThickCaretEnabled(true);
+            textArea.setCaretBlinkEnabled(false);
+        }
 
         textArea.setOverwriteEnabled((mode & VimulatorConstants.OVERWRITE) != 0);
         textArea.setRectangularSelectionEnabled((mode & VimulatorConstants.BLOCK) != 0);
-        if (mode == VimulatorConstants.COMMAND) {
+        if ((mode & VimulatorConstants.COMMAND) != 0) {
             textArea.selectNone();
             textArea.setMultipleSelectionEnabled(false);
         }
@@ -723,16 +737,16 @@ public class VimulatorUtilities {
         String text = textArea.getText();
         // TODO more efficient?
         // at -1 is the jEdit native place to show bracket opening/closing,
-        // so we accept that primarily to avoid confusion
+        // so we accept that to avoid confusion
         // TODO might introduce unitutive "priority" for brackets based on the order
         // in the brackets array
         for(Bracket b : brackets){
-            for(int i = -b.getOpening().length(); i <= 0; i++){
+            for(int i = 0, t = -b.getOpening().length(); i >= t; i--){
                 if(text.startsWith(b.getOpening(), caretPos+i)){
                     return findMatchingBracketForward(text, b.getOpening(), b.getClosing(), caretPos+i);
                 }
             }
-            for(int i = -b.getClosing().length(); i <= 0; i++){
+            for(int i = 0, t = -b.getClosing().length(); i >= t; i--){
                 if (text.startsWith(b.getClosing(), caretPos+i)){
                     return findMatchingBracketBackward(text, b.getOpening(), b.getClosing(), caretPos+i);
                 }

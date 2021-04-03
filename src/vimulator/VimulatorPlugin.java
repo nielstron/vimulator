@@ -112,9 +112,6 @@ public class VimulatorPlugin extends EBPlugin {
         // Check if we are switching to VimulatorInputHandler
         // or back to the default
         if (newHandler instanceof VimulatorInputHandler) {
-            // Switch to COMMAND mode
-            ((VimulatorInputHandler) newHandler).setMode(VimulatorConstants.COMMAND);
-
             // Install command line
             view.addToolBar(View.BOTTOM_GROUP, View.ABOVE_SYSTEM_BAR_LAYER, getCommandLine(view));
         } else {
@@ -127,6 +124,7 @@ public class VimulatorPlugin extends EBPlugin {
 
         // Install new handler
         view.setInputHandler(newHandler);
+        VimulatorUtilities.setMode(view, VimulatorConstants.COMMAND);
     }
 
     public static boolean emulationActive(View view) {

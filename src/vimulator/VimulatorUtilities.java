@@ -583,7 +583,7 @@ public class VimulatorUtilities {
         multilineEdit(view, textArea, MULTILINE_INSERT);
     }
 
-    public static void multilineReplace(View view, JEditTextArea textArea){
+    public static void multilineChange(View view, JEditTextArea textArea){
         multilineEdit(view, textArea, MULTILINE_REPLACE);
     }
 

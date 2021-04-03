@@ -319,7 +319,7 @@
 			vimulator.VimulatorPlugin.enterExCommand(view);
 		</CODE>
 	</ACTION>
-	<ACTION NAME="vi-end-command" NO_RECORD="TRUE">
+	<ACTION NAME="vi-end-ex-command" NO_RECORD="TRUE">
 		<CODE>
 			vimulator.VimulatorPlugin.leaveExCommand(view);
 		</CODE>
@@ -496,7 +496,7 @@
 
 	<ACTION NAME="vi-multiline-change">
 		<CODE>
-            vimulator.VimulatorUtilities.multilineReplace(view, textArea);
+            vimulator.VimulatorUtilities.multilineChange(view, textArea);
 		</CODE>
 	</ACTION>
 

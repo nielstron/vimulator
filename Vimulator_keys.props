@@ -166,6 +166,7 @@ vimulator.keys.visual.vi-select-next-word=W
 vimulator.keys.visual.vi-select-word-start=B
 vimulator.keys.visual.shift-right=>
 vimulator.keys.visual.shift-left=<
+vimulator.keys.visual.vi-replace-selection=R
 
 # Visual block mode
 vimulator.keys.visual-block.vi-multiline-change=C

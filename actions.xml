@@ -375,6 +375,13 @@
 		</CODE>
 	</ACTION>
 
+	<ACTION NAME="vi-replace-selection">
+		<CODE>
+            view.getInputHandler().readNextChar("",
+                "vimulator.VimulatorUtilities.replaceSelection(textArea,__char__);");
+		</CODE>
+	</ACTION>
+
 	<ACTION NAME="vi-find-char">
 		<CODE>
 			view.getInputHandler().readNextChar("",

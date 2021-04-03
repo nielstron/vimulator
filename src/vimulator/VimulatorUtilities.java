@@ -54,7 +54,7 @@ public class VimulatorUtilities {
         if (!checkEmulation(view))
             return;
 
-        Log.log(Log.WARNING, null, "Setting mode to "+mode);
+        Log.log(Log.WARNING, null, "Setting mode to " + mode);
         ((VimulatorInputHandler) view.getInputHandler()).setMode(mode);
 
         JEditTextArea textArea = view.getTextArea();
@@ -62,21 +62,16 @@ public class VimulatorUtilities {
         int lastAllowed = getLastAllowedOffset(view, textArea);
         if (textArea.getCaretPosition() > lastAllowed)
             textArea.moveCaretPosition(lastAllowed);
-        
+
         textArea.setOverwriteEnabled((mode & VimulatorConstants.OVERWRITE) != 0);
         textArea.setRectangularSelectionEnabled((mode & VimulatorConstants.BLOCK) != 0);
-        if(mode == VimulatorConstants.COMMAND){
+        if (mode == VimulatorConstants.COMMAND) {
             textArea.selectNone();
             textArea.setMultipleSelectionEnabled(false);
         }
-        
-        setStatus(
-            view,
-            jEdit.getProperty(
-                "vimulator.msg." +
-                VimulatorConstants.stringOfMode.get(mode).toLowerCase() +
-                "-mode")
-        );
+
+        setStatus(view, jEdit.getProperty("vimulator.msg."
+                + VimulatorConstants.stringOfMode.get(mode).toLowerCase() + "-mode"));
     }
 
     public static void setInsertMode(View view) {
@@ -122,8 +117,8 @@ public class VimulatorUtilities {
         }
 
         int lastAllowed = textArea.getLineEndOffset(line) - 1;
-        if (checkEmulation(view)
-                && ((VimulatorInputHandler) view.getInputHandler()).getMode() == VimulatorConstants.COMMAND)
+        if (checkEmulation(view) && ((VimulatorInputHandler) view.getInputHandler())
+                .getMode() == VimulatorConstants.COMMAND)
             lastAllowed--;
 
         lastAllowed = Math.max(lastAllowed, textArea.getLineStartOffset(line));
@@ -132,7 +127,7 @@ public class VimulatorUtilities {
     }
 
     public static void goToWordEnd(JEditTextArea textArea) {
-        textArea.moveCaretPosition(findWordEnd(textArea)-1);
+        textArea.moveCaretPosition(findWordEnd(textArea) - 1);
     }
 
     public static void goToNextWordStart(JEditTextArea textArea) {
@@ -166,7 +161,7 @@ public class VimulatorUtilities {
             return -1;
         }
         buffer.beginCompoundEdit();
-        buffer.remove(end - 1, leadingWhitespace(buffer, lineNo+1)+1);
+        buffer.remove(end - 1, leadingWhitespace(buffer, lineNo + 1) + 1);
         if (addSpace)
             buffer.insert(end - 1, " ");
         buffer.endCompoundEdit();
@@ -183,18 +178,18 @@ public class VimulatorUtilities {
             index = -1;
         for (int i = 0; i < index; i++) {
             switch (Character.toUpperCase(keyStroke.charAt(i))) {
-            case 'A':
-                modifiers |= KeyEvent.ALT_DOWN_MASK;
-                break;
-            case 'C':
-                modifiers |= KeyEvent.CTRL_DOWN_MASK;
-                break;
-            case 'M':
-                modifiers |= KeyEvent.META_DOWN_MASK;
-                break;
-            case 'S':
-                modifiers |= KeyEvent.SHIFT_DOWN_MASK;
-                break;
+                case 'A':
+                    modifiers |= KeyEvent.ALT_DOWN_MASK;
+                    break;
+                case 'C':
+                    modifiers |= KeyEvent.CTRL_DOWN_MASK;
+                    break;
+                case 'M':
+                    modifiers |= KeyEvent.META_DOWN_MASK;
+                    break;
+                case 'S':
+                    modifiers |= KeyEvent.SHIFT_DOWN_MASK;
+                    break;
             }
         }
         String key = keyStroke.substring(index + 1);
@@ -235,7 +230,8 @@ public class VimulatorUtilities {
         findChar(view, find, reverse, until, true);
     }
 
-    public static void findChar(View view, char find, boolean reverse, boolean until, boolean setLastFindChar) {
+    public static void findChar(View view, char find, boolean reverse, boolean until,
+            boolean setLastFindChar) {
         if (setLastFindChar)
             VimulatorPlugin.setLastFindChar(find, reverse, until);
 
@@ -295,8 +291,8 @@ public class VimulatorUtilities {
         findChar(view, last.ch, last.reverse ^ opposite, last.until, false);
     }
 
-    public static int leadingWhitespace(JEditBuffer buffer, int line){
-        int[] leadingWhitespace = { 0 };
+    public static int leadingWhitespace(JEditBuffer buffer, int line) {
+        int[] leadingWhitespace = {0};
         buffer.getCurrentIndentForLine(line, leadingWhitespace);
         return leadingWhitespace[0];
     }
@@ -310,10 +306,7 @@ public class VimulatorUtilities {
     }
 
     public static void goToLine(View view, JEditTextArea textArea) {
-        int rc = Math.min(
-            view.getInputHandler().getRepeatCount(),
-            textArea.getLineCount()
-        );
+        int rc = Math.min(view.getInputHandler().getRepeatCount(), textArea.getLineCount());
         // Reset repeat count, this action should really only be invoked once
         view.getInputHandler().setRepeatCount(1);
         int line = rc - 1;
@@ -325,28 +318,27 @@ public class VimulatorUtilities {
     /**
      * 
      * @param textArea
-     * @param start True -> finds next word start False -> finds word end
+     * @param start    True -> finds next word start False -> finds word end
      * @return
      */
-    public static int findWord(JEditTextArea textArea, boolean start){
+    public static int findWord(JEditTextArea textArea, boolean start) {
         int caretLine = textArea.getCaretLine();
         int caret = textArea.getCaretPosition();
         JEditBuffer buffer = textArea.getBuffer();
 
         // Copied from textArea.deleteWord from here (with modifications)
-		int lineStart = textArea.getLineStartOffset(caretLine);
+        int lineStart = textArea.getLineStartOffset(caretLine);
         // start off by one to skip the current end of word
-		int _caret = caret - lineStart + 1;
+        int _caret = caret - lineStart + 1;
 
-		String lineText = textArea.getLineText(caretLine);
+        String lineText = textArea.getLineText(caretLine);
 
         // addition: skip leading whitespace
-        while(_caret >= lineText.length() || (!start && Character.isWhitespace(lineText.charAt(_caret)))){
+        while (_caret >= lineText.length()
+                || (!start && Character.isWhitespace(lineText.charAt(_caret)))) {
             _caret += 1;
-            if(_caret >= lineText.length()-1)
-            {
-                if(lineStart + _caret == buffer.getLength())
-                {
+            if (_caret >= lineText.length() - 1) {
+                if (lineStart + _caret == buffer.getLength()) {
                     return buffer.getLength();
                 }
                 caretLine += 1;
@@ -357,25 +349,25 @@ public class VimulatorUtilities {
         }
         String noWordSep = buffer.getStringProperty("noWordSep");
         boolean camelCasedWords = buffer.getBooleanProperty("camelCasedWords");
-        _caret = TextUtilities.findWordEnd(lineText,
-            _caret+1,noWordSep,true,camelCasedWords,start);
+        _caret = TextUtilities.findWordEnd(lineText, _caret + 1, noWordSep, true, camelCasedWords,
+                start);
         return _caret + lineStart;
     }
 
-    public static int findWordEnd(JEditTextArea textArea){
+    public static int findWordEnd(JEditTextArea textArea) {
         return findWord(textArea, false);
     }
 
-    public static int findNextWordStart(JEditTextArea textArea){
+    public static int findNextWordStart(JEditTextArea textArea) {
         return findWord(textArea, true); // broken
     }
 
 
-    public static void yank(String s){
+    public static void yank(String s) {
         Registers.setRegister('y', s);
     }
 
-    public static String unYank(){
+    public static String unYank() {
         return Registers.getRegister('y').toString();
     }
 
@@ -386,7 +378,8 @@ public class VimulatorUtilities {
 
     public static void yankEndLine(JEditTextArea textArea) {
         int caretPos = textArea.getCaretPosition();
-        String s = textArea.getText(caretPos, textArea.getLineEndOffset(textArea.getCaretLine()) - caretPos - 1);
+        String s = textArea.getText(caretPos,
+                textArea.getLineEndOffset(textArea.getCaretLine()) - caretPos - 1);
         yank(s);
     }
 
@@ -410,7 +403,7 @@ public class VimulatorUtilities {
     public static void deleteEndLine(View view, JEditTextArea textArea) {
         yankEndLine(textArea);
         textArea.deleteToEndOfLine();
-        //goToNextCol(view, textArea);
+        // goToNextCol(view, textArea);
     }
 
     public static void deleteStartLine(JEditTextArea textArea) {
@@ -422,7 +415,7 @@ public class VimulatorUtilities {
         yankWordEnd(textArea);
         int caretPos = textArea.getCaretPosition();
         textArea.getBuffer().remove(caretPos, findWordEnd(textArea) - caretPos);;
-        //goToNextCol(view, textArea);
+        // goToNextCol(view, textArea);
     }
 
     public static void paste(JEditTextArea textArea, JEditBuffer buffer, boolean after) {
@@ -435,21 +428,20 @@ public class VimulatorUtilities {
             else
                 caretPos = textArea.getLineStartOffset(caretLine);
         } else
-            caretPos = textArea.getCaretPosition() + (after? 1:0);
+            caretPos = textArea.getCaretPosition() + (after ? 1 : 0);
         buffer.insert(caretPos, s);
     }
 
-    public static void selectCaret(JEditTextArea textArea){
+    public static void selectCaret(JEditTextArea textArea) {
         int caret = textArea.getCaretPosition();
-        Selection s = new Selection.Range(caret, caret+1);
-        textArea.addToSelection(new Selection[]{s});
+        Selection s = new Selection.Range(caret, caret + 1);
+        textArea.addToSelection(new Selection[] {s});
     }
 
-    public static void goToNextCol(View view, JEditTextArea textArea, boolean select){
+    public static void goToNextCol(View view, JEditTextArea textArea, boolean select) {
         int lastAllowed = getLastAllowedOffset(view, textArea);
 
-        if (textArea.getCaretPosition() >= lastAllowed)
-        {
+        if (textArea.getCaretPosition() >= lastAllowed) {
             view.getToolkit().beep();
             return;
         }
@@ -457,17 +449,16 @@ public class VimulatorUtilities {
         textArea.goToNextCharacter(select);
     }
 
-    public static void goToPrevCol(View view, JEditTextArea textArea){
+    public static void goToPrevCol(View view, JEditTextArea textArea) {
         goToPrevCol(view, textArea, false);
     }
 
-    public static void selectPrevCol(View view, JEditTextArea textArea){
+    public static void selectPrevCol(View view, JEditTextArea textArea) {
         goToPrevCol(view, textArea, true);
     }
 
-    public static void goToPrevCol(View view, JEditTextArea textArea, boolean select){
-        if (textArea.getCaretPosition() == textArea.getLineStartOffset(textArea.getCaretLine()))
-        {
+    public static void goToPrevCol(View view, JEditTextArea textArea, boolean select) {
+        if (textArea.getCaretPosition() == textArea.getLineStartOffset(textArea.getCaretLine())) {
             view.getToolkit().beep();
             return;
         }
@@ -475,68 +466,64 @@ public class VimulatorUtilities {
         textArea.goToPrevCharacter(select);
     }
 
-    public static void goToNextCol(View view, JEditTextArea textArea){
+    public static void goToNextCol(View view, JEditTextArea textArea) {
         goToNextCol(view, textArea, false);
     }
 
-    public static void selectNextCol(View view, JEditTextArea textArea){
+    public static void selectNextCol(View view, JEditTextArea textArea) {
         goToNextCol(view, textArea, true);
     }
 
-    public static void yankSelection(JEditTextArea textArea){
+    public static void yankSelection(JEditTextArea textArea) {
         yank(textArea.getSelectedText());
     }
 
-    public static void replaceSelection(JEditTextArea textArea, String s){
+    public static void replaceSelection(JEditTextArea textArea, String s) {
         yankSelection(textArea);
         textArea.setSelectedText(s);
     }
 
-    public static void deleteSelection(JEditTextArea textArea){
+    public static void deleteSelection(JEditTextArea textArea) {
         replaceSelection(textArea, "");
     }
 
-    public static void pasteSelection(JEditTextArea textArea){
+    public static void pasteSelection(JEditTextArea textArea) {
         replaceSelection(textArea, unYank());
     }
 
-    public static void append(View view, JEditTextArea textArea){
+    public static void append(View view, JEditTextArea textArea) {
         vimulator.VimulatorUtilities.setInsertMode(view);
         int caretLine = textArea.getCaretLine();
         int pos = textArea.getCaretPosition() + 1;
-        if (pos >= textArea.getLineEndOffset(caretLine))
-        {
+        if (pos >= textArea.getLineEndOffset(caretLine)) {
             pos--;
         }
         textArea.moveCaretPosition(pos);
     }
 
-    public static void selectLine(JEditTextArea textArea){
+    public static void selectLine(JEditTextArea textArea) {
         textArea.moveCaretPosition(textArea.getLineStartOffset(textArea.getCaretLine()));
         textArea.goToNextLine(true);
     }
 
-    public static int findWordStart(JEditTextArea textArea){
+    public static int findWordStart(JEditTextArea textArea) {
         // TODO fix beginning of line
         int caretLine = textArea.getCaretLine();
         JEditBuffer buffer = textArea.getBuffer();
         int caret = textArea.getCaretPosition();
         int lineStart = textArea.getLineStartOffset(caretLine);
-		int _caret = caret - lineStart;
-		if(_caret == 0 && lineStart == 0)
-		{
-            javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
+        int _caret = caret - lineStart;
+        if (_caret == 0 && lineStart == 0) {
+            javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);
             return caret;
-		}
+        }
         _caret--;
 
-		String lineText = textArea.getLineText(caretLine);
+        String lineText = textArea.getLineText(caretLine);
         // addition: skip leading whitespace
-        while(_caret < 0 || Character.isWhitespace(lineText.charAt(_caret))){
-            if(_caret < 0)
-            {
-                if(lineStart + _caret < 0)
-                {
+        while (_caret < 0 || Character.isWhitespace(lineText.charAt(_caret))) {
+            if (_caret < 0) {
+                if (lineStart + _caret < 0) {
                     return 0;
                 }
                 caretLine -= 1;
@@ -549,49 +536,55 @@ public class VimulatorUtilities {
 
         String noWordSep = buffer.getStringProperty("noWordSep");
         boolean camelCasedWords = buffer.getBooleanProperty("camelCasedWords");
-        _caret = TextUtilities.findWordStart(lineText,_caret,
-            noWordSep,true,camelCasedWords,false,true);
-		return _caret + lineStart;
+        _caret = TextUtilities.findWordStart(lineText, _caret, noWordSep, true, camelCasedWords,
+                false, true);
+        return _caret + lineStart;
     }
 
-    public static void goToWordStart(JEditTextArea textArea){
+    public static void goToWordStart(JEditTextArea textArea) {
         textArea.moveCaretPosition(findWordStart(textArea));
     }
 
-    public static void selectWordStart(JEditTextArea textArea){
+    public static void selectWordStart(JEditTextArea textArea) {
         textArea.extendSelection(textArea.getCaretPosition(), findWordStart(textArea));
         textArea.moveCaretPosition(findWordStart(textArea));
     }
 
-    public static void yankWordStart(JEditTextArea textArea){
+    public static void yankWordStart(JEditTextArea textArea) {
         int wordStartPos = findWordStart(textArea);
         String s = textArea.getText(wordStartPos, wordStartPos - textArea.getCaretPosition());
         yank(s);
     }
 
-    public static void deleteWordStart(JEditTextArea textArea){
+    public static void deleteWordStart(JEditTextArea textArea) {
         yankWordStart(textArea);
         int wordStartPos = findWordStart(textArea);
         textArea.getBuffer().remove(wordStartPos, wordStartPos - textArea.getCaretPosition());
     }
 
+    public static void replaceSelection(JEditTextArea textArea, char c) {
+        String text = textArea.getSelectedText();
+        String newtext = text.replaceAll("[^\n\r]", Character.toString(c));
+        replaceSelection(textArea, newtext);
+    }
+
     public static int MULTILINE_INSERT = 1;
-    public static int MULTILINE_REPLACE = 2;
+    public static int MULTILINE_CHANGE = 2;
     public static int MULTILINE_APPEND = 3;
 
-    public static void multilineInsert(View view, JEditTextArea textArea){
+    public static void multilineInsert(View view, JEditTextArea textArea) {
         multilineEdit(view, textArea, MULTILINE_INSERT);
     }
 
-    public static void multilineChange(View view, JEditTextArea textArea){
-        multilineEdit(view, textArea, MULTILINE_REPLACE);
+    public static void multilineChange(View view, JEditTextArea textArea) {
+        multilineEdit(view, textArea, MULTILINE_CHANGE);
     }
 
-    public static void multilineAppend(View view, JEditTextArea textArea){
+    public static void multilineAppend(View view, JEditTextArea textArea) {
         multilineEdit(view, textArea, MULTILINE_APPEND);
     }
 
-    public static void multilineEdit(View view, JEditTextArea textArea, int mode){
+    public static void multilineEdit(View view, JEditTextArea textArea, int mode) {
         // Some black magic to enable multi-caret editing (insertion and replacement)
         // Idea courtesy to Skeeve https://sourceforge.net/p/jedit/feature-requests/499/
         JEditBuffer buffer = textArea.getBuffer();
@@ -600,12 +593,13 @@ public class VimulatorUtilities {
         Selection s = textArea.getSelection()[0];
         selectionStart = Math.min(selectionStart, s.getStart());
 
-        for(int j : textArea.getSelectedLines()){
+        for (int j : textArea.getSelectedLines()) {
             int start = s.getStart(buffer, j);
             int end = s.getEnd(buffer, j);
             // TODO insert dummy value at selection beginnings
             // for correct multi-caret insertion
-            news.add(new Selection.Range(mode == MULTILINE_APPEND ? end-1 : start, mode == MULTILINE_INSERT ? start+1 : end));
+            news.add(new Selection.Range(mode == MULTILINE_APPEND ? end - 1 : start,
+                    mode == MULTILINE_INSERT ? start + 1 : end));
         }
         textArea.setMultipleSelectionEnabled(true);
         textArea.setSelection(news.toArray(new Selection.Range[0]));

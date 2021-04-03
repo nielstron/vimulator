@@ -81,7 +81,6 @@ public class VimulatorUtilities {
         textArea.setRectangularSelectionEnabled((mode & VimulatorConstants.BLOCK) != 0);
         if ((mode & VimulatorConstants.COMMAND) != 0) {
             textArea.selectNone();
-            textArea.setMultipleSelectionEnabled(false);
         }
 
         setStatus(view, jEdit.getProperty("vimulator.msg."
@@ -133,7 +132,7 @@ public class VimulatorUtilities {
         int lastAllowed = textArea.getLineEndOffset(line) - 1;
         if (checkEmulation(view) && ((VimulatorInputHandler) view.getInputHandler())
                 .getMode() == VimulatorConstants.COMMAND)
-            lastAllowed--;
+            lastAllowed -= 1;
 
         lastAllowed = Math.max(lastAllowed, textArea.getLineStartOffset(line));
 
@@ -236,8 +235,10 @@ public class VimulatorUtilities {
         textArea.selectNone();
 
         JEditBuffer buffer = textArea.getBuffer();
+        buffer.beginCompoundEdit();
         buffer.remove(pos, 1);
         buffer.insert(pos, String.valueOf(replace));
+        buffer.endCompoundEdit();
         textArea.moveCaretPosition(pos);
     }
 
@@ -374,7 +375,7 @@ public class VimulatorUtilities {
     }
 
     public static int findNextWordStart(JEditTextArea textArea) {
-        return findWord(textArea, true); // broken
+        return findWord(textArea, true);
     }
 
 
@@ -608,16 +609,31 @@ public class VimulatorUtilities {
         Selection s = textArea.getSelection()[0];
         selectionStart = Math.min(selectionStart, s.getStart());
 
-        for (int j : textArea.getSelectedLines()) {
-            int start = s.getStart(buffer, j);
-            int end = s.getEnd(buffer, j);
-            // TODO insert dummy value at selection beginnings
-            // for correct multi-caret insertion
-            news.add(new Selection.Range(mode == MULTILINE_APPEND ? end - 1 : start,
-                    mode == MULTILINE_INSERT ? start + 1 : end));
+        if(s instanceof Selection.Rect && s.getStart() != s.getEnd()){
+            // Special case: for rectangles with non-zero line difference,
+            // a selection of zero width is allowed
+            Selection.Rect r = (Selection.Rect) s;
+            news.add(new Selection.Rect(
+                buffer,
+                r.getStartLine(),
+                mode == MULTILINE_APPEND ? r.getEndColumn(buffer) : r.getStartColumn(buffer),
+                r.getEndLine(),
+                mode == MULTILINE_INSERT ? r.getStartColumn(buffer) : r.getEndColumn(buffer)
+            ));
         }
-        textArea.setMultipleSelectionEnabled(true);
-        textArea.setSelection(news.toArray(new Selection.Range[0]));
+        else{
+            for (int j : textArea.getSelectedLines()) {
+                int start = s.getStart(buffer, j);
+                int end = s.getEnd(buffer, j);
+                // TODO insert dummy value at selection beginnings
+                // for correct multi-caret insertion
+                news.add(new Selection.Rect(
+                    mode == MULTILINE_APPEND ? end - 1 : start,
+                    mode == MULTILINE_INSERT ? start + 1: end
+                ));
+        }
+        }
+        textArea.setSelection(news.toArray(new Selection.Rect[0]));
         textArea.moveCaretPosition(selectionStart);
         setInsertMode(view);
     }

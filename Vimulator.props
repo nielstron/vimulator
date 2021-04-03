@@ -1,6 +1,6 @@
 plugin.vimulator.VimulatorPlugin.name=Vimulator
 plugin.vimulator.VimulatorPlugin.author=mike dillon, Niels Mündler
-plugin.vimulator.VimulatorPlugin.version=0.6.0
+plugin.vimulator.VimulatorPlugin.version=0.6.1
 plugin.vimulator.VimulatorPlugin.description=The Vimulator plugin provides jEdit with VI-style editing capabilities (i.e. modal editing)
 plugin.vimulator.VimulatorPlugin.activate=startup
 plugin.vimulator.VimulatorPlugin.usePluginHome=true

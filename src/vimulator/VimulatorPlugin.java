@@ -17,7 +17,8 @@
 package vimulator;
 
 import vimulator.inputhandler.*;
-
+import java.beans.*;
+import java.awt.event.*;
 import java.util.*;
 import javax.swing.event.*;
 
@@ -97,7 +98,9 @@ public class VimulatorPlugin extends EBPlugin {
                         forViews);
             } else if (emsg.getWhat() == EditPaneUpdate.CREATED) {
                 JEditTextArea textArea = editPane.getTextArea();
-                textArea.addCaretListener(new VimulatorCaretListener(editPane.getView(), textArea));
+                VimulatorListener vcl = new VimulatorListener(editPane.getView(), textArea);
+                textArea.addCaretListener(vcl);
+                textArea.addKeyListener(vcl);
             }
         }
     }
@@ -230,25 +233,43 @@ public class VimulatorPlugin extends EBPlugin {
         }
     }
 
-    class VimulatorCaretListener implements CaretListener {
-        VimulatorCaretListener(View view, JEditTextArea textArea) {
+    class VimulatorListener implements CaretListener, KeyListener {
+        VimulatorListener(View view, JEditTextArea textArea) {
             this.view = view;
             this.textArea = textArea;
         }
 
-        public void caretUpdate(CaretEvent e) {
+        private void fixPosition(){
+            // Dont change anything if the emulation is inactive
             if (!VimulatorUtilities.checkEmulation(view))
                 return;
 
             int lastAllowed = VimulatorUtilities.getLastAllowedOffset(view, textArea);
-            if (textArea.getCaretPosition() <= lastAllowed)
-                return;
+            if (textArea.getCaretPosition() > lastAllowed)
+                textArea.moveCaretPosition(lastAllowed);
+        }
 
-            textArea.setCaretPosition(lastAllowed);
+        public void caretUpdate(CaretEvent e) {
+            fixPosition();
         }
 
         private View view;
         private JEditTextArea textArea;
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+            // Auto-generated method stub
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            // Auto-generated method stub
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            fixPosition();
+        }
     }
 
     static class CharacterSearch {

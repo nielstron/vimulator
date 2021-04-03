@@ -135,8 +135,9 @@ public class VimulatorUtilities {
     }
 
     public static void selectWordEnd(JEditTextArea textArea) {
-        textArea.extendSelection(textArea.getCaretPosition(), findWordEnd(textArea));
-        textArea.moveCaretPosition(findWordEnd(textArea));
+        int we = findWordEnd(textArea);
+        textArea.extendSelection(textArea.getCaretPosition(), we);
+        textArea.moveCaretPosition(we);
     }
 
     public static void selectNextWordStart(JEditTextArea textArea) {
@@ -605,6 +606,142 @@ public class VimulatorUtilities {
         textArea.setSelection(news.toArray(new Selection.Range[0]));
         textArea.moveCaretPosition(selectionStart);
         setInsertMode(view);
+    }
+
+    public static int findMatchingBracketForward(String s, Bracket b, int offset){
+        return findMatchingBracketForward(s, b.getOpening(), b.getClosing(), offset);
+    }
+
+    /**
+     * Finds the matching closing bracket for an opening bracket
+     * 
+     * Beware trouble with non-prefix-free brackets
+     * @param s String to search in
+     * @param openingbracket String of the opening bracket
+     * @param closingbracket String of the closing bracket
+     * @param offset Position at which the string starts with the opening bracket
+     * @return Position at which the string starts with the corresponding closing bracket
+     */
+    public static int findMatchingBracketForward(String s, String openingbracket, String closingbracket, int offset){
+        int curPos = Math.max(offset,0);
+        int depth = 1;
+        while(depth != 0){
+            curPos += 1;
+            int openPos = s.indexOf(openingbracket, curPos);
+            int closePos = s.indexOf(closingbracket, curPos);
+            if(openPos != -1 && openPos < closePos){
+                depth += 1;
+                curPos = openPos;
+            }
+            else if (closePos != -1){
+                depth -= 1;
+                curPos = closePos;
+            }
+            else return offset;
+        }
+        return curPos;
+    }
+
+    public static int findMatchingBracketBackward(String s, Bracket b, int offset){
+        return findMatchingBracketBackward(s, b.getOpening(), b.getClosing(), offset);
+    }
+
+    /**
+     * Finds the matching opening bracket for a closing bracket
+     * 
+     * Beware trouble with non-prefix-free brackets
+     * @param s String to search in
+     * @param openingbracket String of the opening bracket
+     * @param closingbracket String of the closing bracket
+     * @param offset Position at which the string starts with the closing bracket
+     * @return Position at which the string starts with the corresponding opening bracket
+     */
+    public static int findMatchingBracketBackward(String s, String openingbracket, String closingbracket, int offset){
+        int curPos = Math.min(offset,s.length()-1);
+        int depth = 1;
+        while(depth != 0){
+            curPos -= 1;
+            int openPos = s.lastIndexOf(openingbracket, curPos);
+            int closePos = s.lastIndexOf(closingbracket, curPos);
+            if(openPos != -1 && openPos > closePos){
+                depth -= 1;
+                curPos = openPos;
+            }
+            else if (closePos != -1){
+                depth += 1;
+                curPos = closePos;
+            }
+            else return offset;
+        }
+        return curPos;
+    }
+
+    public static class Bracket{
+
+        private String opening;
+        private String closing;
+
+        public Bracket(String opening, String closing){
+            this.opening = opening;
+            this.closing = closing;
+        }
+        
+        public String getOpening(){
+            return this.opening;
+        }
+
+        public String getClosing(){
+            return this.closing;
+        }
+
+    }
+
+    // TODO make this extensible by users
+    public static final Bracket[] brackets = {
+        new Bracket("(*", "*)"),
+        new Bracket("(", ")"),
+        new Bracket("[", "]"),
+        new Bracket("{", "}"),
+        new Bracket("begin", "end"),
+        new Bracket("proof", "qed"),
+        new Bracket("/*", "*/"),
+        new Bracket("#if", "#end")
+    };
+
+    public static int findMatchingBracket(JEditTextArea textArea, JEditBuffer buffer){
+        int caretPos = textArea.getCaretPosition();
+        String text = textArea.getText();
+        // TODO more efficient?
+        // at -1 is the jEdit native place to show bracket opening/closing,
+        // so we accept that primarily to avoid confusion
+        // TODO might introduce unitutive "priority" for brackets based on the order
+        // in the brackets array
+        for(Bracket b : brackets){
+            for(int i = -b.getOpening().length(); i <= 0; i++){
+                if(text.startsWith(b.getOpening(), caretPos+i)){
+                    return findMatchingBracketForward(text, b.getOpening(), b.getClosing(), caretPos+i);
+                }
+            }
+            for(int i = -b.getClosing().length(); i <= 0; i++){
+                if (text.startsWith(b.getClosing(), caretPos+i)){
+                    return findMatchingBracketBackward(text, b.getOpening(), b.getClosing(), caretPos+i);
+                }
+            }
+        }
+        // TODO no bracket here, beep?
+        return caretPos;
+    }
+
+    public static void goToMatchingBracket(JEditTextArea textArea, JEditBuffer buffer){
+        textArea.moveCaretPosition(findMatchingBracket(textArea, buffer));
+    }
+
+    public static void selectMatchingBracket(JEditTextArea textArea, JEditBuffer buffer){
+        int mb = findMatchingBracket(textArea, buffer);
+        int cp = textArea.getCaretPosition();
+        int backwards = mb < cp ? 0 : +1;
+        textArea.extendSelection(textArea.getCaretPosition(), mb+backwards);
+        textArea.moveCaretPosition(mb+backwards);
     }
 
     // private members

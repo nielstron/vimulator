@@ -512,4 +512,15 @@
             vimulator.VimulatorUtilities.multilineAppend(view, textArea);
 		</CODE>
 	</ACTION>
+
+	<ACTION NAME="vi-matching-bracket">
+		<CODE>
+            vimulator.VimulatorUtilities.goToMatchingBracket(textArea, buffer);
+		</CODE>
+	</ACTION>
+	<ACTION NAME="vi-select-matching-bracket">
+		<CODE>
+            vimulator.VimulatorUtilities.selectMatchingBracket(textArea, buffer);
+		</CODE>
+	</ACTION>
 </ACTIONS>

@@ -86,6 +86,7 @@ vimulator.keys.command.vi-find-until-char-reverse=S+T
 vimulator.keys.command.vi-repeat-find-char=;
 vimulator.keys.command.vi-repeat-find-char-opposite=,
 vimulator.keys.command.vi-current-line-status=C+G
+vimulator.keys.command.vi-matching-bracket=%
 vimulator.keys.command.exit=S+Q
 vimulator.keys.command.shift-left=< <
 vimulator.keys.command.shift-right=> >
@@ -167,6 +168,7 @@ vimulator.keys.visual.vi-select-word-start=B
 vimulator.keys.visual.shift-right=>
 vimulator.keys.visual.shift-left=<
 vimulator.keys.visual.vi-replace-selection=R
+vimulator.keys.visual.vi-select-matching-bracket=%
 
 # Visual block mode
 vimulator.keys.visual-block.vi-multiline-change=C

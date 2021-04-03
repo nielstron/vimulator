@@ -18,7 +18,7 @@
 package vimulator;
 
 import java.util.*;
-
+import java.awt.Cursor;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
@@ -702,6 +702,16 @@ public class VimulatorUtilities {
         new Bracket("(", ")"),
         new Bracket("[", "]"),
         new Bracket("{", "}"),
+        new Bracket("<", ">"),
+        new Bracket("«", "»"),
+        new Bracket("‹", "›"),
+        new Bracket("⟨", "⟩"),
+        new Bracket("⌈", "⌉"),
+        new Bracket("⌊", "⌋"),
+        new Bracket("⦇", "⦈"),
+        new Bracket("⟦", "⟧"),
+        new Bracket("⦃", "⦄"),
+        new Bracket("⟪", "⟫"),
         new Bracket("begin", "end"),
         new Bracket("proof", "qed"),
         new Bracket("/*", "*/"),

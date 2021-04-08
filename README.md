@@ -3,7 +3,7 @@
 
 A vi-emulator for jEdit.
 
-This project is a "fork" of the jEdit Plugin [Vimulator](plugins.jedit.org/plugins/?Vimulator),
+This project is a "fork" of the jEdit Plugin [Vimulator](http://plugins.jedit.org/plugins/?Vimulator),
 modified to work for JDK 15 and jEdit 5+ (or whatever [Isabelle/jEdit](https://isabelle.in.tum.de/) is currently using).
 
 This project is WIP, but already features

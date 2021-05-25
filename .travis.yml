@@ -26,4 +26,5 @@ deploy:
   overwrite: false
   on:
     branch: master
+    condition: $TRAVIS_EVENT_TYPE = push
 

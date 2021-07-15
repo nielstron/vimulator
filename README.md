@@ -19,6 +19,7 @@ This plugin is not (yet) available via the official Plugin Manager.
 You may however manually install the compiled Plugin [as a "User Plugin"](http://plugins.jedit.org/install.php).
 For Isabelle/jEdit 2021 on Linux/Mac, the user plugin path is `$HOME/.isabelle/Isabelle2021/jedit/jars`.
 For Isabelle/jEdit 2021 on Windows, the user plugin path is `%HOMEPATH%\.isabelle\Isabelle2021\jedit\jars`.
+
 You may find the corresponding `Vimulator.jar` under [Releases](https://github.com/nielstron/vimulator/releases) or by building the project yourself.
 
 ## Building

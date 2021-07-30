@@ -140,6 +140,7 @@ vimulator.keys.command.vi-change-next-char=C L
 
 # Yanking
 vimulator.keys.command.vi-yank-line=Y Y
+vimulator.keys.command.vi-yank-line.2=S+Y
 vimulator.keys.command.vi-yank-end-line=Y $
 vimulator.keys.command.vi-yank-start-line=Y 0
 vimulator.keys.command.vi-yank-word-end=Y E

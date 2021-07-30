@@ -244,6 +244,14 @@ public class VimulatorUtilities {
         textArea.moveCaretPosition(pos);
     }
 
+    public static void deleteChar(JEditTextArea textArea) {
+        yankChar(textArea);
+        int pos = textArea.getCaretPosition();
+        JEditBuffer buffer = textArea.getBuffer();
+        buffer.remove(pos, 1);
+        textArea.moveCaretPosition(pos);
+    }
+
     public static void findChar(View view, char find, boolean reverse, boolean until) {
         findChar(view, find, reverse, until, true);
     }
@@ -406,6 +414,11 @@ public class VimulatorUtilities {
 
     public static String unYank() {
         return Registers.getRegister('y').toString();
+    }
+
+    public static void yankChar(JEditTextArea textArea) {
+        String s = textArea.getText(textArea.getCaretPosition(), 1);
+        Registers.setRegister('y', s);
     }
 
     public static void yankLine(JEditTextArea textArea) {

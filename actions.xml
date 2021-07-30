@@ -255,21 +255,21 @@
 
 	<ACTION NAME="vi-append-ws-end">
 		<CODE>
-			vimulator.VimulatorUtilities.setInsertMode(view);
 			textArea.goToEndOfWhiteSpace(false);
+			vimulator.VimulatorUtilities.setInsertMode(view);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-insert-ws-start">
 		<CODE>
-			vimulator.VimulatorUtilities.setInsertMode(view);
 			textArea.goToStartOfWhiteSpace(false);
+			vimulator.VimulatorUtilities.setInsertMode(view);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-change-line">
 		<CODE>
-			vimulator.VimulatorUtilities.deleteStartLine(textArea);
+			textArea.goToStartOfWhiteSpace(false);
 			vimulator.VimulatorUtilities.deleteEndLine(view, textArea);
 			vimulator.VimulatorUtilities.setInsertMode(view);
 		</CODE>
@@ -300,6 +300,13 @@
 	<ACTION NAME="vi-change-word-start">
 		<CODE>
 			vimulator.VimulatorUtilities.deleteWordStart(view, textArea);
+			vimulator.VimulatorUtilities.setInsertMode(view);
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-change-char">
+		<CODE>
+			vimulator.VimulatorUtilities.deleteChar(textArea);
 			vimulator.VimulatorUtilities.setInsertMode(view);
 		</CODE>
 	</ACTION>

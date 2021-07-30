@@ -128,6 +128,9 @@ vimulator.keys.command.vi-change-end-line=C $
 vimulator.keys.command.vi-change-end-line.2=S+C
 vimulator.keys.command.vi-change-start-line=C 0
 vimulator.keys.command.vi-change-line=C C
+# technically also a change, but has different key
+vimulator.keys.command.vi-change-char=S
+vimulator.keys.command.vi-change-line.2=S+S
 # TODO
 vimulator.keys.command.vi-change-next-word=C W 
 vimulator.keys.command.vi-change-prev-char=C H

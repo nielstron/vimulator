@@ -156,6 +156,7 @@ vimulator.keys.visual.vi-change-selection=C
 vimulator.keys.visual.vi-paste-selection=P
 vimulator.keys.visual.select-next-line=J
 vimulator.keys.visual.select-prev-line=K
+vimulator.keys.visual.vi-select-home-ws=^
 vimulator.keys.visual.select-line-end=$
 vimulator.keys.visual.select-line-home=0
 vimulator.keys.visual.vi-select-next-col=L

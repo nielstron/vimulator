@@ -90,6 +90,9 @@ vimulator.keys.command.vi-matching-bracket=%
 vimulator.keys.command.exit=S+Q
 vimulator.keys.command.shift-left=< <
 vimulator.keys.command.shift-right=> >
+vimulator.keys.command.vi-find-mark=`
+vimulator.keys.command.vi-find-mark-line='
+vimulator.keys.command.vi-set-mark=m
 
 vimulator.keys.command.split-horizontal=C+W S
 vimulator.keys.command.split-vertical=C+W V
@@ -183,6 +186,8 @@ vimulator.keys.visual.vi-replace-selection=R
 vimulator.keys.visual.vi-select-matching-bracket=%
 vimulator.keys.visual.vi-select-to-line=G G
 vimulator.keys.visual.select-document-end=S+G
+vimulator.keys.visual.vi-select-find-mark=`
+vimulator.keys.visual.vi-select-find-mark-line='
 
 # Visual block mode
 vimulator.keys.visual-block.vi-multiline-change=C

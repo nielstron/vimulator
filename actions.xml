@@ -394,6 +394,41 @@
 		</CODE>
 	</ACTION>
 
+	<ACTION NAME="vi-set-mark">
+		<CODE>
+            view.getInputHandler().readNextChar("",
+                "vimulator.VimulatorUtilities.setMark(textArea,__char__);");
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-find-mark">
+		<CODE>
+            view.getInputHandler().readNextChar("",
+                "vimulator.VimulatorUtilities.findMark(textArea,__char__,true,false);");
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-find-mark-line">
+		<CODE>
+            view.getInputHandler().readNextChar("",
+                "vimulator.VimulatorUtilities.findMark(textArea,__char__,false,false);");
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-select-find-mark">
+		<CODE>
+            view.getInputHandler().readNextChar("",
+                "vimulator.VimulatorUtilities.findMark(textArea,__char__,true,true);");
+		</CODE>
+	</ACTION>
+
+	<ACTION NAME="vi-select-find-mark-line">
+		<CODE>
+            view.getInputHandler().readNextChar("",
+                "vimulator.VimulatorUtilities.findMark(textArea,__char__,false,true);");
+		</CODE>
+	</ACTION>
+
 	<ACTION NAME="vi-find-char">
 		<CODE>
 			view.getInputHandler().readNextChar("",

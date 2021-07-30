@@ -309,6 +309,22 @@ public class VimulatorUtilities {
         findChar(view, last.ch, last.reverse ^ opposite, last.until, false);
     }
 
+    public static void setMark(JEditTextArea textArea, char mark) {
+        int pos = textArea.getCaretPosition();
+        int line = textArea.getLineOfOffset(pos);
+        int col = pos - textArea.getLineStartOffset(line);
+        int markIndex = (int) mark - (int) 'a';
+        markColumns[markIndex] = col;
+        markLines[markIndex] = line;
+    }
+
+    public static void findMark(JEditTextArea textArea, char mark, boolean col, boolean select) {
+        int markIndex = (int) mark - (int) 'a';
+        int line = markLines[markIndex];
+        int caretPos = textArea.getLineStartOffset(line) + (col ? markColumns[markIndex] : 0);
+        changeLine(textArea, caretPos, select);
+    }
+
     public static int leadingWhitespace(JEditBuffer buffer, int line) {
         int[] leadingWhitespace = {0};
         buffer.getCurrentIndentForLine(line, leadingWhitespace);
@@ -332,20 +348,8 @@ public class VimulatorUtilities {
         view.getInputHandler().setRepeatCount(1);
         int line = rc - 1;
         int caretPos = textArea.getLineStartOffset(line);
-        try {
-            // TODO ugly reflection access ! this is a runtime error source
-            // long term solution: make change line public in jEdit/TextArea
-            Method changeLine = textArea.getClass().getSuperclass()
-                .getDeclaredMethod("_changeLine", boolean.class, int.class);
-            changeLine.setAccessible(true);
-            changeLine.invoke(textArea, select, caretPos);
-            changeLine.setAccessible(false);
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            e.printStackTrace();
-            textArea.moveCaretPosition(caretPos);
-        }
+        changeLine(textArea, caretPos, select);
     }
-
 
 
     /**
@@ -801,9 +805,29 @@ public class VimulatorUtilities {
         textArea.moveCaretPosition(mb+backwards);
     }
 
+    // -- methods that invoke private members of textArea --
+
+    public static void changeLine(JEditTextArea textArea, int caretPos, boolean select){
+        try {
+            // TODO ugly reflection access ! this is a runtime error source
+            // long term solution: make change line public in jEdit/TextArea
+            Method changeLine = textArea.getClass().getSuperclass()
+                .getDeclaredMethod("_changeLine", boolean.class, int.class);
+            changeLine.setAccessible(true);
+            changeLine.invoke(textArea, select, caretPos);
+            changeLine.setAccessible(false);
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            e.printStackTrace();
+            textArea.moveCaretPosition(caretPos);
+        }
+    }
+
 
     // private members
     private VimulatorUtilities() {
     }
+
+    private static int[] markLines = new int[26];
+    private static int[] markColumns = new int[26];
 
 }

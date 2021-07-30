@@ -33,6 +33,8 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 
 import java.lang.Character;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -320,15 +322,30 @@ public class VimulatorUtilities {
         textArea.insertEnterAndIndent();
         textArea.moveCaretPosition(caretPos);
     }
-
     public static void goToLine(View view, JEditTextArea textArea) {
+        goToLine(view, textArea, false);
+    }
+
+    public static void goToLine(View view, JEditTextArea textArea, boolean select) {
         int rc = Math.min(view.getInputHandler().getRepeatCount(), textArea.getLineCount());
         // Reset repeat count, this action should really only be invoked once
         view.getInputHandler().setRepeatCount(1);
         int line = rc - 1;
         int caretPos = textArea.getLineStartOffset(line);
-        textArea.moveCaretPosition(caretPos);
+        try {
+            // TODO ugly reflection access ! this is a runtime error source
+            // long term solution: make change line public in jEdit/TextArea
+            Method changeLine = textArea.getClass().getSuperclass()
+                .getDeclaredMethod("_changeLine", boolean.class, int.class);
+            changeLine.setAccessible(true);
+            changeLine.invoke(textArea, select, caretPos);
+            changeLine.setAccessible(false);
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            e.printStackTrace();
+            textArea.moveCaretPosition(caretPos);
+        }
     }
+
 
 
     /**
@@ -784,7 +801,9 @@ public class VimulatorUtilities {
         textArea.moveCaretPosition(mb+backwards);
     }
 
+
     // private members
     private VimulatorUtilities() {
     }
+
 }

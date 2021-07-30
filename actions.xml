@@ -368,6 +368,12 @@
 		</CODE>
 	</ACTION>
 
+	<ACTION NAME="vi-select-to-line">
+		<CODE>
+			vimulator.VimulatorUtilities.goToLine(view, textArea, true);
+		</CODE>
+	</ACTION>
+
 	<ACTION NAME="vi-replace-char">
 		<CODE>
             view.getInputHandler().readNextChar("",

@@ -170,6 +170,8 @@ vimulator.keys.visual.shift-right=>
 vimulator.keys.visual.shift-left=<
 vimulator.keys.visual.vi-replace-selection=R
 vimulator.keys.visual.vi-select-matching-bracket=%
+vimulator.keys.visual.vi-select-to-line=G G
+vimulator.keys.visual.select-document-end=S+G
 
 # Visual block mode
 vimulator.keys.visual-block.vi-multiline-change=C

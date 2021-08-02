@@ -56,14 +56,19 @@ public class VimulatorUtilities {
         if (!checkEmulation(view))
             return;
 
+        JEditTextArea textArea = view.getTextArea();
+        
+        // when exiting insert mode, move one left
+        if ((((VimulatorInputHandler) view.getInputHandler()).getMode()
+                & VimulatorConstants.INSERT) != 0)
+            textArea.moveCaretPosition(
+                textArea.getCaretPosition()-1
+            );
+
         Log.log(Log.DEBUG, null, "Setting mode to " + mode);
         ((VimulatorInputHandler) view.getInputHandler()).setMode(mode);
 
-        JEditTextArea textArea = view.getTextArea();
 
-        int lastAllowed = getLastAllowedOffset(view, textArea);
-        if (textArea.getCaretPosition() > lastAllowed)
-            textArea.moveCaretPosition(lastAllowed);
         
         if((mode & VimulatorConstants.INSERT) != 0){
             // restore caret user settings in the insert modes

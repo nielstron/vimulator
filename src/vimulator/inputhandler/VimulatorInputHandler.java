@@ -54,7 +54,7 @@ public class VimulatorInputHandler extends InputHandler {
 
     public VimulatorInputHandler(View view, VimulatorInputHandler chain) {
         super(view);
-
+        this.bindings = new Hashtable<>();
         bindingOfMode = chain.bindingOfMode;
 
         initHandlers();

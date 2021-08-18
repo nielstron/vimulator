@@ -71,7 +71,6 @@ public class InsertInputHandler extends InputHandler {
             evt.consume();
             return;
         }
-        // TODO Auto-generated method stub
         this.defaultInputHandler.processKeyEvent(evt, from, global);
     }
 

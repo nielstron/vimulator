@@ -255,15 +255,15 @@
 
 	<ACTION NAME="vi-append-ws-end">
 		<CODE>
-			textArea.goToEndOfWhiteSpace(false);
 			vimulator.VimulatorUtilities.setInsertMode(view);
+			textArea.goToEndOfWhiteSpace(false);
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="vi-insert-ws-start">
 		<CODE>
-			textArea.goToStartOfWhiteSpace(false);
 			vimulator.VimulatorUtilities.setInsertMode(view);
+			textArea.goToStartOfWhiteSpace(false);
 		</CODE>
 	</ACTION>
 

@@ -1,5 +1,5 @@
 # Vimulator
-[![Build Status](https://travis-ci.com/nielstron/vimulator.svg?branch=master)](https://travis-ci.com/nielstron/vimulator)
+[![Build Status](https://app.travis-ci.com/nielstron/vimulator.svg?branch=master)](https://app.travis-ci.com/nielstron/vimulator)
 
 A vi-emulator for jEdit.
 

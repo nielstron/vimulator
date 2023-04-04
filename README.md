@@ -13,10 +13,14 @@ This project is WIP, but already features
 - the 3 visual modes, visual, visual block and visual line
 - yanking
 - multiple caret editing
+
 ## Installation
 
-This plugin is not (yet) available via the official Plugin Manager.
-You may however manually install the compiled Plugin [as a "User Plugin"](http://plugins.jedit.org/install.php).
+This plugin is available via the [official Plugin Manager](http://plugins.jedit.org).
+You can install it using the Plugin Manager
+
+#### Manual installation
+If you do not want to install the plugin through the normal route, you may manually install the compiled Plugin [as a "User Plugin"](http://plugins.jedit.org/install.php).
 For Isabelle/jEdit 2021 on Linux/Mac, the user plugin path is `$HOME/.isabelle/Isabelle2021/jedit/jars`.
 For Isabelle/jEdit 2021 on Windows, the user plugin path is `%HOMEPATH%\.isabelle\Isabelle2021\jedit\jars`.
 
